@@ -1,4 +1,4 @@
-import { 
+import {
     FaBell,
     FaBook,
     FaCalendar,
@@ -13,21 +13,73 @@ import {
     FaHeart,
     FaStar,
 
- } from "react-icons/fa";
+} from "react-icons/fa";
 
- export const menuItems = [
-     { icon: <FaHome/>, text: "Home" },
-     { icon: <FaUser/>, text: "Profile" },
-     { icon: <FaCog/>, text: "Settings" },
-     { icon: <FaEnvelope/>, text: "Messages" },
-     { icon: <FaBell/>, text: "Notifications" },
-     { icon: <FaChartLine/>, text: "Analytics" },
-     { icon: <FaCalendar/>, text: "Calendar" },
-     { icon: <FaBook/>, text: "Library" },
-     { icon: <FaFile/>, text: "Documents" },
-     { icon: <FaSearch/>, text: "Search" },
-     { icon: <FaHeart/>, text: "Favorites" },
-     { icon: <FaStar/>, text: "Starred" },
-     { icon: <FaQuestionCircle/>, text: "Help" },
- ]
+export const menuItems = [
+    {
+        routerLink: "home", 
+        icon: <FaHome />, 
+        text: "Home" 
+    },
+    {
+        routerLink: "profile", 
+        icon: <FaUser />, 
+        text: "Profile" 
+    },
+    {
+        routerLink: "settings", 
+        icon: <FaCog />, 
+        text: "Settings" 
+    },
+    {
+        routerLink: "messages", 
+        icon: <FaEnvelope />, 
+        text: "Messages" 
+    },
+    {
+        routerLink: "notifications", 
+        icon: <FaBell />, 
+        text: "Notifications" 
+    },
+    {
+        routerLink: "analytics", 
+        icon: <FaChartLine />, 
+        text: "Analytics" 
+    },
+    {
+        routerLink: "calendar", 
+        icon: <FaCalendar />, 
+        text: "Calendar" 
+    },
+    {
+        routerLink: "library", 
+        icon: <FaBook />, 
+        text: "Library" 
+    },
+    {
+        routerLink: "documents", 
+        icon: <FaFile />, 
+        text: "Documents" 
+    },
+    {
+        routerLink: "search", 
+        icon: <FaSearch />, 
+        text: "Search" 
+    },
+    {
+        routerLink: "favorites", 
+        icon: <FaHeart />, 
+        text: "Favorites" 
+    },
+    {
+        routerLink: "starred", 
+        icon: <FaStar />, 
+        text: "Starred" 
+    },
+    {
+        routerLink: "help", 
+        icon: <FaQuestionCircle />, 
+        text: "Help" 
+    },
+]
 

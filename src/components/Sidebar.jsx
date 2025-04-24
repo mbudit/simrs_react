@@ -4,6 +4,8 @@ import { FaBars } from 'react-icons/fa';
 import { menuItems } from '../data';
 import NavItem from './NavItem';
 import { Tooltip } from 'react-tooltip';
+import { Link } from 'react-router-dom';
+
 
 const Sidebar = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -27,9 +29,11 @@ const Sidebar = () => {
                             key={index}
                             icon={item.icon}
                             text={item.text}
+                            routerLink={item.routerLink}
                             isOpen={isOpen}
                             setIsOpen={setIsOpen}
-                        />
+                        >
+                        </NavItem>
                     ))}
                 </nav>
             </motion.div>

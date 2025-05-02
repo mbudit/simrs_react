@@ -23,7 +23,7 @@ const Sidebar = () => {
                     </button>
                 </div>
 
-                <nav className={`flex flex-col gap-10 h-full overflow-y-auto ${!isOpen && 'no-scrollbar'} `}>
+                <nav className={`flex flex-col gap-10 h-full overflow-y-auto ${!isOpen && 'no-scrollbar'}`}>
                     {menuItems.map((item, index) => (
                         <NavItem
                             key={index}

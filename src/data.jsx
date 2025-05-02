@@ -12,6 +12,7 @@ import {
     FaSearch,
     FaHeart,
     FaStar,
+    FaWheelchair,
 
 } from "react-icons/fa";
 
@@ -27,9 +28,9 @@ export const menuItems = [
         text: "Profile" 
     },
     {
-        routerLink: "settings", 
-        icon: <FaCog />, 
-        text: "Settings" 
+        routerLink: "rawatjalan", 
+        icon: <FaWheelchair />, 
+        text: "Rawat Jalan" 
     },
     {
         routerLink: "messages", 

@@ -3,7 +3,7 @@ import Sidebar from "./components/Sidebar"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import Settings from "./pages/Settings";
+import RawatJalan from "./pages/rawatjalan/RawatJalan";
 import Messages from "./pages/Messages";
 import Notifications from "./pages/Notifications";
 import Analytics from "./pages/Analytics";
@@ -14,7 +14,7 @@ import Search from "./pages/Search";
 import Favorites from "./pages/Favorites";
 import Starred from "./pages/Starred";
 import Help from "./pages/Help";
- 
+
 
 function App() {
   return (
@@ -28,7 +28,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path='/home' element={<Home />} />
               <Route path='/profile' element={<Profile />} />
-              <Route path='/settings' element={<Settings />} />
+              <Route path='/rawatjalan' element={<RawatJalan />} />
               <Route path="/messages" element={<Messages />} />
               <Route path="/notifications" element={<Notifications />} />
               <Route path="/analytics" element={<Analytics />} />

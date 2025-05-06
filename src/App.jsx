@@ -2,7 +2,6 @@ import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
-import Profile from "./pages/Profile";
 import RawatJalan from "./pages/rawatjalan/RawatJalan";
 import Messages from "./pages/Messages";
 import Notifications from "./pages/Notifications";
@@ -16,6 +15,7 @@ import Starred from "./pages/Starred";
 import Help from "./pages/Help";
 import Sidebar2 from "./components/Sidebar2";
 import { useState, useEffect } from "react";
+import DaftarPasien from "./pages/pasien/DaftarPasien";
 
 
 function App() {
@@ -39,7 +39,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path='/home' element={<Home />} />
-              <Route path='/profile' element={<Profile />} />
+              <Route path='/daftarpasien' element={<DaftarPasien />} />
               <Route path='/rawatjalan' element={<RawatJalan />} />
               {/* <Route path="/messages" element={<Messages />} />
               <Route path="/notifications" element={<Notifications />} />

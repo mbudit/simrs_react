@@ -23,9 +23,9 @@ export const menuItems = [
         text: "Home" 
     },
     {
-        routerLink: "profile", 
+        routerLink: "daftarpasien", 
         icon: <FaUser />, 
-        text: "Profile" 
+        text: "Daftar Pasien" 
     },
     {
         routerLink: "rawatjalan", 

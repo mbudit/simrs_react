@@ -44,7 +44,7 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                 <MenuItem icon={<FaHome />} component={<Link to="/" />}>
                     Home
                 </MenuItem>
-                <MenuItem icon={<FaUser />} component={<Link to="/profile" />}>
+                <MenuItem icon={<FaUser />} component={<Link to="/daftarpasien" />}>
                     Profile
                 </MenuItem>
                 <MenuItem icon={<FaWheelchair />} component={<Link to="/rawatjalan" />}>

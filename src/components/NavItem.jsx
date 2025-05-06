@@ -25,7 +25,7 @@ const NavItem = ({
                     {icon}
                 </span>
                 {isOpen && (
-                    <div>
+                    <div className="whitespace-nowrap transition-opacity duration-300 opacity-0" style={{ opacity: isOpen ? 1 : 0 }}>
                         {text}
                     </div>
                 )}

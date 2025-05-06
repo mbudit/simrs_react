@@ -1,7 +1,26 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { TextField, MenuItem, FormControl, Select, InputLabel } from '@mui/material';
 
 const FormPendaftaran = ({ onClose }) => {
+    useEffect(() => {
+        // Disable scroll on mount
+        document.body.style.overflow = 'hidden';
+
+        // Re-enable scroll on unmount
+        return () => {
+            document.body.style.overflow = '';
+        };
+    }, []);
+
+    const [jenisKelamin, setJenisKelamin] = React.useState('');
+    const [agama, setAgama] = React.useState('');
+    const [status, setStatus] = React.useState('');
+    const [goldar, setGoldar] = React.useState('');
+    const [rhesus, setRhesus] = React.useState('');
+    const [pendidikan, setPendidikan] = React.useState('');
+    const [asuransi, setAsuransi] = React.useState('');
+
     return (
         <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex justify-center items-center z-50">
             <motion.div
@@ -9,119 +28,206 @@ const FormPendaftaran = ({ onClose }) => {
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="bg-white p-6 rounded shadow-md w-full max-w-3xl"
+                className="bg-white p-6 rounded shadow-md w-full max-w-6xl"
             >
-                <h2 className="text-xl font-bold mb-4">Form Pendaftaran</h2>
-                <form className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[80vh] overflow-y-auto pr-2">
-                    <div>
-                        <label className="block mb-1">No. KTP:</label>
-                        <input type="text" className="w-full border px-3 py-2 rounded" />
+                <form className="grid grid-cols-1 md:grid-cols-5 gap-4 max-h-[80vh] overflow-y-auto pr-2">
+                    <div className="md:col-span-5">
+                        <h3 className="text-xl font-bold">Form Pendaftaran Pasien Baru</h3>
                     </div>
-                    <div>
-                        <label className="block mb-1">Nama Lengkap:</label>
-                        <input type="text" className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                        <label className="block mb-1">Tempat Lahir:</label>
-                        <input type="text" className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                        <label className="block mb-1">Tanggal Lahir:</label>
-                        <input type="date" className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                        <label className="block mb-1">Umur:</label>
-                        <input type="number" className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                        <label className="block mb-1">Jenis Kelamin:</label>
-                        <select className="w-full border px-3 py-2 rounded">
-                            <option value="">-- Pilih --</option>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block mb-1">Agama:</label>
-                        <select className="w-full border px-3 py-2 rounded">
-                            <option value="">-- Pilih --</option>
-                            <option value="Islam">Islam</option>
-                            <option value="Kristen">Kristen</option>
-                            <option value="Katolik">Katolik</option>
-                            <option value="Hindu">Hindu</option>
-                            <option value="Budha">Budha</option>
-                            <option value="Konghucu">Konghucu</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block mb-1">Status Pernikahan:</label>
-                        <select className="w-full border px-3 py-2 rounded">
-                            <option value="">-- Pilih --</option>
-                            <option value="Belum Menikah">Belum Menikah</option>
-                            <option value="Menikah">Menikah</option>
-                            <option value="Cerai">Cerai</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block mb-1">Golongan Darah:</label>
-                        <select className="w-full border px-3 py-2 rounded">
-                            <option value="">-- Pilih --</option>
-                            <option value="A">A</option>
-                            <option value="B">B</option>
-                            <option value="AB">AB</option>
-                            <option value="O">O</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block mb-1">Rhesus:</label>
-                        <select className="w-full border px-3 py-2 rounded">
-                            <option value="">-- Pilih --</option>
-                            <option value="+">Positif (+)</option>
-                            <option value="-">Negatif (-)</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block mb-1">Pendidikan:</label>
-                        <select className="w-full border px-3 py-2 rounded">
-                            <option value="">-- Pilih --</option>
-                            <option value="SD">SD</option>
-                            <option value="SMP">SMP</option>
-                            <option value="SMA/SMK">SMA/SMK</option>
-                            <option value="D3">D3</option>
-                            <option value="S1">S1</option>
-                            <option value="S2">S2</option>
-                            <option value="S3">S3</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label className="block mb-1">Pekerjaan:</label>
-                        <input type="text" className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                        <label className="block mb-1">No. Telp:</label>
-                        <input type="tel" className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                        <label className="block mb-1">Warga Negara:</label>
-                        <input type="text" className="w-full border px-3 py-2 rounded" />
-                    </div>
-                    <div>
-                        <label className="block mb-1">Nama Orangtua/Penanggung Jawab:</label>
-                        <input type="text" className="w-full border px-3 py-2 rounded" />
+                    <div className="md:col-span-5">
+                        <hr className=" border-t border-gray-300" />
                     </div>
 
-                    <div className="md:col-span-2 flex justify-end mt-4">
-                        <button
-                            type="button"
-                            onClick={onClose}
-                            className="mr-2 px-4 py-2 bg-gray-300 rounded"
-                        >
+                    <div className="md:col-span-5 mt-2">
+                        <h3 className="text-lg font-semibold mb-2">Kredensial</h3>
+                    </div>
+
+                    <div className="md:col-span-2">
+                        <TextField label="No. KTP" type="number" fullWidth required />
+                    </div>
+                    <div className="md:col-span-3">
+                        <TextField label="Nama Lengkap" fullWidth required />
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <TextField label="Tempat Lahir" fullWidth required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="Tanggal Lahir" type="date" fullWidth InputLabelProps={{ shrink: true }} required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="Umur" type="number" fullWidth required />
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <FormControl fullWidth required>
+                            <InputLabel>Jenis Kelamin</InputLabel>
+                            <Select
+                                label="Jenis Kelamin"
+                                value={jenisKelamin}
+                                onChange={(e) => setJenisKelamin(e.target.value)}
+                            >
+                                <MenuItem value="Laki-laki">Laki-laki</MenuItem>
+                                <MenuItem value="Perempuan">Perempuan</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <FormControl fullWidth required>
+                            <InputLabel>Agama</InputLabel>
+                            <Select
+                                label="Agama"
+                                value={agama}
+                                onChange={(e) => setAgama(e.target.value)}
+                            >
+                                <MenuItem value="Islam">Islam</MenuItem>
+                                <MenuItem value="Kristen">Kristen</MenuItem>
+                                <MenuItem value="Katolik">Katolik</MenuItem>
+                                <MenuItem value="Hindu">Hindu</MenuItem>
+                                <MenuItem value="Budha">Budha</MenuItem>
+                                <MenuItem value="Konghucu">Konghucu</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <FormControl fullWidth required>
+                            <InputLabel>Status</InputLabel>
+                            <Select
+                                label="Status"
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
+                            >
+                                <MenuItem value="Belum Menikah">Belum Menikah</MenuItem>
+                                <MenuItem value="Menikah">Menikah</MenuItem>
+                                <MenuItem value="Cerai">Cerai</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <FormControl fullWidth required>
+                            <InputLabel>Gol. Darah</InputLabel>
+                            <Select
+                                label="Gol. Darah"
+                                value={goldar}
+                                onChange={(e) => setGoldar(e.target.value)}
+                            >
+                                <MenuItem value="A">A</MenuItem>
+                                <MenuItem value="B">B</MenuItem>
+                                <MenuItem value="AB">AB</MenuItem>
+                                <MenuItem value="O">O</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <FormControl fullWidth required>
+                            <InputLabel>Rhesus</InputLabel>
+                            <Select
+                                label="Rhesus"
+                                value={rhesus}
+                                onChange={(e) => setRhesus(e.target.value)}
+                            >
+                                <MenuItem value="+">Positif (+)</MenuItem>
+                                <MenuItem value="-">Negatif (-)</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <FormControl fullWidth required>
+                            <InputLabel>Pendidikan</InputLabel>
+                            <Select
+                                label="Pendidikan"
+                                value={pendidikan}
+                                onChange={(e) => setPendidikan(e.target.value)}
+                            >
+                                <MenuItem value="SD">SD</MenuItem>
+                                <MenuItem value="SMP">SMP</MenuItem>
+                                <MenuItem value="SMA/SMK">SMA/SMK</MenuItem>
+                                <MenuItem value="D3">D3</MenuItem>
+                                <MenuItem value="S1">S1</MenuItem>
+                                <MenuItem value="S2">S2</MenuItem>
+                                <MenuItem value="S3">S3</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <TextField label="Pekerjaan" fullWidth required />
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <TextField label="No. Telp" type="number" fullWidth required />
+                    </div>
+
+                    <div className="md:col-span-1">
+                        <TextField label="Warga Negara" fullWidth required />
+                    </div>
+
+                    <div className="md:col-span-3">
+                        <TextField label="Nama Orangtua / Penanggung Jawab" fullWidth required />
+                    </div>
+
+                    <div className="md:col-span-5 mt-6">
+                        <h3 className="text-lg font-semibold mb-2">Alamat</h3>
+                    </div>
+                    <div className="md:col-span-5">
+                        <TextField label="Alamat" fullWidth required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="RT" type="number" fullWidth required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="RW" type="number" fullWidth required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="Kelurahan" fullWidth required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="Kecamatan" fullWidth required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="Provinsi" fullWidth required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="Kode Pos" type="number" fullWidth required />
+                    </div>
+
+                    <div className="md:col-span-5 mt-6">
+                        <h3 className="text-lg font-semibold mb-2">Asuransi</h3>
+                    </div>
+                    <div className="md:col-span-1">
+                        <FormControl fullWidth required>
+                            <InputLabel>Asuransi</InputLabel>
+                            <Select
+                                label="Asuransi"
+                                value={asuransi}
+                                onChange={(e) => setAsuransi(e.target.value)}
+                            >
+                                <MenuItem value="BPJS">BPJS</MenuItem>
+                                <MenuItem value="Asuransi A">Asuransi A</MenuItem>
+                                <MenuItem value="Asuransi B">Asuransi B</MenuItem>
+                                <MenuItem value="Asuransi Swasta">Asuransi Swasta</MenuItem>
+                                <MenuItem value="Tidak Ada">Tidak Ada</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </div>
+                    <div className="md:col-span-2">
+                        <TextField
+                            label="Nomor Asuransi"
+                            fullWidth
+                            required
+                        />
+                    </div>
+
+                    <div className="md:col-span-5 flex justify-end mt-4">
+                        <button type="button" onClick={onClose} className="mr-2 px-4 py-2 bg-gray-300 rounded">
                             Batal
                         </button>
-                        <button
-                            type="submit"
-                            className="px-4 py-2 bg-green-600 text-white rounded"
-                        >
+                        <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
                             Simpan
                         </button>
                     </div>

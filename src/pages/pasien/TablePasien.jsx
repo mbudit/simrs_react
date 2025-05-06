@@ -37,7 +37,7 @@ const paginationModel = { page: 0, pageSize: 5 };
 
 export default function TablePasien() {
     return (
-        <Paper sx={{ 
+        <Paper elevation={5} sx={{ 
             height: '100%', 
             width: '100%',
             '& .super-app-theme--header': {

@@ -1,18 +1,24 @@
 import React from 'react';
+import { BackButton, ButtonDaftar } from '../../components/Buttons';
 import TableIRJ from './Tables';
-import BackButton from '../../components/BackButton';
-import ButtonDaftar from '../../components/ButtonDaftar';
 import TableIRJ2 from './Tables2';
+import ModalComponent from './forms/DaftarRawatJalan';
+import { useState } from "react";
 
 const RawatJalan = () => {
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
+
     return (
         <div >
             <BackButton />
             <div className="flex items-center justify-between mb-4 mt-5">
                 <h3 className="text-2xl font-semibold">Data Pasien Rawat Jalan</h3>
-                <ButtonDaftar />
+                <ButtonDaftar onClick={handleOpen} />
             </div>
             <TableIRJ2 />
+            <ModalComponent open={open} handleClose={handleClose} />
         </div>
     );
 }

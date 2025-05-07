@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BackButton from '../../components/BackButton';
+import { BackButton } from '../../components/Buttons';
 import ButtonDaftar from '../../components/ButtonDaftar';
 import TablePasien from './TablePasien';
 import DataTable from './TablePasien';

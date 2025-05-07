@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { TextField, MenuItem, FormControl, Select, InputLabel } from '@mui/material';
+import { TextField, MenuItem, FormControl, Select, InputLabel, Button, Stack } from '@mui/material';
 
 const FormPendaftaran = ({ onClose }) => {
     useEffect(() => {
@@ -20,6 +20,7 @@ const FormPendaftaran = ({ onClose }) => {
     const [rhesus, setRhesus] = React.useState('');
     const [pendidikan, setPendidikan] = React.useState('');
     const [asuransi, setAsuransi] = React.useState('');
+    const [wargaNegara, setWargaNegara] = React.useState('');
 
     return (
         <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex justify-center items-center z-50">
@@ -42,10 +43,10 @@ const FormPendaftaran = ({ onClose }) => {
                         <h3 className="text-lg font-semibold mb-2">Kredensial</h3>
                     </div>
 
-                    <div className="md:col-span-2">
+                    <div className="md:col-span-1">
                         <TextField label="No. KTP" type="number" fullWidth required />
                     </div>
-                    <div className="md:col-span-3">
+                    <div className="md:col-span-2">
                         <TextField label="Nama Lengkap" fullWidth required />
                     </div>
 
@@ -164,17 +165,31 @@ const FormPendaftaran = ({ onClose }) => {
                     </div>
 
                     <div className="md:col-span-1">
-                        <TextField label="Warga Negara" fullWidth required />
+                        <FormControl fullWidth>
+                            <InputLabel>Warga Negara</InputLabel>
+                            <Select
+                                label="Warga Negara"
+                                value={wargaNegara}
+                                onChange={(e) => setWargaNegara(e.target.value)}
+                                required
+                            >
+                                <MenuItem value="WNI">WNI</MenuItem>
+                                <MenuItem value="WNA">WNA</MenuItem>
+                            </Select>
+                        </FormControl>
                     </div>
 
-                    <div className="md:col-span-3">
-                        <TextField label="Nama Orangtua / Penanggung Jawab" fullWidth required />
+                    <div className="md:col-span-2">
+                        <TextField label="Nama Orangtua / Wali" fullWidth required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="No. Telp Wali" type="number" fullWidth required />
                     </div>
 
                     <div className="md:col-span-5 mt-6">
                         <h3 className="text-lg font-semibold mb-2">Alamat</h3>
                     </div>
-                    <div className="md:col-span-5">
+                    <div className="md:col-span-3">
                         <TextField label="Alamat" fullWidth required />
                     </div>
                     <div className="md:col-span-1">
@@ -188,6 +203,9 @@ const FormPendaftaran = ({ onClose }) => {
                     </div>
                     <div className="md:col-span-1">
                         <TextField label="Kecamatan" fullWidth required />
+                    </div>
+                    <div className="md:col-span-1">
+                        <TextField label="Kabupaten" fullWidth required />
                     </div>
                     <div className="md:col-span-1">
                         <TextField label="Provinsi" fullWidth required />
@@ -224,12 +242,11 @@ const FormPendaftaran = ({ onClose }) => {
                     </div>
 
                     <div className="md:col-span-5 flex justify-end mt-4">
-                        <button type="button" onClick={onClose} className="mr-2 px-4 py-2 bg-gray-300 rounded">
-                            Batal
-                        </button>
-                        <button type="submit" className="px-4 py-2 bg-green-600 text-white rounded">
-                            Simpan
-                        </button>
+                        <Stack spacing={2} direction="row">
+                            <Button type="button" onClick={onClose} className="mr-2 px-4 py-2 bg-gray-300 rounded" variant="outlined">Tutup</Button>
+                            <Button type='submit' variant="contained" className='px-4 py-2 bg-green-600 text-white rounded' color="success">Simpan</Button>
+                        </Stack>
+
                     </div>
                 </form>
             </motion.div>

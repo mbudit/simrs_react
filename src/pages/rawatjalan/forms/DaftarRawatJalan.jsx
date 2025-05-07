@@ -17,6 +17,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import Fade from '@mui/material/Fade';
+import Grow from '@mui/material/Grow';
+import Slide from '@mui/material/Slide';
 
 const style = {
     position: 'absolute',
@@ -24,20 +27,20 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     bgcolor: 'background.paper',
-    border: '2px solid #000',
     boxShadow: 24,
-    p: 4,
     width: '80vw',
     maxWidth: '100%',
     maxHeight: '100%',
     overflow: 'auto',
+    padding: 0,
+    borderRadius: '12px',
     '& .MuiTextField-root': {
         m: 1,
         width: '25ch',
     },
 };
 
-export default function ModalComponent({ open, handleClose }) {
+export default function ModalRajal({ open, handleClose }) {
     const [form, setForm] = useState({
         name: '',
         email: '',
@@ -167,306 +170,333 @@ export default function ModalComponent({ open, handleClose }) {
         <Modal
             open={open}
             onClose={handleClose}
+            closeAfterTransition
             aria-labelledby="modal-form-title"
             aria-describedby="modal-form-description"
+            slotProps={{
+                backdrop: {
+                    timeout: 300,
+                },
+            }}
         >
-            <Box sx={style}>
-                <ModalCloseButton onClick={handleClose} />
-                <h2 className="text-xl font-bold mb-7 mt-7">Pendaftaran Rawat Jalan</h2>
-                <form onSubmit={handleSubmit}>
-                    <h3 className="text-xl mb-1">Data Pasien</h3>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Nama"
-                                name="name"
-                                value={form.name}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.name}
-                                helperText={errors.name}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="outlined-select-genders"
-                                select
-                                label="Jenis Kelamin"
-                                defaultValue=""
-                                helperText=" "
-                                >
-                                {genders.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="NIK"
-                                name="nik"
-                                value={form.nik}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.nik}
-                                helperText={errors.nik || " "}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <div style={{ marginTop: '7px' }}>
-                                        <DatePicker
-                                            label="Tanggal Lahir"
-                                            value={value}
-                                            onChange={(newValue) => setValue(newValue)}
-                                        />
-                                    </div>
-                            </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="outlined-select-status_pernikahan"
-                                select
-                                label="Status Pernikahan"
-                                defaultValue=""
-                                helperText=" "
-                            >
-                                {status_pernikahan.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                    </Grid>
-
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Pekerjaan"
-                                name="pekerjaan"
-                                value={form.pekerjaan}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.pekerjaan}
-                                helperText={errors.pekerjaan}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="No. Telp"
-                                name="no_telp"
-                                value={form.no_telp}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.no_telp}
-                                helperText={errors.no_telp}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Alamat"
-                                name="alamat"
-                                value={form.alamat}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.alamat}
-                                helperText={errors.alamat}
-                                multiline
-                                rows={4} // Menentukan tinggi area teks, bisa disesuaikan sesuai kebutuhan
-                                style={{ width: '600px' }}
-                            />
-                        </Grid>
-                    </Grid>
-
-                    <Box sx={{ borderBottom: '1px solid #ccc', mb: 2, mt: 2, }} />
-
-                    <h3 className="text-xl mb-1 mt-3">Detail</h3>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <div style={{ marginTop: '7px' }}>
-                                        <DatePicker
-                                            label="Tanggal Daftar"
-                                            value={value}
-                                            onChange={(newValue) => setValue(newValue)}
-                                        />
-                                    </div>
-                            </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="outlined-select-payment"
-                                select
-                                label="Cara Bayar"
-                                defaultValue=""
-                                helperText=" "
-                            >
-                                {payments.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="No. Kartu BPJS/Asuransi"
-                                name="no_kartu"
-                                value={form.no_kartu}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.no_kartu}
-                                helperText={errors.no_kartu}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="outlined-select-poli"
-                                select
-                                label="Pilih Poli"
-                                defaultValue=""
-                                helperText=" "
-                            >
-                                {poli.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="outlined-select-dokter"
-                                select
-                                label="Pilih Dokter"
-                                defaultValue=""
-                                helperText=" "
-                            >
-                                {dokter.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="No. Rujukan"
-                                name="rujukan"
-                                value={form.rujukan}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.rujukan}
-                                helperText={errors.rujukan}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                    <div style={{ marginTop: '7px' }}>
-                                        <DatePicker
-                                            label="Tanggal Rujukan"
-                                            value={value}
-                                            onChange={(newValue) => setValue(newValue)}
-                                        />
-                                    </div>
-                            </LocalizationProvider>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="outlined-select-rujukan"
-                                select
-                                label="Datang Sendiri/Rujukan"
-                                defaultValue=""
-                                helperText=" "
-                            >
-                                {rujukan.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Pelayanan"
-                                name="pelayanan"
-                                value={form.pelayanan}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.pelayanan}
-                                helperText={errors.pelayanan}
-                            />
-                            <TextField
-                                id="outlined-select-pelayanan"
-                                select
-                                label="Pilih Pelayanan"
-                                defaultValue=""
-                                helperText=" "
-                            >
-                                {pelayanan.map((option) => (
-                                    <MenuItem key={option.value} value={option.value}>
-                                        {option.label}
-                                    </MenuItem>
-                                ))}
-                            </TextField>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="No. Whatsapp"
-                                name="no_wa"
-                                value={form.no_wa}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.no_wa}
-                                helperText={errors.no_wa}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="No. Telpon Wali"
-                                name="telp_wali"
-                                value={form.telp_wali}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.telp_wali}
-                                helperText={errors.telp_wali}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                label="Alasan Berobat"
-                                name="alasan"
-                                value={form.alasan}
-                                onChange={handleChange}
-                                fullWidth
-                                margin="normal"
-                                error={!!errors.alasan}
-                                helperText={errors.alasan}
-                                multiline
-                                rows={4} // Menentukan tinggi area teks, bisa disesuaikan sesuai kebutuhan
-                                style={{ width: '600px' }}
-                            />
-                        </Grid>
-                    </Grid>
-                    
-                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 6 }}>
-                        <ButtonSubmit onClick={handleSubmit} />
-                        <ButtonClose onClick={handleClose} />
+            <Fade in={open}>
+                <Box sx={style}>
+                    <Box
+                        sx={{
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            backgroundColor: '#1e2838', // biru MUI default
+                            color: '#fff',
+                            px: 2,
+                            py: 1.5,
+                            /* borderTopLeftRadius: '4px',
+                            borderTopRightRadius: '4px', */
+                            /* borderBottom: '1px solid #1565c0', */
+                        }}
+                        >
+                        <h2 className="text-xl font-bold">Pendaftaran Rawat Jalan</h2>
+                        <ModalCloseButton onClick={handleClose} />
                     </Box>
-                </form>
-            </Box>
+
+                    <Box sx={{ pt: 4, pl: 2, pb: 2, pr: 2 }}>
+                        <form onSubmit={handleSubmit}>
+                            <h3 className="text-xl mb-2 font-bold">Data Pasien</h3>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} >
+                                    <TextField
+                                        label="Nama"
+                                        name="name"
+                                        value={form.name}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.name}
+                                        helperText={errors.name}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="outlined-select-genders"
+                                        select
+                                        label="Jenis Kelamin"
+                                        defaultValue=""
+                                        helperText=" "
+                                        >
+                                        {genders.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="NIK"
+                                        name="nik"
+                                        value={form.nik}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.nik}
+                                        helperText={errors.nik || " "}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <div style={{ marginTop: '7px' }}>
+                                                <DatePicker
+                                                    label="Tanggal Lahir"
+                                                    value={value}
+                                                    onChange={(newValue) => setValue(newValue)}
+                                                />
+                                            </div>
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="outlined-select-status_pernikahan"
+                                        select
+                                        label="Status Pernikahan"
+                                        defaultValue=""
+                                        helperText=" "
+                                    >
+                                        {status_pernikahan.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                            </Grid>
+
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="Pekerjaan"
+                                        name="pekerjaan"
+                                        value={form.pekerjaan}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.pekerjaan}
+                                        helperText={errors.pekerjaan}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="No. Telp"
+                                        name="no_telp"
+                                        value={form.no_telp}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.no_telp}
+                                        helperText={errors.no_telp}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="Alamat"
+                                        name="alamat"
+                                        value={form.alamat}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.alamat}
+                                        helperText={errors.alamat}
+                                        multiline
+                                        rows={4} // Menentukan tinggi area teks, bisa disesuaikan sesuai kebutuhan
+                                        style={{ width: '600px' }}
+                                    />
+                                </Grid>
+                            </Grid>
+
+                            <Box sx={{ borderBottom: '1px solid #ccc', mb: 2, mt: 2, }} />
+
+                            <h3 className="text-xl mb-2 mt-3 font-bold">Detail</h3>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <div style={{ marginTop: '7px' }}>
+                                                <DatePicker
+                                                    label="Tanggal Daftar"
+                                                    value={value}
+                                                    onChange={(newValue) => setValue(newValue)}
+                                                />
+                                            </div>
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="outlined-select-payment"
+                                        select
+                                        label="Cara Bayar"
+                                        defaultValue=""
+                                        helperText=" "
+                                    >
+                                        {payments.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="No. Kartu BPJS/Asuransi"
+                                        name="no_kartu"
+                                        value={form.no_kartu}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.no_kartu}
+                                        helperText={errors.no_kartu}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="outlined-select-poli"
+                                        select
+                                        label="Pilih Poli"
+                                        defaultValue=""
+                                        helperText=" "
+                                    >
+                                        {poli.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="outlined-select-dokter"
+                                        select
+                                        label="Pilih Dokter"
+                                        defaultValue=""
+                                        helperText=" "
+                                    >
+                                        {dokter.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="No. Rujukan"
+                                        name="rujukan"
+                                        value={form.rujukan}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.rujukan}
+                                        helperText={errors.rujukan}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                            <div style={{ marginTop: '7px' }}>
+                                                <DatePicker
+                                                    label="Tanggal Rujukan"
+                                                    value={value}
+                                                    onChange={(newValue) => setValue(newValue)}
+                                                />
+                                            </div>
+                                    </LocalizationProvider>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        id="outlined-select-rujukan"
+                                        select
+                                        label="Datang Sendiri/Rujukan"
+                                        defaultValue=""
+                                        helperText=" "
+                                    >
+                                        {rujukan.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="Pelayanan"
+                                        name="pelayanan"
+                                        value={form.pelayanan}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.pelayanan}
+                                        helperText={errors.pelayanan}
+                                    />
+                                    <TextField
+                                        id="outlined-select-pelayanan"
+                                        select
+                                        label="Pilih Pelayanan"
+                                        defaultValue=""
+                                        helperText=" "
+                                    >
+                                        {pelayanan.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="No. Whatsapp"
+                                        name="no_wa"
+                                        value={form.no_wa}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.no_wa}
+                                        helperText={errors.no_wa}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="No. Telpon Wali"
+                                        name="telp_wali"
+                                        value={form.telp_wali}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.telp_wali}
+                                        helperText={errors.telp_wali}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        label="Alasan Berobat"
+                                        name="alasan"
+                                        value={form.alasan}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        margin="normal"
+                                        error={!!errors.alasan}
+                                        helperText={errors.alasan}
+                                        multiline
+                                        rows={4} // Menentukan tinggi area teks, bisa disesuaikan sesuai kebutuhan
+                                        style={{ width: '600px' }}
+                                    />
+                                </Grid>
+                            </Grid>
+                            
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 6 }}>
+                                <ButtonSubmit onClick={handleSubmit} />
+                                <ButtonClose onClick={handleClose} />
+                            </Box>
+                        </form>
+                    </Box>
+                </Box>
+            </Fade>
         </Modal>
     );
 }

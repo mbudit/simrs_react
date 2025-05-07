@@ -36,7 +36,7 @@ export const ButtonSubmit = ({ onClick }) => {
 
 export const ButtonClose = ({ onClick }) => {
     return (
-        <Button variant="contained" color="secondary" onClick={onClick}>
+        <Button variant="contained" color="error" onClick={onClick}>
             Close
         </Button>
     );
@@ -49,8 +49,6 @@ export const ModalCloseButton = ({ onClick }) => {
             variant="contained"
             color="error"
             sx={{
-                position: 'absolute',
-                top: 8,
                 right: 8,
                 minWidth: 'unset',
                 padding: 1,

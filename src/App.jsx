@@ -1,6 +1,6 @@
 import Navbar from "./components/Navbar"
 import Sidebar from "./components/Sidebar"
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import RawatJalan from "./pages/rawatjalan/RawatJalan";
 import Messages from "./pages/Messages";
@@ -16,47 +16,51 @@ import Help from "./pages/Help";
 import Sidebar2 from "./components/Sidebar2";
 import { useState, useEffect } from "react";
 import DaftarPasien from "./pages/pasien/DaftarPasien";
+import Login from "./pages/login/Login";
 
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
-  // Trigger resize agar DataGrid merespons perubahan
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      window.dispatchEvent(new Event("resize"));
-    }, 300); // cocokkan dengan animasi sidebar
-    return () => clearTimeout(timeout);
-  }, [sidebarCollapsed]);
-
   return (
     <Router>
-      <div className='flex flex-col'>
-        <Navbar />
-        <div className='flex'>
-          <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
-          <div className='flex-1 min-h-screen bg-blue-200 p-6 overflow-hidden'>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path='/home' element={<Home />} />
-              <Route path='/daftarpasien' element={<DaftarPasien />} />
-              <Route path='/rawatjalan' element={<RawatJalan />} />
-              {/* <Route path="/messages" element={<Messages />} />
-              <Route path="/notifications" element={<Notifications />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/calendar" element={<Calendar />} />
-              <Route path="/library" element={<Library />} />
-              <Route path="/documents" element={<Documents />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/favorites" element={<Favorites />} />
-              <Route path="/starred" element={<Starred />} />
-              <Route path="/help" element={<Help />} /> */}
-              {/* Add more routes matching your menuItems */}
-            </Routes>
-          </div>
-        </div>
+      <div className="flex flex-col">
+        <AppContent sidebarCollapsed={sidebarCollapsed} setSidebarCollapsed={setSidebarCollapsed} />
       </div>
     </Router>
+  );
+}
+
+const AppContent = ({ sidebarCollapsed, setSidebarCollapsed }) => {
+  const location = useLocation();  // Mengambil informasi lokasi/rute aktif
+
+  return (
+    <>
+      {/* Cek apakah halaman login yang aktif */}
+      {location.pathname !== "/login" && (
+        <>
+          <Navbar />
+          <div className="flex">
+            <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
+            <div className="flex-1 min-h-screen bg-blue-200 p-6 overflow-hidden">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/home" element={<Home />} />
+                <Route path="/daftarpasien" element={<DaftarPasien />} />
+                <Route path="/rawatjalan" element={<RawatJalan />} />
+                {/* Rute lainnya */}
+              </Routes>
+            </div>
+          </div>
+        </>
+      )}
+      {/* Halaman Login tidak memiliki Navbar dan Sidebar */}
+      {location.pathname === "/login" && (
+        <Routes>
+          <Route path="/login" element={<Login />} />
+        </Routes>
+      )}
+    </>
   );
 }
 

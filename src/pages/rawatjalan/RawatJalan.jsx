@@ -1,8 +1,8 @@
 import React from 'react';
 import { BackButton, ButtonDaftar } from '../../components/Buttons';
 import TableIRJ from './Tables';
-import TableIRJ2 from './Tables2';
-import ModalComponent from './forms/DaftarRawatJalan';
+import TableIRJ2 from './TablesRajal';
+import ModalRajal from './forms/DaftarRawatJalan';
 import { useState } from "react";
 
 const RawatJalan = () => {
@@ -18,7 +18,7 @@ const RawatJalan = () => {
                 <ButtonDaftar onClick={handleOpen} />
             </div>
             <TableIRJ2 />
-            <ModalComponent open={open} handleClose={handleClose} />
+            <ModalRajal open={open} handleClose={handleClose} />
         </div>
     );
 }

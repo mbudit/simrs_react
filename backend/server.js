@@ -23,7 +23,7 @@ db.connect(err => {
   console.log('Connected to MySQL database');
 });
 
-// API endpoint to save patient data
+// API endpoint buat nyimpen data patients
 app.post('/api/patients', (req, res) => {
   const patientData = req.body;
   
@@ -74,7 +74,7 @@ app.post('/api/patients', (req, res) => {
   });
 });
 
-// API endpoint to get all patients
+// API endpoint buat GET data patients
 app.get('/api/patients', (req, res) => {
   const sql = 'SELECT * FROM patients';
 
@@ -87,6 +87,64 @@ app.get('/api/patients', (req, res) => {
     res.json(results);
   });
 });
+
+// DELETE patient by KTP
+app.delete('/api/patients/:no_ktp', (req, res) => {
+  const noKtp = req.params.no_ktp;
+
+  const sql = 'DELETE FROM patients WHERE no_ktp = ?';
+  db.query(sql, [noKtp], (err, result) => {
+    if (err) {
+      console.error('Delete error:', err);
+      return res.status(500).json({ error: 'Failed to delete patient' });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: 'Patient not found' });
+    }
+
+    res.json({ message: 'Patient deleted successfully' });
+  });
+});
+
+app.put('/api/patients/:no_ktp', (req, res) => {
+  const { no_ktp } = req.params;
+  const {
+    nama_lengkap,
+    umur,
+    tanggal_lahir,
+    asuransi,
+    no_asuransi,
+    no_telp,
+    nama_orangtua_wali,
+    no_telp_wali
+  } = req.body;
+
+  const sql = `UPDATE patients SET 
+    nama_lengkap = ?, umur = ?, tanggal_lahir = ?, asuransi = ?, 
+    no_asuransi = ?, no_telp = ?, nama_orangtua_wali = ?, no_telp_wali = ?
+    WHERE no_ktp = ?`;
+
+  db.query(sql, [
+    nama_lengkap,
+    umur,
+    tanggal_lahir,
+    asuransi,
+    no_asuransi,
+    no_telp,
+    nama_orangtua_wali,
+    no_telp_wali,
+    no_ktp,
+  ], (err, result) => {
+    if (err) {
+      console.error('Error updating patient:', err);
+      return res.status(500).send('Failed to update');
+    }
+    res.send('Patient updated successfully');
+  });
+});
+
+
 
 
 const PORT = 5000;

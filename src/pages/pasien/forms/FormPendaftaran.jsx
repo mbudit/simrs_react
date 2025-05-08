@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  TextField, 
-  MenuItem, 
-  FormControl, 
-  Select, 
-  InputLabel, 
-  Button, 
+import {
+  TextField,
+  MenuItem,
+  FormControl,
+  Select,
+  InputLabel,
+  Button,
   Stack,
   Snackbar,
   Alert,
@@ -64,7 +64,7 @@ const FormPendaftaran = ({ onClose }) => {
       ...prev,
       [name]: value
     }));
-    
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -76,7 +76,7 @@ const FormPendaftaran = ({ onClose }) => {
 
   const validateForm = () => {
     const newErrors = {};
-    
+
     // Required fields validation
     const requiredFields = [
       'noKtp', 'namaLengkap', 'tempatLahir', 'tanggalLahir', 'umur',
@@ -86,7 +86,7 @@ const FormPendaftaran = ({ onClose }) => {
       'kelurahan', 'kecamatan', 'kabupaten', 'provinsi', 'kodePos',
       'asuransi'
     ];
-    
+
     requiredFields.forEach(field => {
       if (!formData[field]) {
         newErrors[field] = 'Field ini wajib diisi';
@@ -109,7 +109,7 @@ const FormPendaftaran = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       setSnackbar({
         open: true,
@@ -120,7 +120,7 @@ const FormPendaftaran = ({ onClose }) => {
     }
 
     setIsSubmitting(true);
-    
+
     try {
       const response = await fetch('http://localhost:5000/api/patients', {
         method: 'POST',
@@ -145,7 +145,7 @@ const FormPendaftaran = ({ onClose }) => {
         message: 'Pendaftaran pasien berhasil!',
         severity: 'success'
       });
-      
+
       // Reset form after successful submission
       setFormData({
         noKtp: '',
@@ -175,7 +175,7 @@ const FormPendaftaran = ({ onClose }) => {
         asuransi: '',
         noAsuransi: ''
       });
-      
+
       // Optionally close the form after delay
       setTimeout(() => {
         onClose();
@@ -205,7 +205,7 @@ const FormPendaftaran = ({ onClose }) => {
         transition={{ duration: 0.3 }}
         className="bg-white p-6 rounded shadow-md w-full max-w-6xl"
       >
-        <form 
+        <form
           className="grid grid-cols-1 md:grid-cols-5 gap-4 max-h-[80vh] overflow-y-auto pr-2"
           onSubmit={handleSubmit}
           noValidate
@@ -222,23 +222,25 @@ const FormPendaftaran = ({ onClose }) => {
           </div>
 
           <div className="md:col-span-1">
-            <TextField 
-              label="No. KTP" 
-              type="number" 
-              fullWidth 
+            <TextField
+              label="No. KTP"
+              type="number"
+              fullWidth
               required
               name="noKtp"
               value={formData.noKtp}
               onChange={handleChange}
               error={!!errors.noKtp}
               helperText={errors.noKtp}
-              inputProps={{ maxLength: 16 }}
+              slotProps={{
+                htmlInput: { maxLength: 16 }
+              }}
             />
           </div>
           <div className="md:col-span-2">
-            <TextField 
-              label="Nama Lengkap" 
-              fullWidth 
+            <TextField
+              label="Nama Lengkap"
+              fullWidth
               required
               name="namaLengkap"
               value={formData.namaLengkap}
@@ -249,9 +251,9 @@ const FormPendaftaran = ({ onClose }) => {
           </div>
 
           <div className="md:col-span-1">
-            <TextField 
-              label="Tempat Lahir" 
-              fullWidth 
+            <TextField
+              label="Tempat Lahir"
+              fullWidth
               required
               name="tempatLahir"
               value={formData.tempatLahir}
@@ -261,31 +263,35 @@ const FormPendaftaran = ({ onClose }) => {
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="Tanggal Lahir" 
-              type="date" 
-              fullWidth 
-              InputLabelProps={{ shrink: true }} 
+            <TextField
+              label="Tanggal Lahir"
+              type="date"
+              fullWidth
               required
               name="tanggalLahir"
               value={formData.tanggalLahir}
               onChange={handleChange}
               error={!!errors.tanggalLahir}
               helperText={errors.tanggalLahir}
+              slotProps={{
+                inputLabel: { shrink: true }
+              }}
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="Umur" 
-              type="number" 
-              fullWidth 
+            <TextField
+              label="Umur"
+              type="number"
+              fullWidth
               required
               name="umur"
               value={formData.umur}
               onChange={handleChange}
               error={!!errors.umur}
               helperText={errors.umur}
-              inputProps={{ min: 0, max: 120 }}
+              slotProps={{
+                htmlInput: { min: 0, max: 120 }
+              }}
             />
           </div>
 
@@ -392,9 +398,9 @@ const FormPendaftaran = ({ onClose }) => {
           </div>
 
           <div className="md:col-span-1">
-            <TextField 
-              label="Pekerjaan" 
-              fullWidth 
+            <TextField
+              label="Pekerjaan"
+              fullWidth
               required
               name="pekerjaan"
               value={formData.pekerjaan}
@@ -405,17 +411,19 @@ const FormPendaftaran = ({ onClose }) => {
           </div>
 
           <div className="md:col-span-1">
-            <TextField 
-              label="No. Telp" 
-              type="tel" 
-              fullWidth 
+            <TextField
+              label="No. Telp"
+              type="tel"
+              fullWidth
               required
               name="noTelp"
               value={formData.noTelp}
               onChange={handleChange}
               error={!!errors.noTelp}
               helperText={errors.noTelp}
-              inputProps={{ maxLength: 15 }}
+              slotProps={{
+                htmlInput: { maxLength: 15 }
+              }}
             />
           </div>
 
@@ -435,9 +443,9 @@ const FormPendaftaran = ({ onClose }) => {
           </div>
 
           <div className="md:col-span-2">
-            <TextField 
-              label="Nama Orangtua / Wali" 
-              fullWidth 
+            <TextField
+              label="Nama Orangtua / Wali"
+              fullWidth
               required
               name="namaOrangtuaWali"
               value={formData.namaOrangtuaWali}
@@ -447,17 +455,19 @@ const FormPendaftaran = ({ onClose }) => {
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="No. Telp Wali" 
-              type="tel" 
-              fullWidth 
+            <TextField
+              label="No. Telp Wali"
+              type="tel"
+              fullWidth
               required
               name="noTelpWali"
               value={formData.noTelpWali}
               onChange={handleChange}
               error={!!errors.noTelpWali}
               helperText={errors.noTelpWali}
-              inputProps={{ maxLength: 15 }}
+              slotProps={{
+                htmlInput: { maxLength: 15 }
+              }}
             />
           </div>
 
@@ -465,9 +475,9 @@ const FormPendaftaran = ({ onClose }) => {
             <h3 className="text-lg font-semibold mb-2">Alamat</h3>
           </div>
           <div className="md:col-span-3">
-            <TextField 
-              label="Alamat" 
-              fullWidth 
+            <TextField
+              label="Alamat"
+              fullWidth
               required
               name="alamat"
               value={formData.alamat}
@@ -479,37 +489,41 @@ const FormPendaftaran = ({ onClose }) => {
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="RT" 
-              type="number" 
-              fullWidth 
+            <TextField
+              label="RT"
+              type="number"
+              fullWidth
               required
               name="rt"
               value={formData.rt}
               onChange={handleChange}
               error={!!errors.rt}
               helperText={errors.rt}
-              inputProps={{ min: 1, max: 100 }}
+              slotProps={{
+                htmlInput: { min: 1, max: 100 }
+              }}
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="RW" 
-              type="number" 
-              fullWidth 
+            <TextField
+              label="RW"
+              type="number"
+              fullWidth
               required
               name="rw"
               value={formData.rw}
               onChange={handleChange}
               error={!!errors.rw}
               helperText={errors.rw}
-              inputProps={{ min: 1, max: 100 }}
+              slotProps={{
+                htmlInput: { min: 1, max: 100 }
+              }}
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="Kelurahan" 
-              fullWidth 
+            <TextField
+              label="Kelurahan"
+              fullWidth
               required
               name="kelurahan"
               value={formData.kelurahan}
@@ -519,9 +533,9 @@ const FormPendaftaran = ({ onClose }) => {
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="Kecamatan" 
-              fullWidth 
+            <TextField
+              label="Kecamatan"
+              fullWidth
               required
               name="kecamatan"
               value={formData.kecamatan}
@@ -531,9 +545,9 @@ const FormPendaftaran = ({ onClose }) => {
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="Kabupaten" 
-              fullWidth 
+            <TextField
+              label="Kabupaten"
+              fullWidth
               required
               name="kabupaten"
               value={formData.kabupaten}
@@ -543,9 +557,9 @@ const FormPendaftaran = ({ onClose }) => {
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="Provinsi" 
-              fullWidth 
+            <TextField
+              label="Provinsi"
+              fullWidth
               required
               name="provinsi"
               value={formData.provinsi}
@@ -555,17 +569,19 @@ const FormPendaftaran = ({ onClose }) => {
             />
           </div>
           <div className="md:col-span-1">
-            <TextField 
-              label="Kode Pos" 
-              type="number" 
-              fullWidth 
+            <TextField
+              label="Kode Pos"
+              type="number"
+              fullWidth
               required
               name="kodePos"
               value={formData.kodePos}
               onChange={handleChange}
               error={!!errors.kodePos}
               helperText={errors.kodePos}
-              inputProps={{ maxLength: 5 }}
+              slotProps={{
+                htmlInput: { maxLength: 5 }
+              }}
             />
           </div>
 
@@ -605,19 +621,19 @@ const FormPendaftaran = ({ onClose }) => {
 
           <div className="md:col-span-5 flex justify-end mt-4">
             <Stack spacing={2} direction="row">
-              <Button 
-                type="button" 
-                onClick={onClose} 
-                className="mr-2 px-4 py-2 bg-gray-300 rounded" 
+              <Button
+                type="button"
+                onClick={onClose}
+                className="mr-2 px-4 py-2 bg-gray-300 rounded"
                 variant="outlined"
                 disabled={isSubmitting}
               >
                 Tutup
               </Button>
-              <Button 
-                type='submit' 
-                variant="contained" 
-                className='px-4 py-2 bg-green-600 text-white rounded' 
+              <Button
+                type='submit'
+                variant="contained"
+                className='px-4 py-2 bg-green-600 text-white rounded'
                 color="success"
                 disabled={isSubmitting}
                 startIcon={isSubmitting ? <CircularProgress size={20} color="inherit" /> : null}
@@ -628,15 +644,14 @@ const FormPendaftaran = ({ onClose }) => {
           </div>
         </form>
       </motion.div>
-
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}
         onClose={handleCloseSnackbar}
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
       >
-        <Alert 
-          onClose={handleCloseSnackbar} 
+        <Alert
+          onClose={handleCloseSnackbar}
           severity={snackbar.severity}
           sx={{ width: '100%' }}
         >

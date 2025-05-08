@@ -13,7 +13,7 @@ import {
   CircularProgress
 } from '@mui/material';
 
-const FormPendaftaran = ({ onClose }) => {
+const FormPendaftaran = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     noKtp: '',
     namaLengkap: '',
@@ -178,7 +178,7 @@ const FormPendaftaran = ({ onClose }) => {
 
       // Optionally close the form after delay
       setTimeout(() => {
-        onClose();
+        if (onSuccess) onSuccess(); // 👈 trigger table reload and close form
       }, 1500);
     } catch (error) {
       console.error('Error:', error);

@@ -10,8 +10,8 @@ app.use(bodyParser.json());
 // MySQL connection
 const db = mysql.createConnection({
   host: '100.113.21.119',
-  user: 'nugi',
-  password: 'nugi123',
+  user: 'budi',
+  password: 'budi123',
   database: 'myhospital'
 });
 
@@ -76,7 +76,17 @@ app.post('/api/patients', (req, res) => {
 
 // API endpoint buat GET data patients
 app.get('/api/patients', (req, res) => {
-  const sql = 'SELECT * FROM patients';
+  const sql = `
+    SELECT
+      no_ktp, nama_lengkap, tempat_lahir, 
+      DATE_FORMAT(tanggal_lahir, '%Y-%m-%d') AS tanggal_lahir, 
+      umur, jenis_kelamin, agama, status, golongan_darah, rhesus, 
+      pendidikan, pekerjaan, no_telp, warga_negara, 
+      nama_orangtua_wali, no_telp_wali, alamat, rt, rw, 
+      kelurahan, kecamatan, kabupaten, provinsi, kode_pos, 
+      asuransi, no_asuransi
+    FROM patients
+  `;
 
   db.query(sql, (err, results) => {
     if (err) {
@@ -87,6 +97,7 @@ app.get('/api/patients', (req, res) => {
     res.json(results);
   });
 });
+
 
 // DELETE patient by KTP
 app.delete('/api/patients/:no_ktp', (req, res) => {
@@ -107,38 +118,92 @@ app.delete('/api/patients/:no_ktp', (req, res) => {
   });
 });
 
+// UPDATE patient by KTP
 app.put('/api/patients/:no_ktp', (req, res) => {
   const { no_ktp } = req.params;
   const {
     nama_lengkap,
+    tempat_lahir,
+    tanggal_lahir,
     umur,
-    tanggal_lahir = formatDate(req.body.tanggal_lahir),
-    asuransi,
-    no_asuransi,
+    jenis_kelamin,
+    agama,
+    status,
+    golongan_darah,
+    rhesus,
+    pendidikan,
+    pekerjaan,
     no_telp,
+    warga_negara,
     nama_orangtua_wali,
-    no_telp_wali
+    no_telp_wali,
+    alamat,
+    rt,
+    rw,
+    kelurahan,
+    kecamatan,
+    kabupaten,
+    provinsi,
+    kode_pos,
+    asuransi,
+    no_asuransi
   } = req.body;
 
   const sql = `UPDATE patients SET 
-    nama_lengkap = ?, umur = ?, tanggal_lahir = ?, asuransi = ?, 
-    no_asuransi = ?, no_telp = ?, nama_orangtua_wali = ?, no_telp_wali = ?
+      nama_lengkap = ?, 
+      tempat_lahir = ?, 
+      tanggal_lahir = ?, 
+      umur = ?, 
+      jenis_kelamin = ?, 
+      agama = ?, 
+      status = ?, 
+      golongan_darah = ?, 
+      rhesus = ?, 
+      pendidikan = ?, 
+      pekerjaan = ?, 
+      no_telp = ?, 
+      warga_negara = ?, 
+      nama_orangtua_wali = ?, 
+      no_telp_wali = ?, 
+      alamat = ?, 
+      rt = ?, 
+      rw = ?, 
+      kelurahan = ?, 
+      kecamatan = ?, 
+      kabupaten = ?, 
+      provinsi = ?, 
+      kode_pos = ?, 
+      asuransi = ?, 
+      no_asuransi = ?
     WHERE no_ktp = ?`;
-
-  const formatDate = (isoString) => {
-    return isoString?.split('T')[0];
-  };
 
   db.query(sql, [
     nama_lengkap,
-    umur,
+    tempat_lahir,
     tanggal_lahir,
-    asuransi,
-    no_asuransi,
+    umur,
+    jenis_kelamin,
+    agama,
+    status,
+    golongan_darah,
+    rhesus,
+    pendidikan,
+    pekerjaan,
     no_telp,
+    warga_negara,
     nama_orangtua_wali,
     no_telp_wali,
-    no_ktp,
+    alamat,
+    rt,
+    rw,
+    kelurahan,
+    kecamatan,
+    kabupaten,
+    provinsi,
+    kode_pos,
+    asuransi,
+    no_asuransi,
+    no_ktp
   ], (err, result) => {
     if (err) {
       console.error('Error updating patient:', err);

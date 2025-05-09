@@ -11,15 +11,7 @@ const columnsBase = [
     { field: 'no_ktp', headerName: 'No. KTP', width: 150 },
     { field: 'nama_lengkap', headerName: 'Nama Pasien', flex: 1 },
     { field: 'umur', headerName: 'Umur', type: 'number', width: 70 },
-    {
-        field: 'tanggal_lahir',
-        headerName: 'Tanggal Lahir',
-        width: 150,
-        valueFormatter: (params) => {
-            if (!params.value) return '';
-            return params.value.split('T')[0]; // Extract only the date part
-        }
-    },
+    { field: 'tanggal_lahir', headerName: 'Tanggal Lahir', width: 150},
     { field: 'asuransi', headerName: 'Nama Asuransi', width: 120 },
     { field: 'no_asuransi', headerName: 'Nomor Asuransi', flex: 1 },
     { field: 'no_telp', headerName: 'No. Telp', width: 150 },

@@ -114,6 +114,10 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // const formattedDate = formData.tanggalLahir
+    //   ? new Date(formData.tanggalLahir).toISOString().split('T')[0]
+    //   : '';
+
     if (!validateForm()) {
       setSnackbar({
         open: true,
@@ -135,7 +139,8 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
           ...formData,
           // Convert some fields to match backend expectations
           golongan_darah: formData.goldar,
-          no_asuransi: formData.noAsuransi
+          no_asuransi: formData.noAsuransi,
+          // tanggal_lahir: formattedDate
         })
       });
 

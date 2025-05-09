@@ -73,6 +73,7 @@ export default function FormEditDataPatient({ open, patientData, onClose, onUpda
           value={formData.tanggal_lahir}
           onChange={handleChange}
           name="tanggal_lahir"
+          type="date"
           fullWidth
           margin="normal"
         />

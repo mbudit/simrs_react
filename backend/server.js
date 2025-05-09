@@ -26,7 +26,7 @@ db.connect(err => {
 // API endpoint buat nyimpen data patients
 app.post('/api/patients', (req, res) => {
   const patientData = req.body;
-  
+
   const sql = `INSERT INTO patients (
     no_ktp, nama_lengkap, tempat_lahir, tanggal_lahir, umur, 
     jenis_kelamin, agama, status, golongan_darah, rhesus, 
@@ -35,7 +35,7 @@ app.post('/api/patients', (req, res) => {
     kelurahan, kecamatan, kabupaten, provinsi, kode_pos, 
     asuransi, no_asuransi
   ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-  
+
   const values = [
     patientData.noKtp,
     patientData.namaLengkap,
@@ -112,7 +112,7 @@ app.put('/api/patients/:no_ktp', (req, res) => {
   const {
     nama_lengkap,
     umur,
-    tanggal_lahir,
+    tanggal_lahir = formatDate(req.body.tanggal_lahir),
     asuransi,
     no_asuransi,
     no_telp,
@@ -124,6 +124,10 @@ app.put('/api/patients/:no_ktp', (req, res) => {
     nama_lengkap = ?, umur = ?, tanggal_lahir = ?, asuransi = ?, 
     no_asuransi = ?, no_telp = ?, nama_orangtua_wali = ?, no_telp_wali = ?
     WHERE no_ktp = ?`;
+
+  const formatDate = (isoString) => {
+    return isoString?.split('T')[0];
+  };
 
   db.query(sql, [
     nama_lengkap,

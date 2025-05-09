@@ -59,3 +59,11 @@ export const ModalCloseButton = ({ onClick }) => {
         </Button>
     );
 };
+
+export const ButtonPasienLama = ({ onClick }) => {
+    return (
+        <Button variant="contained" color="success" onClick={onClick} sx={{ mt: 1, mr: 1 }}>
+            Pasien Lama
+        </Button>
+    );
+};

@@ -192,10 +192,6 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
     }
   };
 
-  const handleCloseSnackbar = () => {
-    setSnackbar(prev => ({ ...prev, open: false }));
-  };
-
   return (
     <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex justify-center items-center z-50">
       <motion.div

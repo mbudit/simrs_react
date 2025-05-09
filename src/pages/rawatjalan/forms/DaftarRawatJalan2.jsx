@@ -5,17 +5,12 @@ import TextField from '@mui/material/TextField';
 import { useState, useEffect } from "react";
 import { ModalCloseButton, ButtonSubmit, ButtonClose, ButtonPasienLama } from '../../../components/Buttons';
 import Grid from '@mui/material/Grid';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import dayjs from 'dayjs';
 import Fade from '@mui/material/Fade';
-import ModalPasienLama from './PasienLama';
+
 
 const style = {
     position: 'absolute',
@@ -36,34 +31,11 @@ const style = {
     },
 };
 
-export default function ModalRajal({ open, handleClose }) {
-    const [form, setForm] = useState({
-        name: '',
-        email: '',
-        gender: '',
-        nik: '',
-        tgl_lahir: null,
-        status_pernikahan: '',
-        pekerjaan: '',
-        no_telp: '',
-        alamat: '',
-        tgl_daftar: null,
-        payments: '',
-        no_kartu: '',
-        poli: '',
-        dokter: '',
-        no_rujukan: '',
-        rujukan: '',
-        tgl_rujukan: null,
-        faskes: '',
-        pelayanan: '',
-        no_wa: '',
-        telp_wali: '',
-        alasan: '',
-    });
+export default function ModalRajal2({ open, handleClose, form, setForm, handleOpenNested }) {
+    const [errors, setErrors] = useState({});
 
     useEffect(() => {
-    if (!open) {
+        if (!open) {
         setForm({
             name: '',
             email: '',
@@ -88,9 +60,9 @@ export default function ModalRajal({ open, handleClose }) {
             telp_wali: '',
             alasan: '',
         });
-        setErrors({});
-    }
-}, [open]);
+            setErrors({});
+        }
+    }, [open]);
 
     const genders = [
         {
@@ -169,8 +141,6 @@ export default function ModalRajal({ open, handleClose }) {
         },
     ];
 
-    const [errors, setErrors] = useState({});
-
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -179,38 +149,28 @@ export default function ModalRajal({ open, handleClose }) {
         e.preventDefault();
         const newErrors = {};
         Object.entries(form).forEach(([key, value]) => {
-            if (value === '' || value === null) {
-                newErrors[key] = 'Wajib diisi';
+            if (value === "" || value === null) {
+                newErrors[key] = "Wajib diisi";
             }
         });
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
         } else {
-            alert('Form berhasil disubmit');
+            alert("Form berhasil disubmit");
             setErrors({});
             handleClose();
         }
     };
 
-    const [openNested, setOpenNested] = useState(false);
-    const handleOpenNested = () => setOpenNested(true);
-    const handleCloseNested = () => setOpenNested(false);
-    
-
     return (
         <Box>
-            <Modal
-                open={open}
-                onClose={handleClose}
+            <Modal 
+                open={open} 
+                onClose={handleClose} 
                 closeAfterTransition
                 aria-labelledby="modal-form-title"
                 aria-describedby="modal-form-description"
-                slotProps={{
-                    backdrop: {
-                        timeout: 300,
-                    },
-                }}
             >
                 <Fade in={open}>
                     <Box sx={style}>
@@ -218,69 +178,64 @@ export default function ModalRajal({ open, handleClose }) {
                             sx={{
                                 width: '100%',
                                 display: 'flex',
-                                alignItems: 'center',
                                 justifyContent: 'space-between',
-                                backgroundColor: '#1e2838', // biru MUI default
+                                alignItems: 'center',
+                                backgroundColor: '#1e2838',
                                 color: '#fff',
                                 px: 2,
                                 py: 1.5,
-                                /* borderTopLeftRadius: '4px',
-                                borderTopRightRadius: '4px', */
-                                /* borderBottom: '1px solid #1565c0', */
                             }}
-                            >
-                            <h2 className="text-xl font-bold">Pendaftaran Rawat Jalan</h2>
+                        >
+                            <h2>Pendaftaran Rawat Jalan</h2>
                             <ModalCloseButton onClick={handleClose} />
                         </Box>
-                        
-                        <Box display="flex" justifyContent="flex-end">
+
+                        <Box display="flex" justifyContent="flex-end" p={2}>
                             <ButtonPasienLama onClick={handleOpenNested} />
                         </Box>
-                        
-                        <Box sx={{ pt: 4, pl: 2, pb: 2, pr: 2 }}>
+
+                        <Box p={2}>
                             <form onSubmit={handleSubmit}>
                                 <h3 className="text-xl mb-2 font-bold">Data Pasien</h3>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} >
+                                    <Grid item xs={12}>
                                         <TextField
-                                            label="Nama"
-                                            name="name"
-                                            value={form.name}
-                                            onChange={handleChange}
-                                            fullWidth
-                                            margin="normal"
-                                            error={!!errors.name}
-                                            helperText={errors.name}
+                                        label="Nama"
+                                        name="name"
+                                        value={form.name}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        error={!!errors.name}
+                                        helperText={errors.name}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
                                             select
                                             label="Jenis Kelamin"
-                                            name="gender" // tambahkan name
-                                            value={form.gender} // kontrol oleh state
-                                            onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.gender}
-                                            helperText={errors.gender || " "}
+                                            name="gender"
+                                            value={form.gender}
+                                            onChange={handleChange}
                                             fullWidth
+                                            error={!!errors.gender}
+                                            helperText={errors.gender}
                                         >
                                             {genders.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
+                                                {option.label}
                                                 </MenuItem>
                                             ))}
                                         </TextField>
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
-                                            label="NIK"
-                                            name="nik"
-                                            value={form.nik}
-                                            onChange={handleChange}
-                                            fullWidth
-                                            margin="normal"
-                                            error={!!errors.nik}
-                                            helperText={errors.nik || " "}
+                                        label="NIK"
+                                        name="nik"
+                                        value={form.nik}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        error={!!errors.nik}
+                                        helperText={errors.nik}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -290,13 +245,13 @@ export default function ModalRajal({ open, handleClose }) {
                                                     label="Tanggal Lahir"
                                                     value={form.tgl_lahir}
                                                     onChange={(newValue) =>
-                                                        setForm({ ...form, tgl_lahir: newValue })
+                                                    setForm({ ...form, tgl_lahir: newValue })
                                                     }
                                                     slotProps={{
-                                                        textField: {
+                                                    textField: {
                                                         error: !!errors.tgl_lahir,
-                                                        helperText: errors.tgl_lahir || " ",
-                                                        },
+                                                        helperText: errors.tgl_lahir,
+                                                    },
                                                     }}
                                                 />
                                             </div>
@@ -560,8 +515,8 @@ export default function ModalRajal({ open, handleClose }) {
                                         />
                                     </Grid>
                                 </Grid>
-                                
-                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 6 }}>
+
+                                <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                                     <ButtonSubmit onClick={handleSubmit} />
                                     <ButtonClose onClick={handleClose} />
                                 </Box>
@@ -570,8 +525,6 @@ export default function ModalRajal({ open, handleClose }) {
                     </Box>
                 </Fade>
             </Modal>
-
-            <ModalPasienLama open={openNested} handleClose={handleCloseNested} />
         </Box>
     );
 }

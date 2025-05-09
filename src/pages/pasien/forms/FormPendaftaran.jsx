@@ -51,6 +51,10 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
     severity: 'success'
   });
 
+  const handleCloseSnackbar = () => {
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
+
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {

@@ -1,6 +1,7 @@
 import { Box, Fade, Modal, Button } from '@mui/material';
 import TablePasien2 from './TablePasien';
 import { ModalCloseButton } from '../../../components/Buttons';
+import TablePasien from './TablePasien2';
 
 const style = {
     position: 'absolute',
@@ -21,7 +22,7 @@ const style = {
     },
 };
 
-export default function ModalPasienLama({ open, handleClose, setForm, handleOpen }) {
+export default function ModalPasienLama({ open, handleClose, setForm, handleOpen, handleSelect }) {
     return (
         <Modal
             open={open}
@@ -46,10 +47,14 @@ export default function ModalPasienLama({ open, handleClose, setForm, handleOpen
                         <ModalCloseButton onClick={handleClose} />
                     </Box>
                     
-                    <TablePasien2
+                    {/* <TablePasien2
                         setForm={setForm}
                         handleOpen={handleOpen}
                         handleClose={handleClose} // <-- Tambahkan ini
+                    /> */}
+                    <TablePasien 
+                        handleSelect={handleSelect}
+                        
                     />
                 </Box>
             </Fade>

@@ -148,8 +148,52 @@ app.put('/api/patients/:no_ktp', (req, res) => {
   });
 });
 
+app.post("/api/rawatjalan", (req, res) => {
+  console.log("POST /api/rajal dipanggil");
+  const rajalData = req.body;
 
+  const sql = `INSERT INTO rawatjalan (
+    nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
+    pekerjaan, no_telp, alamat, tgl_daftar, payments,
+    no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
+    tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
+  const values = [
+    rajalData.nama_lengkap,
+    rajalData.jenis_kelamin,
+    rajalData.no_ktp,
+    rajalData.tgl_lahir,
+    rajalData.status_pernikahan,
+    rajalData.pekerjaan,
+    rajalData.no_telp,
+    rajalData.alamat,
+    rajalData.tgl_daftar,
+    rajalData.payments,
+    rajalData.no_kartu,
+    rajalData.poli,
+    rajalData.dokter,
+    rajalData.jenis_rujukan,
+    rajalData.no_rujukan,
+    rajalData.tgl_rujukan,
+    rajalData.faskes,
+    rajalData.no_wa,
+    rajalData.nama_wali,
+    rajalData.telp_wali,
+    rajalData.alasan,
+  ];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("DB error:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    res.status(201).json({
+      message: "Rawat Jalan berhasil didaftarkan",
+      id: result.insertId,
+    });
+  });
+});
 
 const PORT = 5000;
 app.listen(PORT, () => {

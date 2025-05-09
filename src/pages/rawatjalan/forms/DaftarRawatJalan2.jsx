@@ -10,6 +10,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Fade from '@mui/material/Fade';
+import axios from 'axios';
+import dayjs from 'dayjs';
 
 
 const style = {
@@ -37,10 +39,9 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
     useEffect(() => {
         if (!open) {
         setForm({
-            name: '',
-            email: '',
-            gender: '',
-            nik: '',
+            nama_lengkap: '',
+            jenis_kelamin: '',
+            no_ktp: '',
             tgl_lahir: null,
             status_pernikahan: '',
             pekerjaan: '',
@@ -51,11 +52,10 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
             no_kartu: '',
             poli: '',
             dokter: '',
+            jenis_rujukan: '',
             no_rujukan: '',
-            rujukan: '',
             tgl_rujukan: null,
             faskes: '',
-            pelayanan: '',
             no_wa: '',
             nama_wali: '',
             telp_wali: '',
@@ -67,100 +67,126 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
 
     const genders = [
         {
-            value: 'laki-laki',
+            value: 'Laki-laki',
             label: 'Laki-laki',
         },
         {
-            value: 'perempuan',
+            value: 'Perempuan',
             label: 'Perempuan',
         },
     ];
 
     const status_pernikahan = [
         {
-            value: 'menikah',
+            value: 'Menikah',
             label: 'Sudah Menikah',
         },
         {
-            value: 'belum_menikah',
+            value: 'Belum Menikah',
             label: 'Belum Menikah',
+        },
+        {
+            value: 'Cerai',
+            label: 'Cerai',
         },
     ];
 
     const payments = [
         {
-            value: 'tunai',
-            label: 'Tunai',
+            value: 'Tidak Ada',
+            label: 'Tidak Ada',
         },
         {
-            value: 'non_tunai',
-            label: 'Non Tunai',
+            value: 'BPJS',
+            label: 'BPJS',
+        },
+        {
+            value: 'Asuransi A',
+            label: 'Asuransi A',
+        },
+        {
+            value: 'Asuransi B',
+            label: 'Asuransi B',
+        },
+        {
+            value: 'Asuransi Swasta',
+            label: 'Asuransi Swasta',
         },
     ];
 
     const poli = [
         {
-            value: 'gigi',
+            value: 'Poli Gigi',
             label: 'Poli Gigi',
         },
         {
-            value: 'anak',
+            value: 'Poli Anak',
             label: 'Poli Anak',
         },
     ];
 
     const dokter = [
         {
-            value: 'dr_beneran',
+            value: 'Dr. Beneran',
             label: 'Dr. Beneran',
         },
         {
-            value: 'dr_gadungan',
+            value: 'Dr. Gadungan',
             label: 'Dr. Gadungan',
         },
     ];
 
-    const rujukan = [
+    const jenis_rujukan = [
         {
-            value: 'sendiri',
+            value: 'Datang Sendiri',
             label: 'Datang Sendiri',
         },
         {
-            value: 'rujukan',
+            value: 'Rujukan',
             label: 'Rujukan',
         },
     ];
 
-    const pelayanan = [
+    const faskes = [
         {
-            value: 'spesialis',
+            value: 'Spesialis',
             label: 'Spesialis',
         },
         {
-            value: 'konsul',
-            label: 'konsul',
+            value: 'Konsul',
+            label: 'Konsul',
         },
     ];
 
     const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
+        setForm({
+            ...form,
+            [e.target.name]: e.target.value,
+        });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        const newErrors = {};
-        Object.entries(form).forEach(([key, value]) => {
-            if (value === "" || value === null) {
-                newErrors[key] = "Wajib diisi";
-            }
-        });
 
-        if (Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
-        } else {
-            alert("Form berhasil disubmit");
-            setErrors({});
+        const formattedData = {
+            ...form,
+            tgl_lahir: form.tgl_lahir ? form.tgl_lahir.format("YYYY-MM-DD") : null, // Format tgl_lahir ke "YYYY-MM-DD"
+            tgl_daftar: form.tgl_daftar ? form.tgl_daftar.format("YYYY-MM-DD") : null,
+            tgl_rujukan: form.tgl_rujukan ? form.tgl_rujukan.format("YYYY-MM-DD") : null,
+        };
+        try {
+            const response = await axios.post('http://localhost:5000/api/rawatjalan', formattedData, {
+                headers: {
+                'Content-Type': 'application/json',
+                }
+            });
+            console.log('Response:', response.data);
+            alert('Data berhasil disubmit!');
+            
             handleClose();
+        } catch (error) {
+            console.error('Error terjadi:', error);
+            alert('Terjadi kesalahan saat mengirim data');
         }
     };
 
@@ -201,25 +227,25 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                 <Grid container spacing={2}>
                                     <Grid item xs={12}>
                                         <TextField
-                                        label="Nama"
-                                        name="name"
-                                        value={form.name}
+                                        label="Nama Lengkap"
+                                        name="nama_lengkap"
+                                        value={form.nama_lengkap}
                                         onChange={handleChange}
                                         fullWidth
-                                        error={!!errors.name}
-                                        helperText={errors.name}
+                                        error={!!errors.nama_lengkap}
+                                        helperText={errors.nama_lengkap}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
                                             select
                                             label="Jenis Kelamin"
-                                            name="gender"
-                                            value={form.gender}
+                                            name="jenis_kelamin"
+                                            value={form.jenis_kelamin}
                                             onChange={handleChange}
                                             fullWidth
-                                            error={!!errors.gender}
-                                            helperText={errors.gender}
+                                            error={!!errors.jenis_kelamin}
+                                            helperText={errors.jenis_kelamin}
                                         >
                                             {genders.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
@@ -230,13 +256,13 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
-                                        label="NIK"
-                                        name="nik"
-                                        value={form.nik}
+                                        label="No. KTP"
+                                        name="no_ktp"
+                                        value={form.no_ktp}
                                         onChange={handleChange}
                                         fullWidth
-                                        error={!!errors.nik}
-                                        helperText={errors.nik}
+                                        error={!!errors.no_ktp}
+                                        helperText={errors.no_ktp}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -244,10 +270,8 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             <div style={{ marginTop: '7px' }}>
                                                 <DatePicker
                                                     label="Tanggal Lahir"
-                                                    value={form.tgl_lahir}
-                                                    onChange={(newValue) =>
-                                                    setForm({ ...form, tgl_lahir: newValue })
-                                                    }
+                                                    value={form.tgl_lahir ? dayjs(form.tgl_lahir) : null}
+                                                    onChange={(newValue) => setForm({ ...form, tgl_lahir: newValue })}
                                                     slotProps={{
                                                     textField: {
                                                         error: !!errors.tgl_lahir,
@@ -329,7 +353,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             <div style={{ marginTop: '7px' }}>
                                                 <DatePicker
                                                     label="Tanggal Daftar"
-                                                    value={form.tgl_daftar}
+                                                    value={form.tgl_daftar ? dayjs(form.tgl_daftar) : null}
                                                     onChange={(newValue) =>
                                                         setForm({ ...form, tgl_daftar: newValue })
                                                     }
@@ -371,6 +395,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             margin="normal"
                                             error={!!errors.no_kartu}
                                             helperText={errors.no_kartu}
+                                            disabled={form.payments === 'umum'}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -413,14 +438,14 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             select
                                             label="Datang Sendiri/Rujukan"
-                                            name="rujukan" // tambahkan name
-                                            value={form.rujukan} // kontrol oleh state
+                                            name="jenis_rujukan" // tambahkan name
+                                            value={form.jenis_rujukan} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.rujukan}
-                                            helperText={errors.rujukan || " "}
+                                            error={!!errors.jenis_rujukan}
+                                            helperText={errors.jenis_rujukan || " "}
                                             fullWidth
                                         >
-                                            {rujukan.map((option) => (
+                                            {jenis_rujukan.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
@@ -430,13 +455,14 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                     <Grid item xs={12}>
                                         <TextField
                                             label="No. Rujukan"
-                                            name="rujukan"
+                                            name="no_rujukan"
                                             value={form.no_rujukan}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
                                             error={!!errors.no_rujukan}
                                             helperText={errors.no_rujukan}
+                                            disabled={form.rujukan === 'sendiri'}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -444,10 +470,11 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             <div style={{ marginTop: '7px' }}>
                                                 <DatePicker
                                                     label="Tanggal Rujukan"
-                                                    value={form.tgl_rujukan}
+                                                    value={form.tgl_rujukan ? dayjs(form.tgl_rujukan) : null}
                                                     onChange={(newValue) =>
                                                         setForm({ ...form, tgl_rujukan: newValue })
                                                     }
+                                                    disabled={form.rujukan === 'sendiri'}
                                                     slotProps={{
                                                         textField: {
                                                         error: !!errors.tgl_rujukan,
@@ -462,14 +489,14 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             select
                                             label="Pilih Pelayanan"
-                                            name="pelayanan" // tambahkan name
-                                            value={form.pelayanan} // kontrol oleh state
+                                            name="faskes" // tambahkan name
+                                            value={form.faskes} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.pelayanan}
-                                            helperText={errors.pelayanan || " "}
+                                            error={!!errors.faskes}
+                                            helperText={errors.faskes || " "}
                                             fullWidth
                                         >
-                                            {pelayanan.map((option) => (
+                                            {faskes.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
@@ -531,7 +558,9 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
 
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                                     <ButtonSubmit onClick={handleSubmit} />
-                                    <ButtonClose onClick={handleClose} />
+                                    <Box sx={{ ml: 2 }}>
+                                        <ButtonClose onClick={handleClose} />
+                                    </Box>
                                 </Box>
                             </form>
                         </Box>

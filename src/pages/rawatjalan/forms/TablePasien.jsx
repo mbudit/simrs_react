@@ -35,7 +35,8 @@ const TablePasien2 = ({ setForm, handleOpen, handleClose }) => {
             faskes: row.faskes || '',
             pelayanan: row.pelayanan || '',
             no_wa: row.no_wa || '',
-            telp_wali: row.telp_wali || '',
+            nama_wali: row.nama_penanggung_jawab || '',
+            telp_wali: row.no_telp_penanggung_jawab || '',
             alasan: row.alasan || '',
         });
         handleOpen();   // buka ModalRajal2

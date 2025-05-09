@@ -57,6 +57,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
             faskes: '',
             pelayanan: '',
             no_wa: '',
+            nama_wali: '',
             telp_wali: '',
             alasan: '',
         });
@@ -410,6 +411,24 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                     </Grid>
                                     <Grid item xs={12}>
                                         <TextField
+                                            select
+                                            label="Datang Sendiri/Rujukan"
+                                            name="rujukan" // tambahkan name
+                                            value={form.rujukan} // kontrol oleh state
+                                            onChange={handleChange} // ubah state saat berubah
+                                            error={!!errors.rujukan}
+                                            helperText={errors.rujukan || " "}
+                                            fullWidth
+                                        >
+                                            {rujukan.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
                                             label="No. Rujukan"
                                             name="rujukan"
                                             value={form.no_rujukan}
@@ -442,24 +461,6 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                     <Grid item xs={12}>
                                         <TextField
                                             select
-                                            label="Datang Sendiri/Rujukan"
-                                            name="rujukan" // tambahkan name
-                                            value={form.rujukan} // kontrol oleh state
-                                            onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.rujukan}
-                                            helperText={errors.rujukan || " "}
-                                            fullWidth
-                                        >
-                                            {rujukan.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <TextField
-                                            select
                                             label="Pilih Pelayanan"
                                             name="pelayanan" // tambahkan name
                                             value={form.pelayanan} // kontrol oleh state
@@ -485,6 +486,18 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             margin="normal"
                                             error={!!errors.no_wa}
                                             helperText={errors.no_wa}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <TextField
+                                            label="Nama Wali"
+                                            name="nama_wali"
+                                            value={form.nama_wali}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.nama_wali}
+                                            helperText={errors.nama_wali}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

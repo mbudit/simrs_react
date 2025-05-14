@@ -16,7 +16,7 @@ function App() {
 
   useEffect(() => {
     // Example: check if token exists (adjust based on your backend)
-    const token = document.cookie.includes("token");
+    const token = localStorage.getItem("token");
     setIsAuthenticated(token);
   }, []);
 

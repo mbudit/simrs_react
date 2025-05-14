@@ -36,6 +36,7 @@ const Login = () => {
                     setOpenSnackbar(true);
 
                     setTimeout(() => {
+                        console.log("Navigating to /home");
                         setOpenSnackbar(false);
                         navigate("/home");
                     }, 3000);

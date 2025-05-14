@@ -268,7 +268,7 @@ app.post("/api/rawatjalan", (req, res) => {
 app.get("/api/pasien_rajal", (req, res) => {
   const sql = `
     SELECT
-      nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
+      no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
       pekerjaan, no_telp, alamat, tgl_daftar, payments,
       no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
       tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan

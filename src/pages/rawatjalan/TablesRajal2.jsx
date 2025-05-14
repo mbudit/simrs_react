@@ -4,10 +4,10 @@ import Paper from '@mui/material/Paper';
 import axios from 'axios';
 
 const columns = [
-    { field: 'tgl_daftar', headerName: 'Tanggal Daftar', headerClassName: 'super-app-theme--header', flex: 1 },
+    { field: 'tgl_daftar', headerName: 'Tanggal Daftar', headerClassName: 'super-app-theme--header', width: 150 },
+    { field: 'no_rm', headerName: 'No RM', headerClassName: 'super-app-theme--header', flex: 1 },
     /* { field: 'status', headerName: 'Status', headerClassName: 'super-app-theme--header', width: 130 }, */
     { field: 'poli', headerName: 'Poli', headerClassName: 'super-app-theme--header', width: 130 },
-    /* { field: 'no_rm', headerName: 'No RM', headerClassName: 'super-app-theme--header', flex: 1 }, */
     { field: 'nama_lengkap', headerName: 'Nama Lengkap', headerClassName: 'super-app-theme--header', flex: 1 },   
     { field: 'jenis_kelamin', headerName: 'Jenis Kelamin', headerClassName: 'super-app-theme--header', width: 140 },
     { field: 'dokter', headerName: 'Dokter', headerClassName: 'super-app-theme--header', flex: 1 },

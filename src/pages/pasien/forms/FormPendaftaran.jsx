@@ -69,6 +69,17 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
       [name]: value
     }));
 
+    const numericFields = ['umur', 'noKtp', 'rt', 'rw', 'kodePos', 'noTelp', 'noTelpWali', 'noAsuransi'];
+
+    const newValue = numericFields.includes(name)
+      ? value.replace(/\D/g, '') // Remove non-digits
+      : value;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: newValue,
+    }));
+
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
@@ -229,7 +240,6 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
           <div className="md:col-span-1">
             <TextField
               label="No. KTP"
-              type="number"
               fullWidth
               required
               name="noKtp"
@@ -286,7 +296,6 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
           <div className="md:col-span-1">
             <TextField
               label="Umur"
-              type="number"
               fullWidth
               required
               name="umur"
@@ -418,7 +427,6 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
           <div className="md:col-span-1">
             <TextField
               label="No. Telp"
-              type="tel"
               fullWidth
               required
               name="noTelp"
@@ -462,7 +470,6 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
           <div className="md:col-span-1">
             <TextField
               label="No. Telp Wali"
-              type="tel"
               fullWidth
               required
               name="noTelpWali"
@@ -496,7 +503,6 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
           <div className="md:col-span-1">
             <TextField
               label="RT"
-              type="number"
               fullWidth
               required
               name="rt"
@@ -512,7 +518,6 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
           <div className="md:col-span-1">
             <TextField
               label="RW"
-              type="number"
               fullWidth
               required
               name="rw"
@@ -576,7 +581,6 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
           <div className="md:col-span-1">
             <TextField
               label="Kode Pos"
-              type="number"
               fullWidth
               required
               name="kodePos"

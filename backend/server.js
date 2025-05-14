@@ -1,18 +1,26 @@
+require('dotenv').config();
+
 const express = require('express');
 const mysql = require('mysql2');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+app.use(cookieParser());
+
+const JWT_SECRET = process.env.JWT_SECRET; // move this to env in real use
 
 // MySQL connection
 const db = mysql.createConnection({
-  host: '100.113.21.119',
-  user: 'nugi',
-  password: 'nugi123',
-  database: 'myhospital'
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME
 });
 
 db.connect(err => {
@@ -21,6 +29,100 @@ db.connect(err => {
     return;
   }
   console.log('Connected to MySQL database');
+});
+
+app.post("/decode-token", (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        return res.status(400).json({ error: "Token is required" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET); // or jwt.decode(token) for non-verified
+        res.json({ decoded });
+    } catch (err) {
+        res.status(400).json({ error: "Invalid token", details: err.message });
+    }
+});
+
+
+app.post("/register", async (req, res) => {
+    const { email, password } = req.body;
+
+    // Check if user already exists
+    db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
+        if (err) return res.status(500).json({ error: "Database error" });
+
+        if (results.length > 0) {
+            return res.status(409).json({ error: "User already exists" });
+        }
+
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Insert user
+        db.query(
+            "INSERT INTO users (email, password) VALUES (?, ?)",
+            [email, hashedPassword],
+            (err, result) => {
+                if (err) return res.status(500).json({ error: "Registration failed" });
+
+                res.status(201).json({ message: "User registered successfully" });
+            }
+        );
+    });
+});
+
+// Login Route
+app.post("/login", (req, res) => {
+    const { email, password } = req.body;
+
+    // Check if email exists in the database
+    const query = "SELECT * FROM users WHERE email = ?";
+    db.query(query, [email], async (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: "Server error" });
+        }
+
+        if (result.length === 0) {
+            return res.status(400).json({ error: "Salah email atau password" });
+        }
+
+        const user = result[0];
+
+        // Compare password with hashed password in the database
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            return res.status(400).json({ error: "Salah email atau password" });
+        }
+
+        // Create JWT token
+        const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
+
+        res.status(200).json({ message: "Login successful", token });
+    });
+});
+
+// Middleware to Protect Routes (Auth Middleware)
+const authenticateJWT = (req, res, next) => {
+    const token = req.headers["authorization"];
+    if (!token) {
+        return res.status(403).json({ error: "Access denied" });
+    }
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) {
+            return res.status(403).json({ error: "Invalid token" });
+        }
+        req.user = user;
+        next();
+    });
+};
+
+// Example of a protected route
+app.get("/dashboard", authenticateJWT, (req, res) => {
+    res.status(200).json({ message: "Welcome to your dashboard!", user: req.user });
 });
 
 // API endpoint buat nyimpen data patients
@@ -285,7 +387,7 @@ app.get("/api/pasien_rajal", (req, res) => {
   });
 });
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

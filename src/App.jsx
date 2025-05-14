@@ -1,43 +1,54 @@
-import Navbar from "./components/Navbar"
-import Sidebar from "./components/Sidebar"
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import Home from "./pages/Home";
-import RawatJalan from "./pages/rawatjalan/RawatJalan";
-import Messages from "./pages/Messages";
-import Notifications from "./pages/Notifications";
-import Analytics from "./pages/Analytics";
-import Calendar from "./pages/Calendar";
-import Library from "./pages/Library";
-import Documents from "./pages/Documents";
-import Search from "./pages/Search";
-import Favorites from "./pages/Favorites";
-import Starred from "./pages/Starred";
-import Help from "./pages/Help";
-import Sidebar2 from "./components/Sidebar2";
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+
+import Navbar from "./components/Navbar";
+import Sidebar2 from "./components/Sidebar2";
+import Home from "./pages/Home";
 import DaftarPasien from "./pages/pasien/DaftarPasien";
+import RawatJalan from "./pages/rawatjalan/RawatJalan";
 import Login from "./pages/login/Login";
+import Register from "./pages/login/Register";
 
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // state auth
+
+  useEffect(() => {
+    // Example: check if token exists (adjust based on your backend)
+    const token = document.cookie.includes("token");
+    setIsAuthenticated(token);
+  }, []);
 
   return (
     <Router>
       <div className="flex flex-col">
-        <AppContent sidebarCollapsed={sidebarCollapsed} setSidebarCollapsed={setSidebarCollapsed} />
+        <AppContent
+          sidebarCollapsed={sidebarCollapsed}
+          setSidebarCollapsed={setSidebarCollapsed}
+          isAuthenticated={isAuthenticated}
+        />
       </div>
     </Router>
   );
 }
 
-const AppContent = ({ sidebarCollapsed, setSidebarCollapsed }) => {
-  const location = useLocation();  // Mengambil informasi lokasi/rute aktif
+const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated }) => {
+  const location = useLocation();
+
+  // if user is NOT authenticated and tries to go to any route except /login, redirect them
+  if (!isAuthenticated && location.pathname !== "/login") {
+    return <Navigate to="/login" replace />;
+  }
 
   return (
     <>
-      {/* Cek apakah halaman login yang aktif */}
-      {location.pathname !== "/login" && (
+      {location.pathname === "/login" || location.pathname === "/register" ? (
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      ) : (
         <>
           <Navbar />
           <div className="flex">
@@ -48,20 +59,13 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed }) => {
                 <Route path="/home" element={<Home />} />
                 <Route path="/daftarpasien" element={<DaftarPasien />} />
                 <Route path="/rawatjalan" element={<RawatJalan />} />
-                {/* Rute lainnya */}
               </Routes>
             </div>
           </div>
         </>
       )}
-      {/* Halaman Login tidak memiliki Navbar dan Sidebar */}
-      {location.pathname === "/login" && (
-        <Routes>
-          <Route path="/login" element={<Login />} />
-        </Routes>
-      )}
     </>
   );
-}
+};
 
-export default App
+export default App;

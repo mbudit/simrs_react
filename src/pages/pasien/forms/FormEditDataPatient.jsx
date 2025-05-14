@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import {
+  TextField,
+  Button,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle
+} from '@mui/material';
 import { motion } from 'framer-motion';
 
 export default function FormEditDataPatient({ open, patientData, onClose, onUpdate }) {
@@ -56,6 +67,18 @@ export default function FormEditDataPatient({ open, patientData, onClose, onUpda
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    const numericFields = ['umur', 'no_ktp', 'rt', 'rw', 'kode_pos', 'no_telp', 'no_telp_wali', 'no_asuransi'];
+
+    const newValue = numericFields.includes(name)
+      ? value.replace(/\D/g, '') // Remove non-digits
+      : value;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: newValue,
+    }));
+
 
     // Clear error when user starts typing
     if (errors[name]) {
@@ -135,7 +158,7 @@ export default function FormEditDataPatient({ open, patientData, onClose, onUpda
           >
             <div className='grid grid-cols-1 md:grid-cols-5 gap-4 max-h-[80vh] overflow-y-auto pr-2'>
               <div className="md:col-span-5">
-                <h3 className="text-xl font-bold">Form Edit Pasien</h3>
+                <h3 className="text-xl font-bold">Form Edit Data Pasien</h3>
               </div>
               <div className="md:col-span-5">
                 <hr className="border-t border-gray-300" />
@@ -195,14 +218,21 @@ export default function FormEditDataPatient({ open, patientData, onClose, onUpda
                   value={formData.umur}
                   onChange={handleChange}
                   name="umur"
-                  type="number"
+                  type="text"
                   fullWidth
                   margin="normal"
+                  slotProps={{
+                    input: {
+                      inputMode: 'numeric',
+                      pattern: '[0-9]*'
+                    }
+                  }}
                 />
               </div>
 
+
               <div className='md:col-span-1'>
-                <FormControl fullWidth required error={!!errors.jenisKelamin}>
+                <FormControl fullWidth required error={!!errors.jenisKelamin} margin='normal'>
                   <InputLabel>Jenis Kelamin</InputLabel>
                   <Select
                     label="Jenis Kelamin"
@@ -217,58 +247,90 @@ export default function FormEditDataPatient({ open, patientData, onClose, onUpda
               </div>
 
               <div className='md:col-span-1'>
-                <TextField
-                  label="Agama"
-                  value={formData.agama}
-                  onChange={handleChange}
-                  name="agama"
-                  fullWidth
-                  margin="normal"
-                />
+                <FormControl fullWidth required error={!!errors.agama} margin='normal'>
+                  <InputLabel>Agama</InputLabel>
+                  <Select
+                    label="Agama"
+                    name="agama"
+                    value={formData.agama}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="Islam">Islam</MenuItem>
+                    <MenuItem value="Kristen">Kristen</MenuItem>
+                    <MenuItem value="Katolik">Katolik</MenuItem>
+                    <MenuItem value="Hindu">Hindu</MenuItem>
+                    <MenuItem value="Budha">Budha</MenuItem>
+                    <MenuItem value="Konghucu">Konghucu</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
 
               <div className='md:col-span-1'>
-                <TextField
-                  label="Status"
-                  value={formData.status}
-                  onChange={handleChange}
-                  name="status"
-                  fullWidth
-                  margin="normal"
-                />
+                <FormControl fullWidth required error={!!errors.status} margin='normal'>
+                  <InputLabel>Status</InputLabel>
+                  <Select
+                    label="Status"
+                    name="status"
+                    value={formData.status}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="Belum Menikah">Belum Menikah</MenuItem>
+                    <MenuItem value="Menikah">Menikah</MenuItem>
+                    <MenuItem value="Cerai">Cerai</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
 
               <div className='md:col-span-1'>
-                <TextField
-                  label="Golongan Darah"
-                  value={formData.golongan_darah}
-                  onChange={handleChange}
-                  name="golongan_darah"
-                  fullWidth
-                  margin="normal"
-                />
+                <FormControl fullWidth required error={!!errors.goldar} margin='normal'>
+                  <InputLabel>Gol. Darah</InputLabel>
+                  <Select
+                    label="Gol. Darah"
+                    name="goldar"
+                    value={formData.golongan_darah}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="A">A</MenuItem>
+                    <MenuItem value="B">B</MenuItem>
+                    <MenuItem value="AB">AB</MenuItem>
+                    <MenuItem value="O">O</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
 
               <div className='md:col-span-1'>
-                <TextField
-                  label="Rhesus"
-                  value={formData.rhesus}
-                  onChange={handleChange}
-                  name="rhesus"
-                  fullWidth
-                  margin="normal"
-                />
+                <FormControl fullWidth required error={!!errors.rhesus} margin='normal'>
+                  <InputLabel>Rhesus</InputLabel>
+                  <Select
+                    label="Rhesus"
+                    name="rhesus"
+                    value={formData.rhesus}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="+">Positif (+)</MenuItem>
+                    <MenuItem value="-">Negatif (-)</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
 
               <div className='md:col-span-1'>
-                <TextField
-                  label="Pendidikan"
-                  value={formData.pendidikan}
-                  onChange={handleChange}
-                  name="pendidikan"
-                  fullWidth
-                  margin="normal"
-                />
+                <FormControl fullWidth required error={!!errors.pendidikan} margin='normal'>
+                  <InputLabel>Pendidikan</InputLabel>
+                  <Select
+                    label="Pendidikan"
+                    name="pendidikan"
+                    value={formData.pendidikan}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="SD">SD</MenuItem>
+                    <MenuItem value="SMP">SMP</MenuItem>
+                    <MenuItem value="SMA/SMK">SMA/SMK</MenuItem>
+                    <MenuItem value="D3">D3</MenuItem>
+                    <MenuItem value="S1">S1</MenuItem>
+                    <MenuItem value="S2">S2</MenuItem>
+                    <MenuItem value="S3">S3</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
 
               <div className='md:col-span-1'>
@@ -294,14 +356,18 @@ export default function FormEditDataPatient({ open, patientData, onClose, onUpda
               </div>
 
               <div className='md:col-span-1'>
-                <TextField
-                  label="Warga Negara"
-                  value={formData.warga_negara}
-                  onChange={handleChange}
-                  name="warga_negara"
-                  fullWidth
-                  margin="normal"
-                />
+                <FormControl fullWidth required error={!!errors.wargaNegara} margin='normal'>
+                  <InputLabel>Warga Negara</InputLabel>
+                  <Select
+                    label="Warga Negara"
+                    name="warga_negara"
+                    value={formData.warga_negara}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="WNI">WNI</MenuItem>
+                    <MenuItem value="WNA">WNA</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
 
               <div className='md:col-span-2'>
@@ -423,14 +489,21 @@ export default function FormEditDataPatient({ open, patientData, onClose, onUpda
               </div>
 
               <div className='md:col-span-2'>
-                <TextField
-                  label="Asuransi"
-                  value={formData.asuransi}
-                  onChange={handleChange}
-                  name="asuransi"
-                  fullWidth
-                  margin="normal"
-                />
+                <FormControl fullWidth required error={!!errors.asuransi} margin='normal'>
+                  <InputLabel>Asuransi</InputLabel>
+                  <Select
+                    label="Asuransi"
+                    name="asuransi"
+                    value={formData.asuransi}
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="BPJS">BPJS</MenuItem>
+                    <MenuItem value="Asuransi A">Asuransi A</MenuItem>
+                    <MenuItem value="Asuransi B">Asuransi B</MenuItem>
+                    <MenuItem value="Asuransi Swasta">Asuransi Swasta</MenuItem>
+                    <MenuItem value="Tidak Ada">Tidak Ada</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
 
               <div className='md:col-span-2'>

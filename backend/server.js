@@ -315,18 +315,22 @@ app.put('/api/patients/:no_ktp', (req, res) => {
   });
 });
 
+const { v4: uuidv4 } = require("uuid");
 app.post("/api/rawatjalan", (req, res) => {
   console.log("POST /api/rajal dipanggil");
   const rajalData = req.body;
 
+  const no_rm = "IRJ-" + uuidv4().split("-")[0];
+
   const sql = `INSERT INTO rawatjalan (
-    nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
+    no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
     pekerjaan, no_telp, alamat, tgl_daftar, payments,
     no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
     tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   const values = [
+    no_rm,
     rajalData.nama_lengkap,
     rajalData.jenis_kelamin,
     rajalData.no_ktp,
@@ -358,7 +362,28 @@ app.post("/api/rawatjalan", (req, res) => {
     res.status(201).json({
       message: "Rawat Jalan berhasil didaftarkan",
       id: result.insertId,
+      no_rm: no_rm,
     });
+  });
+});
+
+app.get("/api/pasien_rajal", (req, res) => {
+  const sql = `
+    SELECT
+      nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
+      pekerjaan, no_telp, alamat, tgl_daftar, payments,
+      no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
+      tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
+    FROM rawatjalan
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    res.json(results);
   });
 });
 

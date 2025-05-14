@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { BackButton, ButtonDaftar } from '../../components/Buttons';
 import TableIRJ2 from './TablesRajal';
+import TableIRJ3 from './TablesRajal2';
 import ModalRajal2 from './forms/DaftarRawatJalan2';
 import ModalPasienLama from './forms/PasienLama';
 import dayjs from 'dayjs';
@@ -69,7 +70,7 @@ const RawatJalan = () => {
                 <h3 className="text-2xl font-semibold">Data Pasien Rawat Jalan</h3>
                 <ButtonDaftar onClick={handleOpen} />
             </div>
-            <TableIRJ2 />
+            <TableIRJ3 />
             <ModalRajal2
                 open={open}
                 handleClose={handleClose}

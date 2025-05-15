@@ -438,7 +438,7 @@ app.post("/api/rawatjalan", (req, res) => {
 app.get("/api/pasien_rajal", (req, res) => {
   const sql = `
     SELECT
-      no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
+      id, no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
       pekerjaan, no_telp, alamat, tgl_daftar, payments,
       no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
       tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
@@ -453,6 +453,141 @@ app.get("/api/pasien_rajal", (req, res) => {
 
     res.json(results);
   });
+});
+
+app.delete("/api/pasien_rajal/:id", (req, res) => {
+  const id = req.params.id;
+
+  const sql = "DELETE FROM rawatjalan WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Delete error:", err);
+      return res.status(500).json({ error: "Failed to delete patient" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    res.json({ message: "Patient deleted successfully" });
+  });
+});
+
+app.put("/api/update_rajal/:id", (req, res) => {
+  const { id } = req.params;
+  let {
+    nama_lengkap,
+    jenis_kelamin,
+    no_ktp,
+    tgl_lahir,
+    status_pernikahan,
+    pekerjaan,
+    no_telp,
+    alamat,
+    tgl_daftar,
+    payments,
+    no_kartu,
+    poli,
+    dokter,
+    jenis_rujukan,
+    no_rujukan,
+    tgl_rujukan,
+    faskes,
+    no_wa,
+    nama_wali,
+    telp_wali,
+    alasan,
+  } = req.body;
+
+  // Fungsi untuk mengubah nilai kosong menjadi "Tidak Ada" atau null untuk tanggal
+  const checkAndFill = (value, isDate = false) => {
+    if (isDate) {
+      return value ? value : null; // Jika nilai kosong, kembalikan null
+    }
+    return value ? value : "Tidak Ada"; // Untuk nilai selain tanggal, kembalikan "Tidak Ada"
+  };
+
+  // Menggunakan fungsi checkAndFill untuk setiap kolom
+  nama_lengkap = checkAndFill(nama_lengkap);
+  jenis_kelamin = checkAndFill(jenis_kelamin);
+  no_ktp = checkAndFill(no_ktp);
+  tgl_lahir = checkAndFill(tgl_lahir, true); // Menambahkan parameter isDate untuk tgl_lahir
+  status_pernikahan = checkAndFill(status_pernikahan);
+  pekerjaan = checkAndFill(pekerjaan);
+  no_telp = checkAndFill(no_telp);
+  alamat = checkAndFill(alamat);
+  tgl_daftar = checkAndFill(tgl_daftar, true); // Menambahkan parameter isDate untuk tgl_daftar
+  payments = checkAndFill(payments);
+  no_kartu = checkAndFill(no_kartu);
+  poli = checkAndFill(poli);
+  dokter = checkAndFill(dokter);
+  jenis_rujukan = checkAndFill(jenis_rujukan);
+  no_rujukan = checkAndFill(no_rujukan);
+  tgl_rujukan = checkAndFill(tgl_rujukan, true); // Menambahkan parameter isDate untuk tgl_rujukan
+  faskes = checkAndFill(faskes);
+  no_wa = checkAndFill(no_wa);
+  nama_wali = checkAndFill(nama_wali);
+  telp_wali = checkAndFill(telp_wali);
+  alasan = checkAndFill(alasan);
+
+  const sql = `UPDATE rawatjalan SET 
+    nama_lengkap = ?, 
+    jenis_kelamin = ?, 
+    no_ktp = ?, 
+    tgl_lahir = ?, 
+    status_pernikahan = ?, 
+    pekerjaan = ?, 
+    no_telp = ?, 
+    alamat = ?, 
+    tgl_daftar = ?, 
+    payments = ?, 
+    no_kartu = ?, 
+    poli = ?, 
+    dokter = ?, 
+    jenis_rujukan = ?, 
+    no_rujukan = ?, 
+    tgl_rujukan = ?, 
+    faskes = ?, 
+    no_wa = ?, 
+    nama_wali = ?, 
+    telp_wali = ?, 
+    alasan = ?
+  WHERE id = ?`;
+
+  db.query(
+    sql,
+    [
+      nama_lengkap,
+      jenis_kelamin,
+      no_ktp,
+      tgl_lahir,
+      status_pernikahan,
+      pekerjaan,
+      no_telp,
+      alamat,
+      tgl_daftar,
+      payments,
+      no_kartu,
+      poli,
+      dokter,
+      jenis_rujukan,
+      no_rujukan,
+      tgl_rujukan,
+      faskes,
+      no_wa,
+      nama_wali,
+      telp_wali,
+      alasan,
+      id,
+    ],
+    (err, result) => {
+      if (err) {
+        console.error("Error updating patient:", err);
+        return res.status(500).send("Failed to update");
+      }
+      res.send("Patient updated successfully");
+    }
+  );
 });
 
 const PORT = process.env.PORT || 5000;

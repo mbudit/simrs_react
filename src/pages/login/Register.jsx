@@ -13,10 +13,14 @@ const Register = () => {
     const navigate = useNavigate();
 
     const handleRegister = async () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
         if (!email || !password || !confirmPassword) {
-            setError("All fields are required!");
+            setError("Semua kolom harus diisi!.");
+        } else if (!emailRegex.test(email)) {
+            setError("Mohon isi dengan alamat email yang benar!.");
         } else if (password !== confirmPassword) {
-            setError("Passwords do not match!");
+            setError("Password tidak sesuai!.");
         } else {
             try {
                 const res = await fetch("http://localhost:5000/register", {
@@ -118,7 +122,7 @@ const Register = () => {
                         onClick={handleRegister}
                         sx={{ marginTop: 2 }}
                     >
-                        Register
+                        Daftar
                     </Button>
 
                     <Grid container justifyContent="flex-end" sx={{ marginTop: 2 }}>
@@ -128,7 +132,7 @@ const Register = () => {
                                 color="primary"
                                 onClick={() => navigate("/login")}
                             >
-                                Already have an account? Login
+                                Sudah punya akun? Login
                             </Button>
                         </Grid>
                     </Grid>

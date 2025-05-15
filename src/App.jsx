@@ -8,17 +8,36 @@ import DaftarPasien from "./pages/pasien/DaftarPasien";
 import RawatJalan from "./pages/rawatjalan/RawatJalan";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
-
+import NotFound from "./pages/NotFound";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // state auth
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Example: check if token exists (adjust based on your backend)
-    const token = document.cookie.includes("token");
-    setIsAuthenticated(token);
+    fetch("http://localhost:5000/auth/check", {
+      credentials: "include"
+    })
+      .then(res => res.json())
+      .then(data => {
+        setIsAuthenticated(data.authenticated);
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+      });
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-screen bg-white">
+        <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+
 
   return (
     <Router>
@@ -36,10 +55,9 @@ function App() {
 const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated }) => {
   const location = useLocation();
 
-  // if user is NOT authenticated and tries to go to any route except /login, redirect them
-  if (!isAuthenticated && location.pathname !== "/login") {
-    return <Navigate to="/login" replace />;
-  }
+  const PrivateRoute = ({ element }) => {
+    return isAuthenticated ? element : <Navigate to="/login" replace />;
+  };
 
   return (
     <>
@@ -47,6 +65,7 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated }) 
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       ) : (
         <>
@@ -55,10 +74,11 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated }) 
             <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
             <div className="flex-1 min-h-screen bg-blue-200 p-6 overflow-hidden">
               <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/home" element={<Home />} />
-                <Route path="/daftarpasien" element={<DaftarPasien />} />
-                <Route path="/rawatjalan" element={<RawatJalan />} />
+                <Route path="/" element={<Navigate to="/home" />} />
+                <Route path="/home" element={<PrivateRoute element={<Home />} />} />
+                <Route path="/daftarpasien" element={<PrivateRoute element={<DaftarPasien />} />} />
+                <Route path="/rawatjalan" element={<PrivateRoute element={<RawatJalan />} />} />
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </div>
           </div>

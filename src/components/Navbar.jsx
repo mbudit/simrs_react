@@ -3,11 +3,14 @@ import { HiMenu } from 'react-icons/hi';
 import { IoClose } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
+import UserSettingsModal from './UserSettingsModal';
 
 const Navbar = () => {
     const [isOpen, setIsopen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [userEmail, setUserEmail] = useState(null);
+    const [showSettingsModal, setShowSettingsModal] = useState(false);
+
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
 
@@ -75,11 +78,24 @@ const Navbar = () => {
                     </>
                 ) : (
                     <div className="relative" ref={dropdownRef}>
-                        <button onClick={toggleDropdown} className="bg-gray-700 px-4 py-2 rounded-md hover:bg-gray-600">
-                            {userEmail}
+                        <button onClick={toggleDropdown} className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-600 hover:border-white">
+                            <img
+                                src="src\assets\placeholderavatar.png" // You can replace this with any placeholder image
+                                alt="User avatar"
+                                className="w-full h-full object-cover"
+                            />
                         </button>
                         {showDropdown && (
                             <div className="absolute right-0 mt-2 w-48 bg-white text-black rounded-md shadow-lg z-50">
+                                <button
+                                    onClick={() => {
+                                        setShowDropdown(false);
+                                        setShowSettingsModal(true);
+                                    }}
+                                    className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                                >
+                                    User Settings
+                                </button>
                                 <button
                                     onClick={handleLogout}
                                     className="block w-full text-left px-4 py-2 hover:bg-gray-100"
@@ -122,6 +138,11 @@ const Navbar = () => {
                     )}
                 </div>
             )}
+            <UserSettingsModal
+                isOpen={showSettingsModal}
+                onClose={() => setShowSettingsModal(false)}
+            />
+
         </nav>
     );
 };

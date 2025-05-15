@@ -9,7 +9,15 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-app.use(cors());
+const FRONTEND_ORIGIN = "http://localhost:5173";
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+app.use(cors({
+  origin: FRONTEND_ORIGIN,   // 👈 NOT "*"
+  credentials: true          // 👈 allow cookies to be sent/received
+}));
+
 app.use(bodyParser.json());
 app.use(cookieParser());
 
@@ -23,6 +31,8 @@ const db = mysql.createConnection({
   database: process.env.DB_NAME
 });
 
+
+
 db.connect(err => {
   if (err) {
     console.error('Database connection failed: ' + err.stack);
@@ -31,99 +41,157 @@ db.connect(err => {
   console.log('Connected to MySQL database');
 });
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 app.post("/decode-token", (req, res) => {
-    const { token } = req.body;
+  const { token } = req.body;
 
-    if (!token) {
-        return res.status(400).json({ error: "Token is required" });
-    }
+  if (!token) {
+    return res.status(400).json({ error: "Token is required" });
+  }
 
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET); // or jwt.decode(token) for non-verified
-        res.json({ decoded });
-    } catch (err) {
-        res.status(400).json({ error: "Invalid token", details: err.message });
-    }
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET); // or jwt.decode(token) for non-verified
+    res.json({ decoded });
+  } catch (err) {
+    res.status(400).json({ error: "Invalid token", details: err.message });
+  }
+});
+
+app.get("/auth/check", (req, res) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.json({ authenticated: false });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    return res.json({ authenticated: true, user: decoded });
+  } catch (err) {
+    return res.json({ authenticated: false });
+  }
+});
+
+app.post("/refresh-token", (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken) return res.sendStatus(401);
+
+  jwt.verify(refreshToken, REFRESH_SECRET, (err, decoded) => {
+    if (err) return res.sendStatus(403);
+
+    const newAccessToken = jwt.sign({ email: decoded.email }, ACCESS_SECRET, { expiresIn: "15m" });
+    res.json({ token: newAccessToken });
+  });
 });
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
 app.post("/register", async (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    // Check if user already exists
-    db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
-        if (err) return res.status(500).json({ error: "Database error" });
+  // Check if user already exists
+  db.query("SELECT * FROM users WHERE email = ?", [email], async (err, results) => {
+    if (err) return res.status(500).json({ error: "Database error" });
 
-        if (results.length > 0) {
-            return res.status(409).json({ error: "User already exists" });
-        }
+    if (results.length > 0) {
+      return res.status(409).json({ error: "User already exists" });
+    }
 
-        // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Insert user
-        db.query(
-            "INSERT INTO users (email, password) VALUES (?, ?)",
-            [email, hashedPassword],
-            (err, result) => {
-                if (err) return res.status(500).json({ error: "Registration failed" });
+    // Insert user
+    db.query(
+      "INSERT INTO users (email, password) VALUES (?, ?)",
+      [email, hashedPassword],
+      (err, result) => {
+        if (err) return res.status(500).json({ error: "Registration failed" });
 
-                res.status(201).json({ message: "User registered successfully" });
-            }
-        );
-    });
+        res.status(201).json({ message: "User registered successfully" });
+      }
+    );
+  });
 });
 
 // Login Route
 app.post("/login", (req, res) => {
-    const { email, password } = req.body;
+  const { email, password } = req.body;
 
-    // Check if email exists in the database
-    const query = "SELECT * FROM users WHERE email = ?";
-    db.query(query, [email], async (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: "Server error" });
-        }
+  const query = "SELECT * FROM users WHERE email = ?";
+  db.query(query, [email], async (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: "Server error" });
+    }
 
-        if (result.length === 0) {
-            return res.status(400).json({ error: "Salah email atau password" });
-        }
+    if (result.length === 0) {
+      return res.status(400).json({ error: "Salah email atau password" });
+    }
 
-        const user = result[0];
+    const user = result[0];
 
-        // Compare password with hashed password in the database
-        const match = await bcrypt.compare(password, user.password);
-        if (!match) {
-            return res.status(400).json({ error: "Salah email atau password" });
-        }
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(400).json({ error: "Salah email atau password" });
+    }
 
-        // Create JWT token
-        const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
-
-        res.status(200).json({ message: "Login successful", token });
+    const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
+      expiresIn: "1h"
     });
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "Lax",
+        maxAge: 60 * 60 * 1000
+      })
+      .status(200)
+      .json({ message: "Login successful", token });
+  });
 });
+
+
+app.post("/logout", (req, res) => {
+  res.clearCookie("token");
+  res.status(200).json({ message: "Logged out successfully" });
+});
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 // Middleware to Protect Routes (Auth Middleware)
 const authenticateJWT = (req, res, next) => {
-    const token = req.headers["authorization"];
-    if (!token) {
-        return res.status(403).json({ error: "Access denied" });
-    }
+  const token = req.headers["authorization"];
+  if (!token) {
+    return res.status(403).json({ error: "Access denied" });
+  }
 
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) {
-            return res.status(403).json({ error: "Invalid token" });
-        }
-        req.user = user;
-        next();
-    });
+  jwt.verify(token, JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({ error: "Invalid token" });
+    }
+    req.user = user;
+    next();
+  });
 };
 
 // Example of a protected route
 app.get("/dashboard", authenticateJWT, (req, res) => {
-    res.status(200).json({ message: "Welcome to your dashboard!", user: req.user });
+  res.status(200).json({ message: "Welcome to your dashboard!", user: req.user });
 });
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // API endpoint buat nyimpen data patients
 app.post('/api/patients', (req, res) => {

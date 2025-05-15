@@ -14,38 +14,47 @@ const Login = () => {
 
         if (!email || !password) {
             setError("Email and Password are required!");
-        } else {
-            try {
-                const res = await fetch("http://localhost:5000/login", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ email, password })
-                });
+            return;
+        }
 
+        try {
+            const res = await fetch("http://localhost:5000/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email, password }),
+                credentials: "include"
+            });
+
+            const contentType = res.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/json")) {
                 const data = await res.json();
 
                 if (!res.ok) {
                     setError(data.error || "Login failed");
                 } else {
-                    // Store the JWT in localStorage or sessionStorage
                     localStorage.setItem("token", data.token);
-
                     setError("");
                     setOpenSnackbar(true);
 
                     setTimeout(() => {
                         setOpenSnackbar(false);
                         navigate("/home");
-                    }, 3000);
+                    }, 2000);
                 }
-            } catch (err) {
-                console.error(err);
-                setError("Network error");
+            } else {
+                const text = await res.text();
+                console.error("Unexpected HTML response:", text);
+                setError("Unexpected server error (HTML instead of JSON)");
             }
+        } catch (err) {
+            console.error("Fetch error:", err);
+            setError("Network error");
         }
     };
+
 
     return (
         <Box
@@ -122,7 +131,7 @@ const Login = () => {
                                 color="primary"
                                 onClick={() => navigate("/register")}
                             >
-                                Don't have an account? Register
+                                Tidak punya akun? Register
                             </Button>
                         </Grid>
                     </Grid>
@@ -134,7 +143,7 @@ const Login = () => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }} // Positioning the Snackbar
             >
                 <Alert severity="success" sx={{ width: '100%' }}>
-                    You have successfully logged in!
+                    Anda berhasil login!
                 </Alert>
             </Snackbar>
         </Box>

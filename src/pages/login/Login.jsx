@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TextField, Button, Container, Typography, Snackbar, Alert, Box, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ setIsAuthenticated }) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
@@ -35,16 +35,17 @@ const Login = () => {
                 if (!res.ok) {
                     setError(data.error || "Login failed");
                 } else {
-                    localStorage.setItem("token", data.token);
+                    localStorage.setItem("token", data.token); // Optional now but you can keep it
                     setError("");
                     setOpenSnackbar(true);
-
+                    setIsAuthenticated(true);  // Important: notify global auth state
                     setTimeout(() => {
-                        console.log("Navigating to /home");
                         setOpenSnackbar(false);
                         navigate("/home");
                     }, 2000);
+                    console.log("Navbar props:", { setIsAuthenticated }); // ngecheck autentikasinya ke oper ga
                 }
+
             } else {
                 const text = await res.text();
                 console.error("Unexpected HTML response:", text);
@@ -126,7 +127,7 @@ const Login = () => {
                     </form>
 
                     <Grid container justifyContent="flex-end" sx={{ marginTop: 2 }}>
-                        <Grid item>
+                        <Grid>
                             <Button
                                 variant="text"
                                 color="primary"

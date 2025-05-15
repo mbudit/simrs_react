@@ -9,28 +9,41 @@ import RawatJalan from "./pages/rawatjalan/RawatJalan";
 import Login from "./pages/login/Login";
 import Register from "./pages/login/Register";
 import NotFound from "./pages/NotFound";
+import Antrian from "./pages/antrian/Antrian";
+import RawatInap from "./pages/rawatinap/RawatInap";
+import RME from "./pages/rme/RME";
+import IGD from "./pages/igd/IGD";
+import Radiologi from "./pages/radiologi/Radiologi";
+import Laboratorium from "./pages/laboratorium/Laboratorium";
+import DataObat from "./pages/farmasi/apotek/DataObat"
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingAuth, setLoadingAuth] = useState(true); // optional loading flag
+
+  
 
   useEffect(() => {
-    fetch("http://localhost:5000/auth/check", {
-      credentials: "include"
-    })
-      .then(res => res.json())
-      .then(data => {
+    // Check auth status from backend cookie/session
+    async function checkAuth() {
+      try {
+        const res = await fetch("http://localhost:5000/auth/check", {
+          credentials: "include", // important!
+        });
+        const data = await res.json();
         setIsAuthenticated(data.authenticated);
-        setIsLoading(false);
-      })
-      .catch(() => {
+      } catch (err) {
         setIsAuthenticated(false);
-        setIsLoading(false);
-      });
+      } finally {
+        setLoadingAuth(false);
+      }
+    }
+    checkAuth();
   }, []);
 
-  if (isLoading) {
+  if (loadingAuth) {
     return (
       <div className="flex justify-center items-center h-screen bg-white">
         <div className="w-16 h-16 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
@@ -46,14 +59,16 @@ function App() {
           sidebarCollapsed={sidebarCollapsed}
           setSidebarCollapsed={setSidebarCollapsed}
           isAuthenticated={isAuthenticated}
+          setIsAuthenticated={setIsAuthenticated}
         />
       </div>
     </Router>
   );
 }
 
-const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated }) => {
+const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, setIsAuthenticated }) => {
   const location = useLocation();
+
 
   const PrivateRoute = ({ element }) => {
     return isAuthenticated ? element : <Navigate to="/login" replace />;
@@ -63,13 +78,13 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated }) 
     <>
       {location.pathname === "/login" || location.pathname === "/register" ? (
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/login" />} />
         </Routes>
       ) : (
         <>
-          <Navbar />
+          <Navbar setIsAuthenticated={setIsAuthenticated} />
           <div className="flex">
             <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
             <div className="flex-1 min-h-screen bg-blue-200 p-6 overflow-hidden">
@@ -77,7 +92,14 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated }) 
                 <Route path="/" element={<Navigate to="/home" />} />
                 <Route path="/home" element={<PrivateRoute element={<Home />} />} />
                 <Route path="/daftarpasien" element={<PrivateRoute element={<DaftarPasien />} />} />
+                <Route path="/antrian" element={<PrivateRoute element={<Antrian />} />} />
                 <Route path="/rawatjalan" element={<PrivateRoute element={<RawatJalan />} />} />
+                <Route path="/rawatinap" element={<PrivateRoute element={<RawatInap />} />} />
+                <Route path="/rme" element={<PrivateRoute element={<RME />} />} />
+                <Route path="/igd" element={<PrivateRoute element={<IGD />} />} />
+                <Route path="/radiologi" element={<PrivateRoute element={<Radiologi />} />} />
+                <Route path="/laboratorium" element={<PrivateRoute element={<Laboratorium />} />} />
+                <Route path="/dataobat" element={<PrivateRoute element={<DataObat />} />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </div>

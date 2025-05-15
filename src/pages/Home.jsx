@@ -8,6 +8,7 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import { Link } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: '#fff',
@@ -20,105 +21,97 @@ const Item = styled(Paper)(({ theme }) => ({
     }),
 }));
 
+const modules = [
+    {
+        title: 'Rekam Medis Elektronik (RME)',
+        description: 'Akses dan kelola riwayat rekam medis pasien secara digital dan terintegrasi.',
+        image: 'src/assets/rme.webp',
+        path: "/rme"
+    },
+    {
+        title: 'Data Pasien',
+        description: 'Lihat, tambah, dan kelola data lengkap pasien secara efisien.',
+        image: 'src/assets/datapasien.jpg',
+        path: "/daftarpasien"
+    },
+    {
+        title: 'Antrian',
+        description: 'Kelola antrian pasien secara online maupun offline dengan sistem terpusat.',
+        image: 'src/assets/antrian.jpg',
+        path: "/antrian"
+    },
+    {
+        title: 'Laboratorium',
+        description: 'Lihat hasil laboratorium pasien dan kelola permintaan pemeriksaan.',
+        image: 'src/assets/lab.jpg',
+        path: "/laboratorium"
+    },
+    {
+        title: 'Radiologi',
+        description: 'Akses hasil pemeriksaan radiologi dan kirim permintaan radiologi baru.',
+        image: 'src/assets/radiologi.jpg',
+        path: "/radiologi"
+    },
+    {
+        title: 'Data Obat',
+        description: 'Kelola stok obat, distribusi, dan informasi penggunaan obat di fasilitas.',
+        image: 'src/assets/dataobat.jpg',
+        path: "/dataobat"
+    },
+    {
+        title: 'Instalasi Gawat Darurat (IGD)',
+        description: 'Tangani pasien gawat darurat dengan alur pencatatan dan penanganan cepat.',
+        image: 'src/assets/igd.jpg',
+        path: "/igd"
+    },
+    {
+        title: 'Instalasi Rawat Jalan',
+        description: 'Atur jadwal dan kunjungan pasien rawat jalan dengan data yang lengkap.',
+        image: 'src/assets/rawatjalan.jpg',
+        path: "/rawatjalan"
+    },
+    {
+        title: 'Instalasi Rawat Inap',
+        description: 'Kelola pasien rawat inap, kamar, serta status harian dan laporan medis.',
+        image: 'src/assets/rawatinap.png',
+        path: "/rawatinap"
+    },
+];
+
 const Home = () => {
     return (
-        <Box sx={{ width: '100%' }}>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                <Grid size={2}>
-                    <Paper elevation={5}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    height="140"
-                                    image="src\assets\tesgambar.jpg"
-                                    alt="green iguana"
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        Lizard
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                                        species, ranging across all continents except Antarctica
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Paper>
-                </Grid>
-                <Grid size={2}>
-                    <Paper elevation={5}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    height="140"
-                                    image="src\assets\tesgambar.jpg"
-                                    alt="green iguana"
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        Lizard
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                                        species, ranging across all continents except Antarctica
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Paper>
-                </Grid>
-                <Grid size={2}>
-                    <Paper elevation={5}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    height="140"
-                                    image="src\assets\tesgambar.jpg"
-                                    alt="green iguana"
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        Lizard
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                                        species, ranging across all continents except Antarctica
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Paper>
-                </Grid>
-                <Grid size={2}>
-                    <Paper elevation={5}>
-                        <Card sx={{ maxWidth: 345 }}>
-                            <CardActionArea>
-                                <CardMedia
-                                    component="img"
-                                    height="140"
-                                    image="src\assets\tesgambar.jpg"
-                                    alt="green iguana"
-                                />
-                                <CardContent>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        Lizard
-                                    </Typography>
-                                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                                        species, ranging across all continents except Antarctica
-                                    </Typography>
-                                </CardContent>
-                            </CardActionArea>
-                        </Card>
-                    </Paper>
-                </Grid>
+        <Box sx={{ width: '100%', padding: 2 }}>
+            <Grid container spacing={2}>
+                {modules.map((modul, index) => (
+                    <Grid key={index}>
+                        <Paper elevation={5} sx={{ height: '100%' }}>
+                            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                <CardActionArea
+                                    component={Link}
+                                    to={modul.path}
+                                    sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+                                >
+                                    <CardMedia
+                                        component="img"
+                                        image={modul.image}
+                                        alt={modul.title}
+                                        sx={{ width: '100%', height: 140, objectFit: 'cover' }}
+                                    />
+                                    <CardContent sx={{ flexGrow: 1 }}>
+                                        <Typography gutterBottom variant="h6" component="div">
+                                            {modul.title}
+                                        </Typography>
+                                        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                                            {modul.description}
+                                        </Typography>
+                                    </CardContent>
+                                </CardActionArea>
+                            </Card>
+                        </Paper>
+                    </Grid>
+                ))}
             </Grid>
         </Box>
-
     );
 }
 

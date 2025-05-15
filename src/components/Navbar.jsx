@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import UserSettingsModal from './UserSettingsModal';
 
-const Navbar = () => {
+const Navbar = ({ setIsAuthenticated }) => {
     const [isOpen, setIsopen] = useState(false);
     const [showDropdown, setShowDropdown] = useState(false);
     const [userEmail, setUserEmail] = useState(null);
@@ -17,9 +17,19 @@ const Navbar = () => {
     const toggleMenu = () => setIsopen(!isOpen);
     const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        try {
+            await fetch("http://localhost:5000/auth/logout", {
+                method: "POST",
+                credentials: "include",
+            });
+        } catch (err) {
+            console.error("Logout error:", err);
+        }
+
         localStorage.removeItem("token");
         setUserEmail(null);
+        setIsAuthenticated(false); // triggers rerender in App
         navigate("/login");
     };
 
@@ -28,16 +38,22 @@ const Navbar = () => {
 
     // Decode token to get email
     useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
+        async function fetchAuth() {
             try {
-                const decoded = jwtDecode(token);
-                setUserEmail(decoded.email); // assuming your JWT contains { email: "user@example.com" }
+                const res = await fetch("http://localhost:5000/auth/check", {
+                    credentials: "include",
+                });
+                const data = await res.json();
+                if (data.authenticated) {
+                    setUserEmail(data.user.email);
+                } else {
+                    setUserEmail(null);
+                }
             } catch (err) {
-                console.error("Invalid token");
-                localStorage.removeItem("token");
+                setUserEmail(null);
             }
         }
+        fetchAuth();
     }, []);
 
     // Close dropdown when clicking outside
@@ -64,10 +80,13 @@ const Navbar = () => {
         return () => window.removeEventListener("resize", handleResize);
     }, []);
 
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     return (
         <nav className='bg-gray-800 text-white w-full relative'>
             <div className='absolute left-4 top-1/2 transform -translate-y-1/2'>
-                <a href='#' className='text-2xl font-bold'>SIMRS</a>
+                <a href='#' className='text-2xl font-bold'>SIMRS SIMTECH</a>
             </div>
 
             <div className='absolute right-6 top-1/2 transform -translate-y-1/2 hidden md:flex gap-4 items-center'>
@@ -80,7 +99,7 @@ const Navbar = () => {
                     <div className="relative" ref={dropdownRef}>
                         <button onClick={toggleDropdown} className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-600 hover:border-white">
                             <img
-                                src="src\assets\placeholderavatar.png" // You can replace this with any placeholder image
+                                src="src\assets\placeholderavatar.png"
                                 alt="User avatar"
                                 className="w-full h-full object-cover"
                             />
@@ -111,9 +130,7 @@ const Navbar = () => {
             <div className='flex justify-center items-center h-16'>
                 <div className='hidden md:flex gap-4'>
                     <a href='#'>Home</a>
-                    <a href='#'>About</a>
-                    <a href='#'>Services</a>
-                    <a href='#'>Contact</a>
+                    <a href='#'>Settings</a>
                 </div>
 
                 <div className='md:hidden z-30 ml-auto pr-4' onClick={toggleMenu}>
@@ -124,10 +141,7 @@ const Navbar = () => {
             {isOpen && (
                 <div className='bg-gray-800 fixed z-20 top-0 left-0 w-screen min-h-screen flex flex-col items-center justify-center gap-10'>
                     <a className='text-2xl font-bold' href='#'>Home</a>
-                    <a className='text-2xl font-bold' href='#'>About</a>
-                    <a className='text-2xl font-bold' href='#'>Services</a>
-                    <a className='text-2xl font-bold' href='#'>Contact</a>
-
+                    <a className='text-2xl font-bold' href='#'>Settings</a>
                     {!userEmail ? (
                         <>
                             <button className='bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-md' onClick={handleSignIn}>Sign In</button>

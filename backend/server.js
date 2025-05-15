@@ -11,6 +11,9 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const FRONTEND_ORIGIN = "http://localhost:5173";
 
+const ACCESS_SECRET = process.env.ACCESS_SECRET;
+const REFRESH_SECRET = process.env.REFRESH_SECRET;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 app.use(cors({
@@ -143,6 +146,10 @@ app.post("/login", (req, res) => {
       expiresIn: "1h"
     });
 
+    const refreshToken = jwt.sign({ id: user.id, email: user.email }, REFRESH_SECRET, {
+      expiresIn: "7d"
+    });
+
     res
       .cookie("token", token, {
         httpOnly: true,
@@ -150,42 +157,25 @@ app.post("/login", (req, res) => {
         sameSite: "Lax",
         maxAge: 60 * 60 * 1000
       })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "Lax",
+        maxAge: 7 * 24 * 60 * 60 * 1000
+      })
       .status(200)
       .json({ message: "Login successful", token });
   });
 });
 
-
-app.post("/logout", (req, res) => {
+app.post('/auth/logout', (req, res) => {
   res.clearCookie("token");
+  res.clearCookie('refreshToken'); // Must match cookie name used
   res.status(200).json({ message: "Logged out successfully" });
 });
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-// Middleware to Protect Routes (Auth Middleware)
-const authenticateJWT = (req, res, next) => {
-  const token = req.headers["authorization"];
-  if (!token) {
-    return res.status(403).json({ error: "Access denied" });
-  }
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ error: "Invalid token" });
-    }
-    req.user = user;
-    next();
-  });
-};
-
-// Example of a protected route
-app.get("/dashboard", authenticateJWT, (req, res) => {
-  res.status(200).json({ message: "Welcome to your dashboard!", user: req.user });
-});
 
 
 

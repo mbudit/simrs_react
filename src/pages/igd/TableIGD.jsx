@@ -1,11 +1,10 @@
 import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
-import axios from 'axios';
-import Button from '@mui/material/Button';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import IconButton from '@mui/material/IconButton';
+import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import Button from '@mui/material/Button';
+import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 
@@ -20,7 +19,7 @@ const columnsBase = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function TableIRJ3({ handleSelect, refreshTrigger }) {
+export default function TableIGD({ refreshTrigger }) {
     const [rows, setRows] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [openDialog, setOpenDialog] = React.useState(false); // State untuk Dialog
@@ -28,7 +27,7 @@ export default function TableIRJ3({ handleSelect, refreshTrigger }) {
     const { enqueueSnackbar } = useSnackbar(); // Pakai notistack
 
     React.useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}/api/pasien_rajal`)
+        axios.get(`${import.meta.env.VITE_API_URL}/api/pasien_igd`)
             .then((res) => {
                 const dataWithId = res.data.map((row, index) => ({
                     id: index,
@@ -56,7 +55,7 @@ export default function TableIRJ3({ handleSelect, refreshTrigger }) {
     };
 
     const handleDelete = () => {
-        axios.delete(`${import.meta.env.VITE_API_URL}/api/pasien_rajal/${deleteId}`)
+        axios.delete(`${import.meta.env.VITE_API_URL}/api/pasien_igd/${deleteId}`)
             .then(() => {
                 setRows(prev => prev.filter(row => row.id !== deleteId));
                 enqueueSnackbar("Data berhasil dihapus!", { variant: 'success', autoHideDuration: 3000 });
@@ -107,9 +106,9 @@ export default function TableIRJ3({ handleSelect, refreshTrigger }) {
 
     return (
         <>
-            <Paper sx={{
-                height: '100%', 
-                width: '100%',
+            <Paper sx={{ 
+                    height: '100%', 
+                    width: '100%',
             }}>
                 <DataGrid
                     rows={rows}
@@ -143,7 +142,7 @@ export default function TableIRJ3({ handleSelect, refreshTrigger }) {
                             '& .MuiDataGrid-cell': {
                                 borderBottom: '1px solid #e0e0e0', // Tambahkan border bawah pada data
                                 borderRight: '1px solid #e0e0e0',
-                            }, 
+                            },
                         }}
                 />
             </Paper>

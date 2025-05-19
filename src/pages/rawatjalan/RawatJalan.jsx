@@ -7,6 +7,7 @@ import ModalPasienLama from './forms/PasienLama';
 import dayjs from 'dayjs';
 import { SnackbarProvider } from 'notistack';
 import ModalEditRajal from './forms/FormEditRajal';
+import ModalPasienLama2 from '../pasien_lama/ModalPasienLama';
 
 const RawatJalan = () => {
     const [open, setOpen] = useState(false);
@@ -19,6 +20,7 @@ const RawatJalan = () => {
         setOpenEdit(false);
         setForm({}); // opsional, kalau ingin reset form juga
     };
+    const [refreshTrigger, setRefreshTrigger] = useState(false);
 
     const [form, setForm] = useState({
         id: '',
@@ -109,7 +111,7 @@ const RawatJalan = () => {
                 <ButtonDaftar onClick={handleOpen} />
             </div>
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                <TableIRJ3 handleSelect={handleSelectPasien} />
+                <TableIRJ3 handleSelect={handleSelectPasien} refreshTrigger={refreshTrigger} />
                 <ModalEditRajal
                     open={openEdit}
                     handleCloseEdit={handleCloseEdit}
@@ -125,9 +127,10 @@ const RawatJalan = () => {
                     form={form}
                     setForm={setForm}
                     handleOpenNested={() => setOpenPasienLama(true)}
+                    setRefreshTrigger={setRefreshTrigger}
                 />
             </SnackbarProvider>
-            <ModalPasienLama
+            <ModalPasienLama2
                 open={openPasienLama}
                 handleClose={() => setOpenPasienLama(false)}
                 setForm={setForm}

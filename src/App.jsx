@@ -20,10 +20,9 @@ import DataObat from "./pages/farmasi/apotek/DataObat"
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
   const [loadingAuth, setLoadingAuth] = useState(true); // optional loading flag
 
-  
+
 
   useEffect(() => {
     // Check auth status from backend cookie/session
@@ -84,24 +83,36 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
         </Routes>
       ) : (
         <>
-          <Navbar setIsAuthenticated={setIsAuthenticated} />
-          <div className="flex">
-            <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
-            <div className="flex-1 min-h-screen bg-blue-200 p-6 overflow-hidden">
-              <Routes>
-                <Route path="/" element={<Navigate to="/home" />} />
-                <Route path="/home" element={<PrivateRoute element={<Home />} />} />
-                <Route path="/daftarpasien" element={<PrivateRoute element={<DaftarPasien />} />} />
-                <Route path="/antrian" element={<PrivateRoute element={<Antrian />} />} />
-                <Route path="/rawatjalan" element={<PrivateRoute element={<RawatJalan />} />} />
-                <Route path="/rawatinap" element={<PrivateRoute element={<RawatInap />} />} />
-                <Route path="/rme" element={<PrivateRoute element={<RME />} />} />
-                <Route path="/igd" element={<PrivateRoute element={<IGD />} />} />
-                <Route path="/radiologi" element={<PrivateRoute element={<Radiologi />} />} />
-                <Route path="/laboratorium" element={<PrivateRoute element={<Laboratorium />} />} />
-                <Route path="/dataobat" element={<PrivateRoute element={<DataObat />} />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
+          <div className="min-h-screen bg-gray-100">
+
+            {/* NAVBAR */}
+            <div className="fixed top-0 left-0 right-0 z-50">
+              <Navbar setIsAuthenticated={setIsAuthenticated} />
+            </div>
+
+            {/* SIDEBAR */}
+            <div className="fixed top-16 left-0 h-[calc(100vh-4rem)] z-40">
+              <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
+            </div>
+
+            <div className={`pt-16 transition-all duration-300 ml-16 ${sidebarCollapsed ? "ml-16" : "ml-[250px]"
+              }`}>
+              <main className="h-[calc(100vh-4rem)] overflow-y-auto p-6 bg-blue-200">
+                <Routes>
+                  <Route path="/" element={<Navigate to="/home" />} />
+                  <Route path="/home" element={<PrivateRoute element={<Home />} />} />
+                  <Route path="/daftarpasien" element={<PrivateRoute element={<DaftarPasien />} />} />
+                  <Route path="/antrian" element={<PrivateRoute element={<Antrian />} />} />
+                  <Route path="/rawatjalan" element={<PrivateRoute element={<RawatJalan />} />} />
+                  <Route path="/rawatinap" element={<PrivateRoute element={<RawatInap />} />} />
+                  <Route path="/rme" element={<PrivateRoute element={<RME />} />} />
+                  <Route path="/igd" element={<PrivateRoute element={<IGD />} />} />
+                  <Route path="/radiologi" element={<PrivateRoute element={<Radiologi />} />} />
+                  <Route path="/laboratorium" element={<PrivateRoute element={<Laboratorium />} />} />
+                  <Route path="/dataobat" element={<PrivateRoute element={<DataObat />} />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </main>
             </div>
           </div>
         </>

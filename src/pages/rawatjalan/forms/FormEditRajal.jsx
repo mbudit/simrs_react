@@ -257,7 +257,7 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
         };
     
         try {
-            const response = await axios.put(`http://localhost:5000/api/update_rajal/${form.id}`, formattedData,
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_rajal/${form.id}`, formattedData,
                 {
                     headers: {
                         'Content-Type': 'application/json',

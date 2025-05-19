@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const FRONTEND_ORIGIN = "http://localhost:5173";
+const FRONTEND_ORIGIN = "http://100.108.196.112:5173";
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 const REFRESH_SECRET = process.env.REFRESH_SECRET;

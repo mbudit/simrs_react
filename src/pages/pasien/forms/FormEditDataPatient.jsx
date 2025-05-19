@@ -134,7 +134,7 @@ export default function FormEditDataPatient({ open, patientData, onClose, onUpda
       return;
     }
 
-    axios.put(`http://localhost:5000/api/patients/${formData.no_ktp}`, formData)
+    axios.put(`${import.meta.env.VITE_API_URL}/api/patients/${formData.no_ktp}`, formData)
       .then((res) => {
         onUpdate(formData); // Update the data in the table
         onClose(); // Close the dialog

@@ -206,7 +206,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
         };
 
         try {
-            const response = await axios.post('http://localhost:5000/api/rawatjalan', formattedData, {
+            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/rawatjalan`, formattedData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

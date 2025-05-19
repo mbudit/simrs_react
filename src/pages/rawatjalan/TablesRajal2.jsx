@@ -27,7 +27,7 @@ export default function TableIRJ3({ handleSelect }) {
     const { enqueueSnackbar } = useSnackbar(); // Pakai notistack
 
     React.useEffect(() => {
-        axios.get("http://localhost:5000/api/pasien_rajal")
+        axios.get(`${import.meta.env.VITE_API_URL}/api/pasien_rajal`)
             .then((res) => {
                 const dataWithId = res.data.map((row, index) => ({
                     id: index,
@@ -55,7 +55,7 @@ export default function TableIRJ3({ handleSelect }) {
     };
 
     const handleDelete = () => {
-        axios.delete(`http://localhost:5000/api/pasien_rajal/${deleteId}`)
+        axios.delete(`${import.meta.env.VITE_API_URL}/api/pasien_rajal/${deleteId}`)
             .then(() => {
                 setRows(prev => prev.filter(row => row.id !== deleteId));
                 enqueueSnackbar("Data berhasil dihapus!", { variant: 'success', autoHideDuration: 3000 });

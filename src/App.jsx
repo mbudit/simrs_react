@@ -29,7 +29,7 @@ function App() {
     // Check auth status from backend cookie/session
     async function checkAuth() {
       try {
-        const res = await fetch("http://localhost:5000/auth/check", {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/auth/check`, {
           credentials: "include", // important!
         });
         const data = await res.json();

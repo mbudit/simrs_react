@@ -12,7 +12,7 @@ export const fetchWithAuth = async (url, options = {}) => {
 
   if (res.status === 401) {
     // Token might be expired, try refreshing
-    const refreshRes = await fetch("http://localhost:5000/refresh-token", {
+    const refreshRes = await fetch(`${import.meta.env.VITE_API_URL}/refresh-token`, {
       method: "POST",
       credentials: "include",
     });

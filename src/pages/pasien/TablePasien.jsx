@@ -38,7 +38,7 @@ export default function TablePasien() {
     }, []);
 
     const fetchPatients = () => {
-        axios.get('http://localhost:5000/api/patients')
+        axios.get(`${import.meta.env.VITE_API_URL}/api/patients`)
             .then((res) => setRows(res.data))
             .catch((err) => console.error('Error fetching patients:', err));
     };
@@ -46,7 +46,7 @@ export default function TablePasien() {
     const handleDelete = (no_ktp) => {
         if (!window.confirm('Apakah anda yakin untuk menghapus data pasien ini??')) return;
 
-        axios.delete(`http://localhost:5000/api/patients/${no_ktp}`)
+        axios.delete(`${import.meta.env.VITE_API_URL}/api/patients/${no_ktp}`)
             .then(() => {
                 setRows(prev => prev.filter(row => row.no_ktp !== no_ktp));
                 setSnackbar({

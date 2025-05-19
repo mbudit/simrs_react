@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
-import FormEditDataPatient from '../../pasien/forms/FormEditDataPatient';
+/* import FormEditDataPatient from '../../pasien/forms/FormEditDataPatient'; */
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 
 const columnsBase = [
@@ -19,7 +19,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export default function TablePasien({ handleSelect }) {
+export default function TablePasienLama({ handleSelect }) {
     const [rows, setRows] = useState([]);
     const [openEditForm, setOpenEditForm] = useState(false);
     const [selectedPatient, setSelectedPatient] = useState(null);
@@ -118,14 +118,6 @@ export default function TablePasien({ handleSelect }) {
                     {snackbar.message}
                 </Alert>
             </Snackbar>
-            <FormEditDataPatient
-                open={openEditForm}
-                patientData={selectedPatient}
-                onClose={handleCloseEditForm}
-                onUpdate={(updatedData) => {
-                    setRows(prev => prev.map(row => row.no_ktp === updatedData.no_ktp ? updatedData : row));
-                }}
-            />
         </Paper>
     );
 }

@@ -368,6 +368,18 @@ app.post("/api/rawatjalan", (req, res) => {
 
   const no_rm = "IRJ-" + uuidv4().split("-")[0];
 
+  // Logika default untuk no_kartu jika payments adalah "Tidak Ada"
+  const no_kartu_final =
+    rajalData.payments === "Tidak Ada" ? "Umum" : rajalData.no_kartu;
+
+  // Logika default untuk no_rujukan & tgl_rujukan jika jenis_rujukan adalah "Datang Sendiri"
+  const no_rujukan_final =
+    rajalData.jenis_rujukan === "Datang Sendiri"
+      ? "Tidak Ada"
+      : rajalData.no_rujukan;
+  const tgl_rujukan_final =
+    rajalData.jenis_rujukan === "Datang Sendiri" ? null : rajalData.tgl_rujukan;
+
   const sql = `INSERT INTO rawatjalan (
     no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
     pekerjaan, no_telp, alamat, tgl_daftar, payments,
@@ -387,12 +399,12 @@ app.post("/api/rawatjalan", (req, res) => {
     rajalData.alamat,
     rajalData.tgl_daftar,
     rajalData.payments,
-    rajalData.no_kartu,
+    no_kartu_final,
     rajalData.poli,
     rajalData.dokter,
     rajalData.jenis_rujukan,
-    rajalData.no_rujukan,
-    rajalData.tgl_rujukan,
+    no_rujukan_final,
+    tgl_rujukan_final,
     rajalData.faskes,
     rajalData.no_wa,
     rajalData.nama_wali,
@@ -489,19 +501,26 @@ app.put("/api/update_rajal/:id", (req, res) => {
   nama_lengkap = checkAndFill(nama_lengkap);
   jenis_kelamin = checkAndFill(jenis_kelamin);
   no_ktp = checkAndFill(no_ktp);
-  tgl_lahir = checkAndFill(tgl_lahir, true); // Menambahkan parameter isDate untuk tgl_lahir
+  tgl_lahir = checkAndFill(tgl_lahir, true);
   status_pernikahan = checkAndFill(status_pernikahan);
   pekerjaan = checkAndFill(pekerjaan);
   no_telp = checkAndFill(no_telp);
   alamat = checkAndFill(alamat);
-  tgl_daftar = checkAndFill(tgl_daftar, true); // Menambahkan parameter isDate untuk tgl_daftar
+  tgl_daftar = checkAndFill(tgl_daftar, true);
   payments = checkAndFill(payments);
-  no_kartu = checkAndFill(no_kartu);
+
+  // Logika tambahan sesuai permintaan
+  if (payments === "Tidak Ada") {
+    no_kartu = "Umum";
+  } else {
+    no_kartu = checkAndFill(no_kartu);
+  }
+
   poli = checkAndFill(poli);
   dokter = checkAndFill(dokter);
   jenis_rujukan = checkAndFill(jenis_rujukan);
   no_rujukan = checkAndFill(no_rujukan);
-  tgl_rujukan = checkAndFill(tgl_rujukan, true); // Menambahkan parameter isDate untuk tgl_rujukan
+  tgl_rujukan = checkAndFill(tgl_rujukan, true);
   faskes = checkAndFill(faskes);
   no_wa = checkAndFill(no_wa);
   nama_wali = checkAndFill(nama_wali);
@@ -566,6 +585,107 @@ app.put("/api/update_rajal/:id", (req, res) => {
       res.send("Patient updated successfully");
     }
   );
+});
+
+app.post("/api/igd", (req, res) => {
+  console.log("POST /api/igd dipanggil");
+  const igdData = req.body;
+
+  const no_rm = "IGD-" + uuidv4().split("-")[0];
+
+  // Logika default untuk no_kartu jika payments adalah "Tidak Ada"
+  const no_kartu_final =
+    igdData.payments === "Tidak Ada" ? "Umum" : igdData.no_kartu;
+
+  // Logika default untuk no_rujukan & tgl_rujukan jika jenis_rujukan adalah "Datang Sendiri"
+  const no_rujukan_final =
+    igdData.jenis_rujukan === "Datang Sendiri"
+      ? "Tidak Ada"
+      : igdData.no_rujukan;
+  const tgl_rujukan_final =
+    igdData.jenis_rujukan === "Datang Sendiri" ? null : igdData.tgl_rujukan;
+
+  const sql = `INSERT INTO igd (
+    no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
+    pekerjaan, no_telp, alamat, tgl_daftar, payments,
+    no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
+    tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+  const values = [
+    no_rm,
+    igdData.nama_lengkap,
+    igdData.jenis_kelamin,
+    igdData.no_ktp,
+    igdData.tgl_lahir,
+    igdData.status_pernikahan,
+    igdData.pekerjaan,
+    igdData.no_telp,
+    igdData.alamat,
+    igdData.tgl_daftar,
+    igdData.payments,
+    no_kartu_final,
+    igdData.poli,
+    igdData.dokter,
+    igdData.jenis_rujukan,
+    no_rujukan_final,
+    tgl_rujukan_final,
+    igdData.faskes,
+    igdData.no_wa,
+    igdData.nama_wali,
+    igdData.telp_wali,
+    igdData.alasan,
+  ];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("DB error:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    res.status(201).json({
+      message: "IGD berhasil didaftarkan",
+      id: result.insertId,
+      no_rm: no_rm,
+    });
+  });
+});
+
+app.get("/api/pasien_igd", (req, res) => {
+  const sql = `
+    SELECT
+      id, no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
+      pekerjaan, no_telp, alamat, tgl_daftar, payments,
+      no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
+      tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
+    FROM igd
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    res.json(results);
+  });
+});
+
+app.delete("/api/pasien_igd/:id", (req, res) => {
+  const id = req.params.id;
+
+  const sql = "DELETE FROM igd WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Delete error:", err);
+      return res.status(500).json({ error: "Failed to delete patient" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    res.json({ message: "Patient deleted successfully" });
+  });
 });
 
 const PORT = process.env.PORT || 5000;

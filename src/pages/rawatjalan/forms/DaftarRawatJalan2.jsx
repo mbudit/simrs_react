@@ -135,8 +135,8 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
             label: 'Dr. Beneran',
         },
         {
-            value: 'Dr. Gadungan',
-            label: 'Dr. Gadungan',
+            value: 'Dr. Placeholder',
+            label: 'Dr. Placeholder',
         },
     ];
 
@@ -270,7 +270,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                             <form onSubmit={handleSubmit}>
                                 <h3 className="text-xl mb-2 font-bold">Data Pasien</h3>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                         label="Nama Lengkap"
                                         name="nama_lengkap"
@@ -281,7 +281,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         helperText={errors.nama_lengkap}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Jenis Kelamin"
@@ -299,7 +299,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                         label="No. KTP"
                                         name="no_ktp"
@@ -310,7 +310,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         helperText={errors.no_ktp}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <div style={{ marginTop: '7px' }}>
                                                 <DatePicker
@@ -327,7 +327,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             </div>
                                         </LocalizationProvider>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Status Pernikahan"
@@ -348,7 +348,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                 </Grid>
 
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="Pekerjaan"
                                             name="pekerjaan"
@@ -360,7 +360,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             helperText={errors.pekerjaan}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Telp"
                                             name="no_telp"
@@ -372,7 +372,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             helperText={errors.no_telp}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="Alamat"
                                             name="alamat"
@@ -393,7 +393,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
 
                                 <h3 className="text-xl mb-2 mt-3 font-bold">Detail</h3>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <div style={{ marginTop: '7px' }}>
                                                 <DatePicker
@@ -412,7 +412,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             </div>
                                         </LocalizationProvider>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Cara Bayar"
@@ -430,7 +430,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Kartu BPJS/Asuransi"
                                             name="no_kartu"
@@ -443,7 +443,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             disabled={form.payments === 'Tidak Ada'}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Pilih Poli"
@@ -461,7 +461,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Pilih Dokter"
@@ -479,7 +479,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Datang Sendiri/Rujukan"
@@ -497,7 +497,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Rujukan"
                                             name="no_rujukan"
@@ -510,7 +510,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             disabled={form.jenis_rujukan === 'Datang Sendiri'}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <div style={{ marginTop: '7px' }}>
                                                 <DatePicker
@@ -530,7 +530,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             </div>
                                         </LocalizationProvider>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Pilih Pelayanan"
@@ -548,7 +548,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Whatsapp"
                                             name="no_wa"
@@ -560,7 +560,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             helperText={errors.no_wa}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="Nama Wali"
                                             name="nama_wali"
@@ -572,7 +572,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             helperText={errors.nama_wali}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Telpon Wali"
                                             name="telp_wali"
@@ -584,7 +584,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             helperText={errors.telp_wali}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="Alasan Berobat"
                                             name="alasan"

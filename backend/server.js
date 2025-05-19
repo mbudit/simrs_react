@@ -9,7 +9,7 @@ const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 
 const app = express();
-const FRONTEND_ORIGIN = "http://100.108.196.112:5173";
+const FRONTEND_ORIGIN = "http://localhost:5173";
 
 const ACCESS_SECRET = process.env.ACCESS_SECRET;
 const REFRESH_SECRET = process.env.REFRESH_SECRET;
@@ -75,18 +75,6 @@ app.get("/auth/check", (req, res) => {
   } catch (err) {
     return res.json({ authenticated: false });
   }
-});
-
-app.post("/refresh-token", (req, res) => {
-  const refreshToken = req.cookies.refreshToken;
-  if (!refreshToken) return res.sendStatus(401);
-
-  jwt.verify(refreshToken, REFRESH_SECRET, (err, decoded) => {
-    if (err) return res.sendStatus(403);
-
-    const newAccessToken = jwt.sign({ email: decoded.email }, ACCESS_SECRET, { expiresIn: "15m" });
-    res.json({ token: newAccessToken });
-  });
 });
 
 

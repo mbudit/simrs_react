@@ -19,7 +19,7 @@ const columnsBase = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function TableIGD({ refreshTrigger }) {
+export default function TableIGD({ handleSelect, refreshTrigger }) {
     const [rows, setRows] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [openDialog, setOpenDialog] = React.useState(false); // State untuk Dialog
@@ -120,15 +120,15 @@ export default function TableIGD({ refreshTrigger }) {
                     sx={{ 
                             border: 0,
                             '& .super-app-theme--header': {
-                                backgroundColor: '#1975d1',
+                                backgroundColor: '#1e2838',
                                 fontSize: '16px',
                                 fontWeight: 'bold !important',
                             }, 
                             '& .MuiDataGrid-columnHeaders': {
-                                        backgroundColor: '#1e2939',
-                                        fontWeight: 'bold !important', // Mengubah gaya font header
-                                        fontSize: '16px', // Ukuran font header lebih besar
-                                        color: '#fff', // Warna font header
+                                backgroundColor: '#1e2838',
+                                fontWeight: 'bold !important', // Mengubah gaya font header
+                                fontSize: '16px', // Ukuran font header lebih besar
+                                color: '#fff', // Warna font header
                             },
                             '& .MuiDataGrid-columnHeaderTitle': {
                                 fontWeight: 'bold !important', // ← paling penting: ini selector internal teks header

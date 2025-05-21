@@ -121,12 +121,12 @@ export default function TableIRJ3({ handleSelect, refreshTrigger }) {
                     sx={{ 
                             border: 0,
                             '& .super-app-theme--header': {
-                                backgroundColor: '#1975d1',
+                                backgroundColor: '#1e2838',
                                 fontSize: '16px',
                                 fontWeight: 'bold !important',
                             }, 
                             '& .MuiDataGrid-columnHeaders': {
-                                        backgroundColor: '#1e2939',
+                                        backgroundColor: '#1e2838',
                                         fontWeight: 'bold !important', // Mengubah gaya font header
                                         fontSize: '16px', // Ukuran font header lebih besar
                                         color: '#fff', // Warna font header

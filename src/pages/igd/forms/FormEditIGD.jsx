@@ -35,14 +35,16 @@ const style = {
     },
 };
 
-export default function ModalRajal2({ open, handleClose, form, setForm, handleOpenNested, setRefreshTrigger }) {
+export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm }) {
     const [errors, setErrors] = useState({});
     const [openDialog, setOpenDialog] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
 
     useEffect(() => {
-        if (!open) {
+    if (!open) {
+        // Reset form saat modal ditutup
         setForm({
+            id: '',
             nama_lengkap: '',
             jenis_kelamin: '',
             no_ktp: '',
@@ -65,9 +67,36 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
             telp_wali: '',
             alasan: '',
         });
-            setErrors({});
-        }
-    }, [open]);
+        setErrors({});
+    } else {
+        // Saat modal dibuka, pastikan form memiliki nilai yang valid (tidak undefined)
+        setForm((prevForm) => ({
+            id: prevForm.id || '',
+            nama_lengkap: prevForm.nama_lengkap || '',
+            jenis_kelamin: prevForm.jenis_kelamin || '',
+            no_ktp: prevForm.no_ktp || '',
+            tgl_lahir: prevForm.tgl_lahir || null,
+            status_pernikahan: prevForm.status_pernikahan || '',
+            pekerjaan: prevForm.pekerjaan || '',
+            no_telp: prevForm.no_telp || '',
+            alamat: prevForm.alamat || '',
+            tgl_daftar: prevForm.tgl_daftar || null,
+            payments: prevForm.payments || '',
+            no_kartu: prevForm.no_kartu || '',
+            poli: prevForm.poli || '',
+            dokter: prevForm.dokter || '',
+            jenis_rujukan: prevForm.jenis_rujukan || '',
+            no_rujukan: prevForm.no_rujukan || '',
+            tgl_rujukan: prevForm.tgl_rujukan || null,
+            faskes: prevForm.faskes || '',
+            no_wa: prevForm.no_wa || '',
+            nama_wali: prevForm.nama_wali || '',
+            telp_wali: prevForm.telp_wali || '',
+            alasan: prevForm.alasan || '',
+        }));
+    }
+}, [open]);
+
 
     const genders = [
         {
@@ -163,70 +192,84 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
     ];
 
     const handleChange = (e) => {
-        setForm({
-            ...form,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value } = e.target;
+    
+        // Handle specific case when payments is 'Tidak Ada'
+        if (name === 'payments' && value === 'Tidak Ada') {
+            setForm({
+                ...form,
+                [name]: value,
+                no_kartu: 'Tidak Ada', // Set no_kartu to 'Tidak Ada' when payments is 'Tidak Ada'
+            });
+        }
+        // Handle specific case when jenis_rujukan is 'Datang Sendiri'
+        else if (name === 'jenis_rujukan' && value === 'Datang Sendiri') {
+            setForm({
+                ...form,
+                [name]: value,
+                no_rujukan: '', // Reset no_rujukan
+                tgl_rujukan: null, // Reset tgl_rujukan
+            });
+        } else {
+            setForm({
+                ...form,
+                [name]: value,
+            });
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         // Reset error state sebelum validasi
         setErrors({});
-    
+
         let isValid = true;
         let newErrors = {};
-    
+
+        // Daftar field yang boleh kosong
+        const optionalFields = ['no_kartu', 'no_rujukan', 'tgl_rujukan'];
+
         // Cek setiap field dalam form
         for (const [key, value] of Object.entries(form)) {
-            if (!value) {
-                // Pengecualian untuk no_kartu
-                if (key === 'no_kartu' && form.payments === 'Tidak Ada') continue;
-    
-                // Pengecualian untuk no_rujukan dan tgl_rujukan
-                if ((key === 'no_rujukan' || key === 'tgl_rujukan') && form.jenis_rujukan === 'Datang Sendiri') continue;
-    
-                // Jika tidak termasuk dalam pengecualian, anggap tidak valid
+            if (!optionalFields.includes(key) && !value) {
                 isValid = false;
                 newErrors[key] = 'Field ini tidak boleh kosong';
             }
         }
-    
+
         // Jika ada error, tampilkan dan tidak lanjutkan ke handleConfirmSubmit
         if (!isValid) {
             setErrors(newErrors);
             return;
         }
-    
+
         setOpenDialog(true); // Menampilkan dialog konfirmasi
     };
-    
 
     const handleConfirmSubmit = async () => {
         const formattedData = {
             ...form,
+            no_kartu: form.payments === 'Tidak Ada' ? null : form.no_kartu,
+            no_rujukan: form.jenis_rujukan === 'Datang Sendiri' ? null : form.no_rujukan,
+            tgl_rujukan: form.jenis_rujukan === 'Datang Sendiri' ? null : (form.tgl_rujukan ? dayjs(form.tgl_rujukan).format("YYYY-MM-DD") : null),
             tgl_lahir: form.tgl_lahir ? dayjs(form.tgl_lahir).format("YYYY-MM-DD") : null,
             tgl_daftar: form.tgl_daftar ? dayjs(form.tgl_daftar).format("YYYY-MM-DD") : null,
-            tgl_rujukan: form.tgl_rujukan ? dayjs(form.tgl_rujukan).format("YYYY-MM-DD") : null,
         };
-
+    
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/rawatjalan`, formattedData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_igd/${form.id}`, formattedData,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+    
             console.log('Response:', response.data);
-            
-            // Menampilkan snackbar setelah berhasil submit
-            enqueueSnackbar('Data berhasil disubmit!', { variant: 'success', autoHideDuration: 3000 });
-            setRefreshTrigger(prev => !prev); // trigger refresh table
-            handleClose();
+            enqueueSnackbar('Data berhasil diperbarui!', { variant: 'success', autoHideDuration: 3000 });
+            handleCloseEdit();
         } catch (error) {
             console.error('Error terjadi:', error);
-            
-            // Menampilkan snackbar jika terjadi error
             enqueueSnackbar('Terjadi kesalahan saat mengirim data', { variant: 'error', autoHideDuration: 3000 });
         }
     };
@@ -239,7 +282,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
         <Box>
             <Modal 
                 open={open} 
-                onClose={handleClose} 
+                onClose={handleCloseEdit} 
                 closeAfterTransition
                 aria-labelledby="modal-form-title"
                 aria-describedby="modal-form-description"
@@ -258,23 +301,34 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                 py: 1.5,
                             }}
                         >
-                            <h2>Pendaftaran Rawat Jalan</h2>
-                            <ModalCloseButton onClick={handleClose} />
+                            <h2>Edit Pendaftaran Rawat Jalan</h2>
+                            <ModalCloseButton onClick={handleCloseEdit} />
                         </Box>
 
-                        <Box display="flex" justifyContent="flex-end" p={2}>
+                        {/* <Box display="flex" justifyContent="flex-end" p={2}>
                             <ButtonPasienLama onClick={handleOpenNested} />
-                        </Box>
+                        </Box> */}
 
                         <Box p={2}>
                             <form onSubmit={handleSubmit}>
                                 <h3 className="text-xl mb-2 font-bold">Data Pasien</h3>
                                 <Grid container spacing={2}>
+                                    <Grid columns={12} hidden>
+                                        <TextField
+                                        label="ID"
+                                        name="id"
+                                        value={form.id || ''}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        error={!!errors.id}
+                                        helperText={errors.id}
+                                        />
+                                    </Grid>
                                     <Grid columns={12}>
                                         <TextField
                                         label="Nama Lengkap"
                                         name="nama_lengkap"
-                                        value={form.nama_lengkap}
+                                        value={form.nama_lengkap || ''}
                                         onChange={handleChange}
                                         fullWidth
                                         error={!!errors.nama_lengkap}
@@ -286,7 +340,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             select
                                             label="Jenis Kelamin"
                                             name="jenis_kelamin"
-                                            value={form.jenis_kelamin}
+                                            value={form.jenis_kelamin || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             error={!!errors.jenis_kelamin}
@@ -303,7 +357,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                         label="No. KTP"
                                         name="no_ktp"
-                                        value={form.no_ktp}
+                                        value={form.no_ktp || ''}
                                         onChange={handleChange}
                                         fullWidth
                                         error={!!errors.no_ktp}
@@ -332,7 +386,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             select
                                             label="Status Pernikahan"
                                             name="status_pernikahan" // tambahkan name
-                                            value={form.status_pernikahan} // kontrol oleh state
+                                            value={form.status_pernikahan || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
                                             error={!!errors.status_pernikahan}
                                             helperText={errors.status_pernikahan || " "}
@@ -352,7 +406,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             label="Pekerjaan"
                                             name="pekerjaan"
-                                            value={form.pekerjaan}
+                                            value={form.pekerjaan || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -364,7 +418,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             label="No. Telp"
                                             name="no_telp"
-                                            value={form.no_telp}
+                                            value={form.no_telp || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -376,7 +430,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             label="Alamat"
                                             name="alamat"
-                                            value={form.alamat}
+                                            value={form.alamat || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -417,7 +471,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             select
                                             label="Cara Bayar"
                                             name="payments" // tambahkan name
-                                            value={form.payments} // kontrol oleh state
+                                            value={form.payments || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
                                             error={!!errors.payments}
                                             helperText={errors.payments || " "}
@@ -434,7 +488,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             label="No. Kartu BPJS/Asuransi"
                                             name="no_kartu"
-                                            value={form.payments === 'Tidak Ada' ? '' : form.no_kartu}
+                                            value={form.payments === 'Tidak Ada' ? '' : form.no_kartu || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -448,7 +502,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             select
                                             label="Pilih Poli"
                                             name="poli" // tambahkan name
-                                            value={form.poli} // kontrol oleh state
+                                            value={form.poli || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
                                             error={!!errors.poli}
                                             helperText={errors.poli || " "}
@@ -466,7 +520,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             select
                                             label="Pilih Dokter"
                                             name="dokter" // tambahkan name
-                                            value={form.dokter} // kontrol oleh state
+                                            value={form.dokter || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
                                             error={!!errors.dokter}
                                             helperText={errors.dokter || " "}
@@ -484,7 +538,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             select
                                             label="Datang Sendiri/Rujukan"
                                             name="jenis_rujukan" // tambahkan name
-                                            value={form.jenis_rujukan} // kontrol oleh state
+                                            value={form.jenis_rujukan || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
                                             error={!!errors.jenis_rujukan}
                                             helperText={errors.jenis_rujukan || " "}
@@ -501,7 +555,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             label="No. Rujukan"
                                             name="no_rujukan"
-                                            value={form.jenis_rujukan === 'Datang Sendiri' ? '' : form.no_rujukan}
+                                            value={form.jenis_rujukan === 'Datang Sendiri' ? '' : form.no_rujukan || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -535,7 +589,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                             select
                                             label="Pilih Pelayanan"
                                             name="faskes" // tambahkan name
-                                            value={form.faskes} // kontrol oleh state
+                                            value={form.faskes || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
                                             error={!!errors.faskes}
                                             helperText={errors.faskes || " "}
@@ -552,7 +606,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             label="No. Whatsapp"
                                             name="no_wa"
-                                            value={form.no_wa}
+                                            value={form.no_wa || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -564,7 +618,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             label="Nama Wali"
                                             name="nama_wali"
-                                            value={form.nama_wali}
+                                            value={form.nama_wali || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -576,7 +630,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             label="No. Telpon Wali"
                                             name="telp_wali"
-                                            value={form.telp_wali}
+                                            value={form.telp_wali || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -588,7 +642,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                         <TextField
                                             label="Alasan Berobat"
                                             name="alasan"
-                                            value={form.alasan}
+                                            value={form.alasan || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
@@ -604,7 +658,7 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                                     <ButtonSubmit onClick={handleSubmit} />
                                     <Box sx={{ ml: 2 }}>
-                                        <ButtonClose onClick={handleClose} />
+                                        <ButtonClose onClick={handleCloseEdit} />
                                     </Box>
                                 </Box>
                             </form>

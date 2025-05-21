@@ -154,8 +154,8 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
             label: 'Dr. Beneran',
         },
         {
-            value: 'Dr. Gadungan',
-            label: 'Dr. Gadungan',
+            value: 'Dr. Placeholder',
+            label: 'Dr. Placeholder',
         },
     ];
 
@@ -289,7 +289,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                             <form onSubmit={handleSubmit}>
                                 <h3 className="text-xl mb-2 font-bold">Data Pasien</h3>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12} >
+                                    <Grid columns={12} >
                                         <TextField
                                             label="Nama Lengkap"
                                             name="nama_lengkap"
@@ -301,7 +301,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             helperText={errors.nama_lengkap}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Jenis Kelamin"
@@ -319,7 +319,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. KTP"
                                             name="no_ktp"
@@ -331,7 +331,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             helperText={errors.no_ktp || " "}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <div style={{ marginTop: '7px' }}>
                                                 <DatePicker
@@ -350,7 +350,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             </div>
                                         </LocalizationProvider>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Status Pernikahan"
@@ -371,7 +371,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                 </Grid>
 
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="Pekerjaan"
                                             name="pekerjaan"
@@ -383,7 +383,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             helperText={errors.pekerjaan}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Telp"
                                             name="no_telp"
@@ -395,7 +395,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             helperText={errors.no_telp}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="Alamat"
                                             name="alamat"
@@ -416,7 +416,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                 
                                 <h3 className="text-xl mb-2 mt-3 font-bold">Detail</h3>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <div style={{ marginTop: '7px' }}>
                                                 <DatePicker
@@ -435,7 +435,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             </div>
                                         </LocalizationProvider>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Cara Bayar"
@@ -453,7 +453,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Kartu BPJS/Asuransi"
                                             name="no_kartu"
@@ -466,7 +466,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             disabled={form.payments === 'Tidak Ada'}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Pilih Poli"
@@ -484,7 +484,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Pilih Dokter"
@@ -502,7 +502,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Datang Sendiri/Rujukan"
@@ -520,7 +520,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Rujukan"
                                             name="no_rujukan"
@@ -533,7 +533,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             disabled={form.jenis_rujukan === 'Datang Sendiri'}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <div style={{ marginTop: '7px' }}>
                                                 <DatePicker
@@ -553,7 +553,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             </div>
                                         </LocalizationProvider>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             select
                                             label="Pilih Pelayanan"
@@ -571,7 +571,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             ))}
                                         </TextField>
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Whatsapp"
                                             name="no_wa"
@@ -583,7 +583,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             helperText={errors.no_wa}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="Nama Wali"
                                             name="nama_wali"
@@ -595,7 +595,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             helperText={errors.nama_wali}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="No. Telpon Wali"
                                             name="telp_wali"
@@ -607,7 +607,7 @@ export default function ModalDaftarIGD({ open, handleClose, form, setForm, handl
                                             helperText={errors.telp_wali}
                                         />
                                     </Grid>
-                                    <Grid item xs={12}>
+                                    <Grid columns={12}>
                                         <TextField
                                             label="Alasan Berobat"
                                             name="alasan"

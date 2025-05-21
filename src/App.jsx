@@ -18,6 +18,9 @@ import Laboratorium from "./pages/laboratorium/Laboratorium";
 import DataObat from "./pages/farmasi/apotek/DataObat"
 import { ThemeProvider } from "@mui/material";
 import Theme from "./theme";
+import TerimaPasienRanap from "./pages/rawatinap/TerimaPasienRanap";
+import DataPasienRanap from "./pages/rawatinap/DataPasienRanap";
+import RME from "./pages/rme/RME";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);

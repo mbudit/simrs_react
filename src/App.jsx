@@ -11,7 +11,6 @@ import Register from "./pages/login/Register";
 import NotFound from "./pages/NotFound";
 import Antrian from "./pages/antrian/Antrian";
 /* import RawatInap from "./pages/rawatinap/RawatInap"; */
-import RME from "./pages/rme/RME";
 import IGD from "./pages/igd/IGD";
 import Radiologi from "./pages/radiologi/Radiologi";
 import Laboratorium from "./pages/laboratorium/Laboratorium";

@@ -16,6 +16,8 @@ import IGD from "./pages/igd/IGD";
 import Radiologi from "./pages/radiologi/Radiologi";
 import Laboratorium from "./pages/laboratorium/Laboratorium";
 import DataObat from "./pages/farmasi/apotek/DataObat"
+import { ThemeProvider } from "@mui/material";
+import Theme from "./theme";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -54,12 +56,14 @@ function App() {
   return (
     <Router>
       <div className="flex flex-col">
-        <AppContent
-          sidebarCollapsed={sidebarCollapsed}
-          setSidebarCollapsed={setSidebarCollapsed}
-          isAuthenticated={isAuthenticated}
-          setIsAuthenticated={setIsAuthenticated}
-        />
+        <ThemeProvider theme={Theme}>
+          <AppContent
+            sidebarCollapsed={sidebarCollapsed}
+            setSidebarCollapsed={setSidebarCollapsed}
+            isAuthenticated={isAuthenticated}
+            setIsAuthenticated={setIsAuthenticated}
+          />
+        </ThemeProvider>
       </div>
     </Router>
   );
@@ -87,12 +91,16 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
 
             {/* NAVBAR */}
             <div className="fixed top-0 left-0 right-0 z-50">
-              <Navbar setIsAuthenticated={setIsAuthenticated} />
+              <ThemeProvider theme={Theme}>
+                <Navbar setIsAuthenticated={setIsAuthenticated} />
+              </ThemeProvider>
             </div>
 
             {/* SIDEBAR */}
             <div className="fixed top-16 left-0 h-[calc(100vh-4rem)] z-40">
-              <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
+              <ThemeProvider theme={Theme}>
+                <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
+              </ThemeProvider>
             </div>
 
             <div className={`pt-16 transition-all duration-300 ml-16 ${sidebarCollapsed ? "ml-16" : "ml-[250px]"

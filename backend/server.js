@@ -226,7 +226,7 @@ app.post('/api/patients', (req, res) => {
 app.get('/api/patients', (req, res) => {
   const sql = `
     SELECT
-      no_ktp, nama_lengkap, tempat_lahir, 
+      no_ktp, no_rme, nama_lengkap, tempat_lahir, 
       DATE_FORMAT(tanggal_lahir, '%Y-%m-%d') AS tanggal_lahir, 
       umur, jenis_kelamin, agama, status, golongan_darah, rhesus, 
       pendidikan, pekerjaan, no_telp, warga_negara, 

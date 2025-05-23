@@ -35,7 +35,7 @@ const style = {
     },
 };
 
-export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setForm }) {
+export default function ModalUpdateIGD({ open, handleCloseEditIGD, form = {}, setForm }) {
     const [errors, setErrors] = useState({});
     const [openDialog, setOpenDialog] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
@@ -66,6 +66,7 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
             nama_wali: '',
             telp_wali: '',
             alasan: '',
+            status: '',
         });
         setErrors({});
     } else {
@@ -93,6 +94,7 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
             nama_wali: prevForm.nama_wali || '',
             telp_wali: prevForm.telp_wali || '',
             alasan: prevForm.alasan || '',
+            status: prevForm.status || '',
         }));
     }
 }, [open]);
@@ -197,10 +199,6 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
             label: 'Pulang',
         },
         {
-            value: 'Rawat Jalan',
-            label: 'Rawat Jalan',
-        },
-        {
             value: 'IGD',
             label: 'IGD',
         },
@@ -276,22 +274,47 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
         };
     
         try {
-            const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_rajal/${form.id}`, formattedData,
-                {
+            let responsePost, responsePut;
+    
+            if (form.status === "Rawat Inap") {
+                // Panggil API kode 1 (POST /api/rawatinap)
+                responsePost = await axios.post(`${import.meta.env.VITE_API_URL}/api/rawatinap`, formattedData, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                }
-            );
+                });
     
-            console.log('Response:', response.data);
-            enqueueSnackbar('Data berhasil diperbarui!', { variant: 'success', autoHideDuration: 3000 });
-            handleCloseEdit();
+                // Panggil API kode 2 (PUT /api/update_rajal/:id)
+                responsePut = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_igd/${form.id}`, formattedData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                console.log('Response POST:', responsePost.data);
+                console.log('Response PUT:', responsePut.data);
+            } else if (form.status === "Pulang") {
+                // Jika status "Pulang", hanya panggil API kode 2 (PUT)
+                responsePut = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_igd/${form.id}`, formattedData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                console.log('Response PUT:', responsePut.data);
+            } else {
+                enqueueSnackbar('Status pasien tidak valid.', { variant: 'warning' });
+                return;
+            }
+    
+            enqueueSnackbar('Data berhasil diproses!', { variant: 'success', autoHideDuration: 3000 });
+            handleCloseEditIGD();
+    
         } catch (error) {
             console.error('Error terjadi:', error);
             enqueueSnackbar('Terjadi kesalahan saat mengirim data', { variant: 'error', autoHideDuration: 3000 });
         }
     };
+    
 
     const handleCancelSubmit = () => {
         setOpenDialog(false); // Menutup dialog konfirmasi tanpa submit
@@ -301,10 +324,9 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
         <Box>
             <Modal 
                 open={open} 
-                onClose={handleCloseEdit} 
+                onClose={handleCloseEditIGD} 
                 closeAfterTransition
-                aria-labelledby="modal-form-title"
-                aria-describedby="modal-form-description"
+                
             >
                 <Fade in={open}>
                     <Box sx={style}>
@@ -320,8 +342,8 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
                                 py: 1.5,
                             }}
                         >
-                            <h2>Edit Pendaftaran Rawat Jalan</h2>
-                            <ModalCloseButton onClick={handleCloseEdit} />
+                            <h2>Update Pendaftaran IGD</h2>
+                            <ModalCloseButton onClick={handleCloseEditIGD} />
                         </Box>
 
                         {/* <Box display="flex" justifyContent="flex-end" p={2}>
@@ -699,7 +721,7 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                                     <ButtonSubmit onClick={handleSubmit} />
                                     <Box sx={{ ml: 2 }}>
-                                        <ButtonClose onClick={handleCloseEdit} />
+                                        <ButtonClose onClick={handleCloseEditIGD} />
                                     </Box>
                                 </Box>
                             </form>

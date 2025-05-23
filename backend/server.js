@@ -384,8 +384,8 @@ app.post("/api/rawatjalan", (req, res) => {
     no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
     pekerjaan, no_telp, alamat, tgl_daftar, payments,
     no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
-    tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan, status
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   const values = [
     no_rm,
@@ -410,6 +410,7 @@ app.post("/api/rawatjalan", (req, res) => {
     rajalData.nama_wali,
     rajalData.telp_wali,
     rajalData.alasan,
+    "Rawat Jalan",
   ];
 
   db.query(sql, values, (err, result) => {
@@ -431,8 +432,9 @@ app.get("/api/pasien_rajal", (req, res) => {
       id, no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
       pekerjaan, no_telp, alamat, tgl_daftar, payments,
       no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
-      tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
+      tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan, status
     FROM rawatjalan
+    WHERE status = 'Rawat Jalan'
   `;
 
   db.query(sql, (err, results) => {
@@ -487,6 +489,7 @@ app.put("/api/update_rajal/:id", (req, res) => {
     nama_wali,
     telp_wali,
     alasan,
+    status,
   } = req.body;
 
   // Fungsi untuk mengubah nilai kosong menjadi "Tidak Ada" atau null untuk tanggal
@@ -526,6 +529,7 @@ app.put("/api/update_rajal/:id", (req, res) => {
   nama_wali = checkAndFill(nama_wali);
   telp_wali = checkAndFill(telp_wali);
   alasan = checkAndFill(alasan);
+  status = checkAndFill(status);
 
   const sql = `UPDATE rawatjalan SET 
     nama_lengkap = ?, 
@@ -548,7 +552,8 @@ app.put("/api/update_rajal/:id", (req, res) => {
     no_wa = ?, 
     nama_wali = ?, 
     telp_wali = ?, 
-    alasan = ?
+    alasan = ?,
+    status = ?
   WHERE id = ?`;
 
   db.query(
@@ -575,6 +580,7 @@ app.put("/api/update_rajal/:id", (req, res) => {
       nama_wali,
       telp_wali,
       alasan,
+      status,
       id,
     ],
     (err, result) => {
@@ -609,8 +615,8 @@ app.post("/api/igd", (req, res) => {
     no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
     pekerjaan, no_telp, alamat, tgl_daftar, payments,
     no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
-    tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
-  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan, status
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
   const values = [
     no_rm,
@@ -635,6 +641,7 @@ app.post("/api/igd", (req, res) => {
     igdData.nama_wali,
     igdData.telp_wali,
     igdData.alasan,
+    "IGD",
   ];
 
   db.query(sql, values, (err, result) => {
@@ -656,8 +663,9 @@ app.get("/api/pasien_igd", (req, res) => {
       id, no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
       pekerjaan, no_telp, alamat, tgl_daftar, payments,
       no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
-      tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan
+      tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan, status
     FROM igd
+    WHERE status = 'IGD'
   `;
 
   db.query(sql, (err, results) => {
@@ -712,6 +720,7 @@ app.put("/api/update_igd/:id", (req, res) => {
     nama_wali,
     telp_wali,
     alasan,
+    status,
   } = req.body;
 
   // Fungsi untuk mengubah nilai kosong menjadi "Tidak Ada" atau null untuk tanggal
@@ -751,6 +760,7 @@ app.put("/api/update_igd/:id", (req, res) => {
   nama_wali = checkAndFill(nama_wali);
   telp_wali = checkAndFill(telp_wali);
   alasan = checkAndFill(alasan);
+  status = checkAndFill(status);
 
   const sql = `UPDATE igd SET 
     nama_lengkap = ?, 
@@ -773,7 +783,8 @@ app.put("/api/update_igd/:id", (req, res) => {
     no_wa = ?, 
     nama_wali = ?, 
     telp_wali = ?, 
-    alasan = ?
+    alasan = ?,
+    status = ?
   WHERE id = ?`;
 
   db.query(
@@ -800,6 +811,7 @@ app.put("/api/update_igd/:id", (req, res) => {
       nama_wali,
       telp_wali,
       alasan,
+      status,
       id,
     ],
     (err, result) => {
@@ -810,6 +822,90 @@ app.put("/api/update_igd/:id", (req, res) => {
       res.send("Patient updated successfully");
     }
   );
+});
+
+app.post("/api/rawatinap", (req, res) => {
+  console.log("POST /api/ranap dipanggil");
+  const ranapData = req.body;
+
+  const no_rm = "IRI-" + uuidv4().split("-")[0];
+
+  // Logika default untuk no_kartu jika payments adalah "Tidak Ada"
+  const no_kartu_final =
+    ranapData.payments === "Tidak Ada" ? "Umum" : ranapData.no_kartu;
+
+  // Logika default untuk no_rujukan & tgl_rujukan jika jenis_rujukan adalah "Datang Sendiri"
+  const no_rujukan_final =
+    ranapData.jenis_rujukan === "Datang Sendiri"
+      ? "Tidak Ada"
+      : ranapData.no_rujukan;
+  const tgl_rujukan_final =
+    ranapData.jenis_rujukan === "Datang Sendiri" ? null : ranapData.tgl_rujukan;
+
+  const sql = `INSERT INTO rawatinap (
+    no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
+    pekerjaan, no_telp, alamat, tgl_daftar, payments,
+    no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
+    tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan, status
+  ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+  const values = [
+    no_rm,
+    ranapData.nama_lengkap,
+    ranapData.jenis_kelamin,
+    ranapData.no_ktp,
+    ranapData.tgl_lahir,
+    ranapData.status_pernikahan,
+    ranapData.pekerjaan,
+    ranapData.no_telp,
+    ranapData.alamat,
+    ranapData.tgl_daftar,
+    ranapData.payments,
+    no_kartu_final,
+    ranapData.poli,
+    ranapData.dokter,
+    ranapData.jenis_rujukan,
+    no_rujukan_final,
+    tgl_rujukan_final,
+    ranapData.faskes,
+    ranapData.no_wa,
+    ranapData.nama_wali,
+    ranapData.telp_wali,
+    ranapData.alasan,
+    ranapData.status,
+  ];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      console.error("DB error:", err);
+      return res.status(500).json({ error: "Database error" });
+    }
+    res.status(201).json({
+      message: "Rawat Inap berhasil didaftarkan",
+      id: result.insertId,
+      no_rm: no_rm,
+    });
+  });
+});
+
+app.get("/api/pasien_ranap", (req, res) => {
+  const sql = `
+    SELECT
+      id, no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
+      pekerjaan, no_telp, alamat, tgl_daftar, payments,
+      no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
+      tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan, status
+    FROM rawatinap
+  `;
+
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Database error" });
+    }
+
+    res.json(results);
+  });
 });
 
 const PORT = process.env.PORT || 5000;

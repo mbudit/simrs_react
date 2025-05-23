@@ -17,9 +17,9 @@ import Laboratorium from "./pages/laboratorium/Laboratorium";
 import DataObat from "./pages/farmasi/apotek/DataObat"
 import { ThemeProvider } from "@mui/material";
 import Theme from "./theme";
-import TerimaPasienRanap from "./pages/rawatinap/TerimaPasienRanap";
-import DataPasienRanap from "./pages/rawatinap/DataPasienRanap";
 import RME from "./pages/rme/RME";
+import TerimaPasien from "./pages/terima_pasien/TerimaPasien";
+import RawatInap from "./pages/rawatinap/RawatInap";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -115,8 +115,8 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
                   <Route path="/antrian" element={<PrivateRoute element={<Antrian />} />} />
                   <Route path="/rawatjalan" element={<PrivateRoute element={<RawatJalan />} />} />
                   {/* <Route path="/rawatinap" element={<PrivateRoute element={<RawatInap />} />} /> */}
-                  <Route path="/rawatinap/terima_pasien" element={<PrivateRoute element={<TerimaPasienRanap />} />} />
-                  <Route path="/rawatinap/data_pasien_ranap" element={<PrivateRoute element={<DataPasienRanap />} />} />
+                  <Route path="/terima_pasien" element={<PrivateRoute element={<TerimaPasien />} />} />
+                  <Route path="/rawatinap" element={<PrivateRoute element={<RawatInap />} />} />
                   <Route path="/rme" element={<PrivateRoute element={<RME />} />} />
                   <Route path="/igd" element={<PrivateRoute element={<IGD />} />} />
                   <Route path="/radiologi" element={<PrivateRoute element={<Radiologi />} />} />

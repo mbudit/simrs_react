@@ -100,11 +100,23 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
 
   const [formOpen, setFormOpen] = useState(false);
   const [newNote, setNewNote] = useState({
-    date: '',
-    diagnosis: '',
-    doctor: '',
-    notes: '',
+    tanggal_pemeriksaan: '',
+    keluhan_utama: '',
+    riwayat_penyakit_sekarang: '',
+    riwayat_penyakit_dahulu: '',
+    riwayat_penyakit_keluarga: '',
+    riwayat_alergi: '',
+    tekanan_darah: '',
+    nadi: '',
+    suhu: '',
+    pernapasan: '',
+    pemeriksaan_fisik: '',
+    diagnosis_kerja: '',
+    diagnosis_banding: '',
+    rencana_terapi: '',
+    rencana_tindak_lanjut: ''
   });
+
 
   const handleOpenForm = () => setFormOpen(true);
   const handleCloseForm = () => setFormOpen(false);
@@ -130,7 +142,6 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
   const no_telp = data.no_telp;
 
   const {
-    bloodType,
     clinicalNotes,
     vitals,
     prescriptions,

@@ -16,6 +16,8 @@ const TabelRME = () => {
   const [rows, setRows] = useState([]);
   const [open, setOpen] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   const handleOpen = (row) => {
     setSelectedRow(row);
@@ -31,11 +33,16 @@ const TabelRME = () => {
     fetchPatients();
   }, []);
 
-  const fetchPatients = () => {
-    axios
-      .get(`${import.meta.env.VITE_API_URL}/api/patients`)
-      .then((res) => setRows(res.data))
-      .catch((err) => console.error('Error fetching patients:', err));
+  const fetchPatients = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/patients`);
+      setRows(res.data);
+    } catch (err) {
+      console.error('Error fetching patients:', err);
+      setError('Gagal memuat data pasien');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const columns = [
@@ -66,9 +73,11 @@ const TabelRME = () => {
   return (
     <>
       <Paper>
+        {error && <Alert severity="error">{error}</Alert>}
         <DataGrid
           rows={rows}
           columns={columns}
+          loading={loading}
           getRowId={(row) => row.no_ktp}
           pageSize={5}
           rowsPerPageOptions={[5, 10]}
@@ -82,7 +91,13 @@ const TabelRME = () => {
         />
       </Paper>
 
-      <Modal open={open} onClose={handleClose}>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="RME"
+        aria-describedby="RME PASIEN"
+
+      >
         <Box
           sx={{
             position: 'absolute',

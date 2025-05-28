@@ -11,7 +11,7 @@ import {
 const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xl">
-      <DialogTitle>Form Catatan Klinis (SOAP)</DialogTitle>
+      <DialogTitle>Form Catatan Klinis</DialogTitle>
       <DialogContent>
         <div className="grid grid-cols-8 md:grid-cols-5 gap-4 max-h-[80vh] overflow-y-auto pr-2">
 

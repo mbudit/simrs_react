@@ -19,7 +19,7 @@ const columnsBase = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function TableRanap({ handleSelect }) {
+export default function TableRanap({ handleSelect, refreshTrigger }) {
     const [rows, setRows] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [openDialog, setOpenDialog] = React.useState(false); // State untuk Dialog
@@ -42,7 +42,7 @@ export default function TableRanap({ handleSelect }) {
             .finally(() => {
                 setLoading(false);
             });
-    }, []);
+    }, [refreshTrigger]);
 
     const handleOpenDialog = (id) => {
         setDeleteId(id);
@@ -55,7 +55,7 @@ export default function TableRanap({ handleSelect }) {
     };
 
     const handleDelete = () => {
-        axios.delete(`${import.meta.env.VITE_API_URL}/api/pasien_igd/${deleteId}`)
+        axios.delete(`${import.meta.env.VITE_API_URL}/api/pasien_ranap/${deleteId}`)
             .then(() => {
                 setRows(prev => prev.filter(row => row.id !== deleteId));
                 enqueueSnackbar("Data berhasil dihapus!", { variant: 'success', autoHideDuration: 3000 });

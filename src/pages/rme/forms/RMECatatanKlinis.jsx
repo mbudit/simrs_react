@@ -18,6 +18,10 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
           {/* === Subjective === */}
           <div className="md:col-span-5 text-lg font-semibold">Subjective</div>
 
+          <div className="md:col-span-5">
+            <hr className="border-t border-gray-300" />
+          </div>
+
           <TextField
             className="md:col-span-1"
             name="tanggal_pemeriksaan"

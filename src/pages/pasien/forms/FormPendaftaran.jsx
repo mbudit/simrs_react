@@ -16,6 +16,7 @@ import {
 const FormPendaftaran = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     noKtp: '',
+    noRme: 'RME-',
     namaLengkap: '',
     tempatLahir: '',
     tanggalLahir: '',
@@ -169,6 +170,7 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
       // Reset form after successful submission
       setFormData({
         noKtp: '',
+        noRme: 'RME-',
         namaLengkap: '',
         tempatLahir: '',
         tanggalLahir: '',
@@ -236,6 +238,31 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
           <div className="md:col-span-5 mt-2">
             <h3 className="text-lg font-semibold mb-2">Kredensial</h3>
           </div>
+
+          <div className="md:col-span-1">
+            <TextField
+              label="No. RME"
+              fullWidth
+              required
+              name="noRme"
+              value={(formData.noRme || '').replace(/^RME-/, '')}  // remove prefix for editing
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  noRme: `RME-${e.target.value.replace(/\D/g, '')}` // keep digits only
+                }))
+              }
+              InputProps={{
+                startAdornment: <span className="text-gray-500 mr-2">RME-</span>
+              }}
+              error={!!errors.noRme}
+              helperText={errors.noRme}
+              inputProps={{
+                maxLength: 4 // just the number part
+              }}
+            />
+          </div>
+
 
           <div className="md:col-span-1">
             <TextField

@@ -872,7 +872,7 @@ app.post("/api/rawatinap", (req, res) => {
     ranapData.nama_wali,
     ranapData.telp_wali,
     ranapData.alasan,
-    ranapData.status,
+    ranapData.status || "Rawat Inap",
   ];
 
   db.query(sql, values, (err, result) => {
@@ -905,6 +905,155 @@ app.get("/api/pasien_ranap", (req, res) => {
     }
 
     res.json(results);
+  });
+});
+
+app.put("/api/update_ranap/:id", (req, res) => {
+  const { id } = req.params;
+  let {
+    nama_lengkap,
+    jenis_kelamin,
+    no_ktp,
+    tgl_lahir,
+    status_pernikahan,
+    pekerjaan,
+    no_telp,
+    alamat,
+    tgl_daftar,
+    payments,
+    no_kartu,
+    poli,
+    dokter,
+    jenis_rujukan,
+    no_rujukan,
+    tgl_rujukan,
+    faskes,
+    no_wa,
+    nama_wali,
+    telp_wali,
+    alasan,
+    status,
+  } = req.body;
+
+  // Fungsi untuk mengubah nilai kosong menjadi "Tidak Ada" atau null untuk tanggal
+  const checkAndFill = (value, isDate = false) => {
+    if (isDate) {
+      return value ? value : null; // Jika nilai kosong, kembalikan null
+    }
+    return value ? value : "Tidak Ada"; // Untuk nilai selain tanggal, kembalikan "Tidak Ada"
+  };
+
+  // Menggunakan fungsi checkAndFill untuk setiap kolom
+  nama_lengkap = checkAndFill(nama_lengkap);
+  jenis_kelamin = checkAndFill(jenis_kelamin);
+  no_ktp = checkAndFill(no_ktp);
+  tgl_lahir = checkAndFill(tgl_lahir, true);
+  status_pernikahan = checkAndFill(status_pernikahan);
+  pekerjaan = checkAndFill(pekerjaan);
+  no_telp = checkAndFill(no_telp);
+  alamat = checkAndFill(alamat);
+  tgl_daftar = checkAndFill(tgl_daftar, true);
+  payments = checkAndFill(payments);
+
+  // Logika tambahan sesuai permintaan
+  if (payments === "Tidak Ada") {
+    no_kartu = "Umum";
+  } else {
+    no_kartu = checkAndFill(no_kartu);
+  }
+
+  poli = checkAndFill(poli);
+  dokter = checkAndFill(dokter);
+  jenis_rujukan = checkAndFill(jenis_rujukan);
+  no_rujukan = checkAndFill(no_rujukan);
+  tgl_rujukan = checkAndFill(tgl_rujukan, true);
+  faskes = checkAndFill(faskes);
+  no_wa = checkAndFill(no_wa);
+  nama_wali = checkAndFill(nama_wali);
+  telp_wali = checkAndFill(telp_wali);
+  alasan = checkAndFill(alasan);
+  status = checkAndFill(status);
+  if (status === "Tidak Ada") {
+    status = "Rawat Inap";
+  }
+
+  const sql = `UPDATE rawatinap SET 
+    nama_lengkap = ?, 
+    jenis_kelamin = ?, 
+    no_ktp = ?, 
+    tgl_lahir = ?, 
+    status_pernikahan = ?, 
+    pekerjaan = ?, 
+    no_telp = ?, 
+    alamat = ?, 
+    tgl_daftar = ?, 
+    payments = ?, 
+    no_kartu = ?, 
+    poli = ?, 
+    dokter = ?, 
+    jenis_rujukan = ?, 
+    no_rujukan = ?, 
+    tgl_rujukan = ?, 
+    faskes = ?, 
+    no_wa = ?, 
+    nama_wali = ?, 
+    telp_wali = ?, 
+    alasan = ?,
+    status = ?
+  WHERE id = ?`;
+
+  db.query(
+    sql,
+    [
+      nama_lengkap,
+      jenis_kelamin,
+      no_ktp,
+      tgl_lahir,
+      status_pernikahan,
+      pekerjaan,
+      no_telp,
+      alamat,
+      tgl_daftar,
+      payments,
+      no_kartu,
+      poli,
+      dokter,
+      jenis_rujukan,
+      no_rujukan,
+      tgl_rujukan,
+      faskes,
+      no_wa,
+      nama_wali,
+      telp_wali,
+      alasan,
+      status,
+      id,
+    ],
+    (err, result) => {
+      if (err) {
+        console.error("Error updating patient:", err);
+        return res.status(500).send("Failed to update");
+      }
+      res.send("Patient updated successfully");
+    }
+  );
+});
+
+app.delete("/api/pasien_ranap/:id", (req, res) => {
+  const id = req.params.id;
+
+  const sql = "DELETE FROM rawatinap WHERE id = ?";
+  db.query(sql, [id], (err, result) => {
+    if (err) {
+      console.error("Delete error:", err);
+      return res.status(500).json({ error: "Failed to delete patient" });
+    }
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Patient not found" });
+    }
+
+    res.json({ message: "Patient deleted successfully" });
   });
 });
 

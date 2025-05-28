@@ -301,7 +301,7 @@ export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm
                                 py: 1.5,
                             }}
                         >
-                            <h2>Edit Pendaftaran Rawat Jalan</h2>
+                            <h2>Edit Pendaftaran IGD</h2>
                             <ModalCloseButton onClick={handleCloseEdit} />
                         </Box>
 

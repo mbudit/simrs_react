@@ -182,19 +182,6 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
             <Typography>Gol. Darah: {golongandarah}{rhesus}</Typography>
             <Typography>No. Telp: {no_telp}</Typography>
           </div>
-          {/* 
-          <div>
-            <Typography>Alergi:</Typography>
-            {allergies.map((allergy, index) => (
-              <Chip
-                key={index}
-                label={allergy}
-                color="warning"
-                size="small"
-                sx={{ mr: 1, mb: 1 }}
-              />
-            ))}
-          </div> */}
         </Box>
       </Paper>
 

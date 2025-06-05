@@ -10,6 +10,7 @@ const patientRoutes = require('./routes/patientRoutes');
 const rajalRoutes = require('./routes/rajalRoutes');
 const igdRoutes = require('./routes/igdRoutes');
 const ranapRoutes = require('./routes/ranapRoutes');
+const rmeRoutes = require('./routes/rmeRoutes');
 
 const app = express();
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
@@ -28,6 +29,7 @@ app.use('/', patientRoutes);
 app.use('/', rajalRoutes);
 app.use('/', igdRoutes);
 app.use('/', ranapRoutes);
+app.use('/', rmeRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

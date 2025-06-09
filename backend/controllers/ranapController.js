@@ -39,7 +39,7 @@ exports.createRanap = (req, res) => {
     ranapData.nama_wali,
     ranapData.telp_wali,
     ranapData.alasan,
-    ranapData.status,
+    "Rawat Inap",
   ];
 
   db.query(sql, values, (err, result) => {

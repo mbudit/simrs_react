@@ -59,7 +59,7 @@ exports.getRajalPatients = (req, res) => {
   const sql = `
     SELECT
       id, no_rm, nama_lengkap, jenis_kelamin, no_ktp, tgl_lahir, status_pernikahan,
-      pekerjaan, no_telp, alamat, tgl_daftar, payments,
+      pekerjaan, no_telp, alamat, DATE_FORMAT(tgl_daftar, '%Y-%m-%d') as tgl_daftar, payments,
       no_kartu, poli, dokter, jenis_rujukan, no_rujukan,
       tgl_rujukan, faskes, no_wa, nama_wali, telp_wali, alasan, status
     FROM rawatjalan
@@ -71,9 +71,12 @@ exports.getRajalPatients = (req, res) => {
       console.error(err);
       return res.status(500).json({ error: "Database error" });
     }
+    // results sudah tgl_daftar berupa string 'YYYY-MM-DD'
     res.json(results);
   });
 };
+
+
 
 exports.deleteRajalPatient = (req, res) => {
   const id = req.params.id;

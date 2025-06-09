@@ -33,7 +33,7 @@ export default function TableIRJ3({ handleSelect, refreshTrigger }) {
                 const dataWithId = res.data.map((row, index) => ({
                     id: index,
                     ...row,
-                    tgl_daftar: row.tgl_daftar ? row.tgl_daftar.split('T')[0] : '',
+                    /* tgl_daftar: row.tgl_daftar ? row.tgl_daftar.split('T')[0] : '', */
                 }));
                 setRows(dataWithId);
             })

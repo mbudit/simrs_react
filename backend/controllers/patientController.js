@@ -6,17 +6,18 @@ exports.createPatient = (req, res) => {
 
   const sql = `
     INSERT INTO patients (
-      no_ktp, nama_lengkap, tempat_lahir, tanggal_lahir, umur, 
+      no_ktp, no_rme, nama_lengkap, tempat_lahir, tanggal_lahir, umur, 
       jenis_kelamin, agama, status, golongan_darah, rhesus, 
       pendidikan, pekerjaan, no_telp, warga_negara, 
       nama_orangtua_wali, no_telp_wali, alamat, rt, rw, 
       kelurahan, kecamatan, kabupaten, provinsi, kode_pos, 
       asuransi, no_asuransi
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const values = [
     data.noKtp,
+    data.noRme,
     data.namaLengkap,
     data.tempatLahir,
     data.tanggalLahir,

@@ -10,13 +10,14 @@ import {
   Tooltip
 } from '@mui/material';
 
-const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
+const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientData }) => {
   const [errors, setErrors] = useState({});
   const [confirmOpen, setConfirmOpen] = useState(false);
-  const [successOpen, setSuccessOpen] = useState(false); 
+  const [successOpen, setSuccessOpen] = useState(false);
 
   const validate = () => {
     const newErrors = {};
+    if (!patientData.no_rme) newErrors.no_rme = 'No. RME wajib diisi.';
     if (!note.tanggal_pemeriksaan) newErrors.tanggal_pemeriksaan = 'Tanggal pemeriksaan wajib diisi.';
     if (!note.keluhan_utama) newErrors.keluhan_utama = 'Keluhan utama wajib diisi.';
     if (!note.tekanan_darah) newErrors.tekanan_darah = 'Tekanan darah wajib diisi.';
@@ -34,13 +35,13 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
   };
 
   const handleConfirmSubmit = async () => {
-    setConfirmOpen(false); 
+    setConfirmOpen(false);
     if (validate()) {
       try {
-        console.log("Submitting form data:", note); 
+        console.log("Submitting form data:", note);
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/rme/save-form`, note);
         console.log(response.data.message);
-        setSuccessOpen(true); 
+        setSuccessOpen(true);
         onSubmit();
         resetForm();
       } catch (error) {
@@ -54,6 +55,7 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
       target: {
         name: "reset",
         value: {
+          no_rme: patientData.no_rme || '',
           tanggal_pemeriksaan: '',
           keluhan_utama: '',
           riwayat_penyakit_sekarang: '',
@@ -93,23 +95,41 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
               <hr className="border-t border-gray-300" />
             </div>
 
+            <Tooltip title="Nomor RME pasien">
+              <TextField
+                className="col-span-2"
+                name="no_rme"
+                label="No. RME"
+                placeholder="Masukkan No. RME"
+                value={patientData.no_rme}
+                error={!!errors.no_rme}
+                helperText={errors.no_rme || "Diisi otomatis dari data pasien"}
+                slotProps={{
+                  input: { readOnly: true }
+                }}
+              >
+              </TextField>
+            </Tooltip>
+
             <Tooltip title="Tanggal pemeriksaan pasien">
               <TextField
-                className="col-span-3"
+                className="col-span-2"
                 name="tanggal_pemeriksaan"
                 label="Tanggal Pemeriksaan"
                 type="date"
                 value={note.tanggal_pemeriksaan}
                 onChange={onChange}
-                InputLabelProps={{ shrink: true }}
                 error={!!errors.tanggal_pemeriksaan}
                 helperText={errors.tanggal_pemeriksaan}
+                slotProps={{
+                  inputLabel: { shrink: true }
+                }}
               />
             </Tooltip>
 
             <Tooltip title="Keluhan utama pasien">
               <TextField
-                className="col-span-7"
+                className="col-span-10"
                 name="keluhan_utama"
                 label="Keluhan Utama"
                 placeholder="Masukkan keluhan utama pasien"
@@ -122,7 +142,7 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
 
             <Tooltip title="Riwayat penyakit yang dialami pasien saat ini">
               <TextField
-                className="col-span-10"
+                className="col-span-5"
                 name="riwayat_penyakit_sekarang"
                 label="Riwayat Penyakit Sekarang"
                 placeholder="Masukkan riwayat penyakit sekarang"
@@ -155,7 +175,7 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
 
             <Tooltip title="Riwayat alergi pasien">
               <TextField
-                className="col-span-10"
+                className="col-span-5"
                 name="riwayat_alergi"
                 label="Riwayat Alergi"
                 placeholder="Masukkan riwayat alergi"

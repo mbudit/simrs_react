@@ -245,22 +245,25 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
               fullWidth
               required
               name="noRme"
-              value={(formData.noRme || '').replace(/^RME-/, '')}  // remove prefix for editing
+              // remove prefix for editing
+              value={(formData.noRme || '').replace(/^RME-/, '')}
               onChange={(e) =>
                 setFormData((prev) => ({
                   ...prev,
                   noRme: `RME-${e.target.value.replace(/\D/g, '')}` // keep digits only
                 }))
               }
-              InputProps={{
-                startAdornment: <span className="text-gray-500 mr-2">RME-</span>
-              }}
               error={!!errors.noRme}
               helperText={errors.noRme}
-              inputProps={{
-                maxLength: 4 // just the number part
-              }}
-            />
+              slotProps={{
+                input: {
+                  startAdornment: <span className="text-gray-500 mr-2">RME-</span>
+                },
+
+                htmlInput: {
+                  maxLength: 4 // just the number part
+                }
+              }} />
           </div>
 
 

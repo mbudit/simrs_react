@@ -7,14 +7,15 @@ exports.saveFormData = (req, res) => {
 
   const sql = `
     INSERT INTO rme_catatan_klinis (
-      tanggal_pemeriksaan, keluhan_utama, riwayat_penyakit_sekarang,
+      no_rme, tanggal_pemeriksaan, keluhan_utama, riwayat_penyakit_sekarang,
       riwayat_penyakit_dahulu, riwayat_penyakit_keluarga, riwayat_alergi,
       tekanan_darah, nadi, suhu, pernapasan, pemeriksaan_fisik,
       diagnosis_kerja, diagnosis_banding, rencana_terapi, rencana_tindak_lanjut
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `;
 
   const values = [
+    formData.no_rme,
     formData.tanggal_pemeriksaan,
     formData.keluhan_utama,
     formData.riwayat_penyakit_sekarang,

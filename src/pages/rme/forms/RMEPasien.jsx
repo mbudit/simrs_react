@@ -95,6 +95,7 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
 
   const [formOpen, setFormOpen] = useState(false);
   const [newNote, setNewNote] = useState({
+    no_rme: data.no_rme,
     tanggal_pemeriksaan: '',
     keluhan_utama: '',
     riwayat_penyakit_sekarang: '',
@@ -112,16 +113,8 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
     rencana_tindak_lanjut: ''
   });
 
-  const handleOpenForm = (rowData) => {
-    setNewNote({
-      ...newNote,
-      tanggal_pemeriksaan: rowData.tanggal_pemeriksaan || '',
-      keluhan_utama: rowData.keluhan_utama || '',
-      // Populate other fields from rowData if needed
-    });
-    setFormOpen(true);
-  };
 
+  const handleOpenForm = () => setFormOpen(true);
   const handleCloseForm = () => setFormOpen(false);
 
   const handleFormChange = (e) => {
@@ -186,22 +179,23 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
           </div>
         </Box>
       </Paper>
-
       {/* Search and Action Bar */}
       <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
         <TextField
           placeholder="Cari"
           size="small"
           sx={{ width: 300 }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <Search />
-              </InputAdornment>
-            ),
-          }}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search />
+                </InputAdornment>
+              ),
+            }
+          }}
         />
         <div>
           <Button variant="outlined" startIcon={<Print />} sx={{ mr: 1 }}>
@@ -212,7 +206,6 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
           </Button>
         </div>
       </Box>
-
       {/* Navigation Tabs */}
       <Tabs
         value={activeTab}
@@ -225,7 +218,6 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
         <Tab label="Hasil Lab" icon={<Science />} />
       </Tabs>
       <Divider sx={{ mb: 3 }} />
-
       {/* Tab Content */}
       {activeTab === 0 && (
         <div>
@@ -233,7 +225,7 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
             <Button
               variant="contained"
               startIcon={<PictureAsPdf />}
-              onClick={() => handleOpenForm(data)} // Pass the selectedRow data
+              onClick={handleOpenForm}
             >
               Buat RME Baru
             </Button>
@@ -269,11 +261,11 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
             onSubmit={handleSubmitNote}
             note={newNote}
             onChange={handleFormChange}
+            patientData={data} // Pass the data parameter here
           />
         </div>
 
       )}
-
       {activeTab === 1 && (
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
           {vitals.map((vital, index) => (
@@ -292,7 +284,6 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
           ))}
         </Box>
       )}
-
       {activeTab === 2 && (
         <Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
@@ -340,7 +331,6 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
           ))}
         </Box>
       )}
-
       {activeTab === 3 && (
         <Box>
           {filteredLabResults.map((lab) => (

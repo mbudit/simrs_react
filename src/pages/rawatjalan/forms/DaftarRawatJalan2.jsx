@@ -179,22 +179,32 @@ export default function ModalRajal2({ open, handleClose, form, setForm, handleOp
     
         // Cek setiap field dalam form
         for (const [key, value] of Object.entries(form)) {
-            if (!value) {
-                // Pengecualian untuk no_kartu
-                if (key === 'no_kartu' && form.payments === 'Tidak Ada') continue;
-    
-                // Pengecualian untuk no_rujukan dan tgl_rujukan
-                if ((key === 'no_rujukan' || key === 'tgl_rujukan') && form.jenis_rujukan === 'Datang Sendiri') continue;
-    
-                // Jika tidak termasuk dalam pengecualian, anggap tidak valid
-                isValid = false;
-                newErrors[key] = 'Field ini tidak boleh kosong';
+            // Pengecualian
+            if (key === 'no_kartu' && form.payments === 'Tidak Ada') continue;
+            if ((key === 'no_rujukan' || key === 'tgl_rujukan') && form.jenis_rujukan === 'Datang Sendiri') continue;
+            if (key === 'status') continue; // skip validasi status karena diisi backend
+        
+            // Validasi Dayjs dan lainnya seperti biasa
+            if (value && value.isDayjsObject) {
+                if (!value.isValid()) {
+                    isValid = false;
+                    newErrors[key] = 'Tanggal tidak valid';
+                }
+            } else {
+                if (value === null || value === undefined || (typeof value === 'string' && value.trim() === '')) {
+                    isValid = false;
+                    newErrors[key] = 'Field ini tidak boleh kosong';
+                }
             }
         }
     
         // Jika ada error, tampilkan dan tidak lanjutkan ke handleConfirmSubmit
         if (!isValid) {
             setErrors(newErrors);
+            enqueueSnackbar('Harap isi semua field yang wajib!', { 
+                variant: 'error',
+                autoHideDuration: 3000 
+            });
             return;
         }
     

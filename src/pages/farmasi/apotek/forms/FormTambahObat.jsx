@@ -15,7 +15,7 @@ const style = {
     transform: 'translate(-50%, -50%)',
     bgcolor: 'background.paper',
     boxShadow: 24,
-    width: '80vw',
+    width: '95vw',
     maxWidth: '100%',
     maxHeight: '100%',
     overflow: 'auto',
@@ -36,7 +36,7 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
             // Reset form saat modal ditutup
             setForm({
                 id: '',
-                nama_lengkap: '',
+                nama_obat: '',
                 jenis_kelamin: '',
                 no_ktp: '',
                 tgl_lahir: null,
@@ -63,7 +63,7 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
             // Saat modal dibuka, pastikan form memiliki nilai yang valid (tidak undefined)
             setForm((prevForm) => ({
                 id: prevForm.id || '',
-                nama_lengkap: prevForm.nama_lengkap || '',
+                nama_obat: prevForm.nama_obat || '',
                 jenis_kelamin: prevForm.jenis_kelamin || '',
                 no_ktp: prevForm.no_ktp || '',
                 tgl_lahir: prevForm.tgl_lahir || null,
@@ -88,96 +88,349 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
         }
     }, [open]);
     
-    const genders = [
+    const produksi = [
         {
-            value: 'Laki-laki',
-            label: 'Laki-laki',
+            value: 'None',
+            label: 'None',
         },
         {
-            value: 'Perempuan',
-            label: 'Perempuan',
-        },
-    ];
-
-    const status_pernikahan = [
-        {
-            value: 'Menikah',
-            label: 'Sudah Menikah',
+            value: 'Material',
+            label: 'Material',
         },
         {
-            value: 'Belum Menikah',
-            label: 'Belum Menikah',
+            value: 'Paket',
+            label: 'Paket',
         },
         {
-            value: 'Cerai',
-            label: 'Cerai',
+            value: 'Bom',
+            label: 'Bom',
         },
     ];
 
-    const payments = [
+    const satuan = [
         {
-            value: 'Tidak Ada',
-            label: 'Tidak Ada',
+            value: 'Ampul',
+            label: 'Ampul',
         },
         {
-            value: 'BPJS',
-            label: 'BPJS',
+            value: 'Box',
+            label: 'Box',
         },
         {
-            value: 'Asuransi A',
-            label: 'Asuransi A',
+            value: 'CC',
+            label: 'CC',
         },
         {
-            value: 'Asuransi B',
-            label: 'Asuransi B',
+            value: 'Flacon',
+            label: 'Flacon',
         },
         {
-            value: 'Asuransi Swasta',
-            label: 'Asuransi Swasta',
+            value: 'FLS',
+            label: 'FLS',
+        },
+        {
+            value: 'Kaplet',
+            label: 'Kaplet',
+        },
+        {
+            value: 'Kapsul',
+            label: 'Kapsul',
+        },
+        {
+            value: 'KOLF',
+            label: 'KOLF',
+        },
+        {
+            value: 'PCS',
+            label: 'PCS',
+        },
+        {
+            value: 'Sachet',
+            label: 'Sachet',
+        },
+        {
+            value: 'Softbag',
+            label: 'Softbag',
+        },
+        {
+            value: 'Strip',
+            label: 'Strip',
+        },
+        {
+            value: 'Supp',
+            label: 'Supp',
+        },
+        {
+            value: 'Tablet',
+            label: 'Tablet',
+        },
+        {
+            value: 'Tube',
+            label: 'Tube',
+        },
+        {
+            value: 'Vial',
+            label: 'Vial',
+        },
+        {
+            value: 'BDL',
+            label: 'BDL',
+        },
+        {
+            value: 'Galon',
+            label: 'Galon',
+        },
+        {
+            value: 'Jam',
+            label: 'Jam',
+        },
+        {
+            value: 'Kantong',
+            label: 'Kantong',
+        },
+        {
+            value: 'KG',
+            label: 'KG',
+        },
+        {
+            value: 'Lembar',
+            label: 'Lembar',
+        },
+        {
+            value: 'Meter',
+            label: 'Meter',
+        },
+        {
+            value: 'Liter',
+            label: 'Liter',
+        },
+        {
+            value: 'MG',
+            label: 'MG',
+        },
+        {
+            value: 'ML',
+            label: 'ML',
+        },
+        {
+            value: 'PAK',
+            label: 'PAK',
+        },
+        {
+            value: 'POT',
+            label: 'POT',
+        },
+        {
+            value: 'PSG',
+            label: 'PSG',
+        },
+        {
+            value: 'ROL',
+            label: 'ROL',
+        },
+        {
+            value: 'Set',
+            label: 'Set',
+        },
+        {
+            value: 'Tabung',
+            label: 'Tabung',
+        },
+        {
+            value: 'Paket',
+            label: 'Paket',
+        },
+        {
+            value: 'Gram',
+            label: 'Gram',
+        },
+        {
+            value: 'CM',
+            label: 'CM',
+        },
+        {
+            value: 'Kaleng',
+            label: 'Kaleng',
+        },
+        {
+            value: 'Flexipen',
+            label: 'Flexipen',
         },
     ];
 
-    const poli = [
+    const pabrik = [
         {
-            value: 'Poli Gigi',
-            label: 'Poli Gigi',
+            value: '3M',
+            label: '3M',
         },
         {
-            value: 'Poli Anak',
-            label: 'Poli Anak',
-        },
-    ];
-
-    const dokter = [
-        {
-            value: 'Dr. Beneran',
-            label: 'Dr. Beneran',
+            value: 'Abbot',
+            label: 'Abbot',
         },
         {
-            value: 'Dr. Placeholder',
-            label: 'Dr. Placeholder',
+            value: 'Actavis',
+            label: 'Actavis',
         },
     ];
 
-    const jenis_rujukan = [
+    const eticket = [
         {
-            value: 'Datang Sendiri',
-            label: 'Datang Sendiri',
+            value: 'Biru',
+            label: 'Biru',
         },
         {
-            value: 'Rujukan',
-            label: 'Rujukan',
+            value: 'Putih',
+            label: 'Putih',
         },
     ];
 
-    const faskes = [
+    const kategori = [
         {
-            value: 'Spesialis',
-            label: 'Spesialis',
+            value: 'Generik',
+            label: 'Generik',
         },
         {
-            value: 'Konsul',
-            label: 'Konsul',
+            value: 'Narkotika',
+            label: 'Narkotika',
+        },
+        {
+            value: 'Paten',
+            label: 'Paten',
+        },
+    ];
+
+    const jenis_obat = [
+        {
+            value: 'Drop',
+            label: 'Drop',
+        },
+        {
+            value: 'Injeksi',
+            label: 'Injeksi',
+        },
+        {
+            value: 'Kapsul',
+            label: 'Kapsul',
+        },
+    ];
+
+    const level_sakit = [
+        {
+            value: 'Berat',
+            label: 'Berat',
+        },
+        {
+            value: 'Gunakan dengan perhatian pasien sakit ginjal',
+            label: 'Gunakan dengan perhatian pasien sakit ginjal',
+        },
+        {
+            value: 'Ringan',
+            label: 'Ringan',
+        },
+    ];
+
+    const resiko = [
+        {
+            value: 'A',
+            label: 'A',
+        },
+        {
+            value: 'B',
+            label: 'B',
+        },
+        {
+            value: 'C',
+            label: 'C',
+        },
+    ];
+
+    const obat_terapi = [
+        {
+            value: 'Anti Epilepsi',
+            label: 'Anti Epilepsi',
+        },
+        {
+            value: 'Antimigrain',
+            label: 'Antimigrain',
+        },
+        {
+            value: 'Antimikroba',
+            label: 'Antimikroba',
+        },
+    ];
+
+    const obat_subterapi = [
+        {
+            value: 'Anti Epilepsi',
+            label: 'Anti Epilepsi',
+        },
+        {
+            value: 'Antimigrain',
+            label: 'Antimigrain',
+        },
+        {
+            value: 'Antimikroba',
+            label: 'Antimikroba',
+        },
+    ];
+
+    const sebelum_makan = [
+        {
+            value: '1 Jam',
+            label: '1 Jam',
+        },
+        {
+            value: '1,5 Jam',
+            label: '1,5 Jam',
+        },
+        {
+            value: '2 Jam',
+            label: '2 Jam',
+        },
+    ];
+
+    const ketika_makan = [
+        {
+            value: '1 Jam',
+            label: '1 Jam',
+        },
+        {
+            value: '1,5 Jam',
+            label: '1,5 Jam',
+        },
+        {
+            value: '2 Jam',
+            label: '2 Jam',
+        },
+    ];
+
+    const setelah_makan = [
+        {
+            value: '1 Jam',
+            label: '1 Jam',
+        },
+        {
+            value: '1,5 Jam',
+            label: '1,5 Jam',
+        },
+        {
+            value: '2 Jam',
+            label: '2 Jam',
+        },
+    ];
+
+    const keterangan = [
+        {
+            value: 'Barang APBD',
+            label: 'Barang APBD',
+        },
+        {
+            value: 'Barang BLUD',
+            label: 'Barang BLUD',
+        },
+        {
+            value: 'Donasi',
+            label: 'Donasi',
         },
     ];
     
@@ -283,32 +536,33 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
 
                         <Box sx={{ pt: 4, pl: 2, pb: 2, pr: 2 }}>
                             <form onSubmit={handleSubmit}>
-                                <h3 className="text-xl mb-2 font-bold">Data Pasien</h3>
                                 <Grid container spacing={2}>
                                     <Grid columns={12} >
                                         <TextField
-                                            label="Nama Lengkap"
-                                            name="nama_lengkap"
-                                            value={form.nama_lengkap || ''}
+                                            label="Nama Obat"
+                                            name="nama_obat"
+                                            value={form.nama_obat || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
-                                            error={!!errors.nama_lengkap}
-                                            helperText={errors.nama_lengkap}
+                                            error={!!errors.nama_obat}
+                                            helperText={errors.nama_obat}
+                                            sx={{ minWidth: 420 }}
                                         />
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
                                             select
-                                            label="Jenis Kelamin"
-                                            name="jenis_kelamin" // tambahkan name
-                                            value={form.jenis_kelamin || ''} // kontrol oleh state
+                                            label="Produksi"
+                                            name="produksi" // tambahkan name
+                                            value={form.produksi || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.jenis_kelamin}
-                                            helperText={errors.jenis_kelamin || " "}
+                                            error={!!errors.produksi}
+                                            helperText={errors.produksi || " "}
                                             fullWidth
+                                            sx={{ minWidth: 400 }}
                                         >
-                                            {genders.map((option) => (
+                                            {produksi.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
@@ -317,47 +571,30 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
-                                            label="No. KTP"
-                                            name="no_ktp"
-                                            value={form.no_ktp || ''}
+                                            label="Isi Kemasan/Box"
+                                            name="isi_kemasan"
+                                            value={form.isi_kemasan || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
-                                            error={!!errors.no_ktp}
-                                            helperText={errors.no_ktp || " "}
+                                            error={!!errors.isi_kemasan}
+                                            helperText={errors.isi_kemasan || " "}
+                                            sx={{ minWidth: 400 }}
                                         />
-                                    </Grid>
-                                    <Grid columns={12}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <div style={{ marginTop: '7px' }}>
-                                                <DatePicker
-                                                    label="Tanggal Lahir"
-                                                    value={form.tgl_lahir ? dayjs(form.tgl_lahir) : null}
-                                                    onChange={(newValue) =>
-                                                        setForm({ ...form, tgl_lahir: newValue })
-                                                    }
-                                                    slotProps={{
-                                                        textField: {
-                                                        error: !!errors.tgl_lahir,
-                                                        helperText: errors.tgl_lahir || " ",
-                                                        },
-                                                    }}
-                                                />
-                                            </div>
-                                        </LocalizationProvider>
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
                                             select
-                                            label="Status Pernikahan"
-                                            name="status_pernikahan" // tambahkan name
-                                            value={form.status_pernikahan || ''} // kontrol oleh state
+                                            label="Satuan"
+                                            name="satuan" // tambahkan name
+                                            value={form.satuan || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.status_pernikahan}
-                                            helperText={errors.status_pernikahan || " "}
+                                            error={!!errors.satuan}
+                                            helperText={errors.satuan || " "}
                                             fullWidth
+                                            sx={{ minWidth: 390 }}
                                         >
-                                            {status_pernikahan.map((option) => (
+                                            {satuan.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
@@ -369,111 +606,186 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
                                 <Grid container spacing={2}>
                                     <Grid columns={12}>
                                         <TextField
-                                            label="Pekerjaan"
-                                            name="pekerjaan"
-                                            value={form.pekerjaan || ''}
+                                            select
+                                            label="Pabrik"
+                                            name="pabrik" // tambahkan name
+                                            value={form.pabrik || ''} // kontrol oleh state
+                                            onChange={handleChange} // ubah state saat berubah
+                                            error={!!errors.pabrik}
+                                            helperText={errors.pabrik || " "}
+                                            fullWidth
+                                            sx={{ minWidth: 420 }}
+                                        >
+                                            {pabrik.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="On Label"
+                                            name="on_label"
+                                            value={form.on_label || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
-                                            error={!!errors.pekerjaan}
-                                            helperText={errors.pekerjaan}
+                                            error={!!errors.on_label}
+                                            helperText={errors.on_label || " "}
+                                            sx={{ minWidth: 300 }}
                                         />
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
-                                            label="No. Telp"
-                                            name="no_telp"
-                                            value={form.no_telp || ''}
+                                            label="Off Label"
+                                            name="off_label"
+                                            value={form.off_label || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
-                                            error={!!errors.no_telp}
-                                            helperText={errors.no_telp}
+                                            error={!!errors.off_label}
+                                            helperText={errors.off_label || " "}
+                                            sx={{ minWidth: 300 }}
                                         />
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
-                                            label="Alamat"
-                                            name="alamat"
-                                            value={form.alamat || ''}
+                                            label="Nama Dagang"
+                                            name="nama_dagang"
+                                            value={form.nama_dagang || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
-                                            error={!!errors.alamat}
-                                            helperText={errors.alamat}
-                                            multiline
-                                            rows={4} // Menentukan tinggi area teks, bisa disesuaikan sesuai kebutuhan
-                                            style={{ width: '600px' }}
+                                            error={!!errors.nama_dagang}
+                                            helperText={errors.nama_dagang || " "}
+                                            sx={{ minWidth: 300 }}
+                                        />
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="Nama Original"
+                                            name="nama_original"
+                                            value={form.nama_original || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.nama_original}
+                                            helperText={errors.nama_original || " "}
+                                            sx={{ minWidth: 255 }}
                                         />
                                     </Grid>
                                 </Grid>
 
-                                <Box sx={{ borderBottom: '1px solid #ccc', mb: 2, mt: 2, }} />
+                                <Grid container spacing={2}>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="Margin"
+                                            name="margin"
+                                            value={form.margin || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.margin}
+                                            helperText={errors.margin || " "}
+                                        />
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="Harga Beli"
+                                            name="harga_beli"
+                                            value={form.harga_beli || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.harga_beli}
+                                            helperText={errors.harga_beli || " "}
+                                        />
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="HNA + Ppn 11%"
+                                            name="harga_pajak"
+                                            value={form.harga_pajak || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.harga_pajak}
+                                            helperText={errors.harga_pajak || " "}
+                                        />
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="Harga Jual"
+                                            name="harga_jual"
+                                            value={form.harga_jual || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.harga_jual}
+                                            helperText={errors.harga_jual || " "}
+                                        />
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="Max Stock"
+                                            name="max_stock"
+                                            value={form.max_stock || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.max_stock}
+                                            helperText={errors.max_stock || " "}
+                                        />
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="Min Stock"
+                                            name="min_stock"
+                                            value={form.min_stock || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.min_stock}
+                                            helperText={errors.min_stock || " "}
+                                        />
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            select
+                                            label="E-Ticket"
+                                            name="eticket" // tambahkan name
+                                            value={form.eticket || ''} // kontrol oleh state
+                                            onChange={handleChange} // ubah state saat berubah
+                                            error={!!errors.eticket}
+                                            helperText={errors.eticket || " "}
+                                            fullWidth
+                                        >
+                                            {eticket.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                </Grid>
+
+                                {/* <Box sx={{ borderBottom: '1px solid #ccc', mb: 2, mt: 2, }} /> */}
                                 
-                                <h3 className="text-xl mb-2 mt-3 font-bold">Detail</h3>
                                 <Grid container spacing={2}>
                                     <Grid columns={12}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <div style={{ marginTop: '7px' }}>
-                                                <DatePicker
-                                                    label="Tanggal Daftar"
-                                                    value={form.tgl_daftar ? dayjs(form.tgl_daftar) : null}
-                                                    onChange={(newValue) =>
-                                                        setForm({ ...form, tgl_daftar: newValue })
-                                                    }
-                                                    slotProps={{
-                                                        textField: {
-                                                        error: !!errors.tgl_daftar,
-                                                        helperText: errors.tgl_daftar || " ",
-                                                        },
-                                                    }}
-                                                />
-                                            </div>
-                                        </LocalizationProvider>
-                                    </Grid>
-                                    <Grid columns={12}>
                                         <TextField
                                             select
-                                            label="Cara Bayar"
-                                            name="payments" // tambahkan name
-                                            value={form.payments || ''} // kontrol oleh state
+                                            label="Kategori"
+                                            name="kategori" // tambahkan name
+                                            value={form.kategori || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.payments}
-                                            helperText={errors.payments || " "}
+                                            error={!!errors.kategori}
+                                            helperText={errors.kategori || " "}
                                             fullWidth
+                                            sx={{ minWidth: 550 }}
                                         >
-                                            {payments.map((option) => (
-                                                <MenuItem key={option.value} value={option.value}>
-                                                    {option.label}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                    <Grid columns={12}>
-                                        <TextField
-                                            label="No. Kartu BPJS/Asuransi"
-                                            name="no_kartu"
-                                            value={form.payments === 'Tidak Ada' ? '' : form.no_kartu || ''}
-                                            onChange={handleChange}
-                                            fullWidth
-                                            margin="normal"
-                                            error={!!errors.no_kartu}
-                                            helperText={errors.no_kartu}
-                                            disabled={form.payments === 'Tidak Ada'}
-                                        />
-                                    </Grid>
-                                    <Grid columns={12}>
-                                        <TextField
-                                            select
-                                            label="Pilih Poli"
-                                            name="poli" // tambahkan name
-                                            value={form.poli || ''} // kontrol oleh state
-                                            onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.poli}
-                                            helperText={errors.poli || " "}
-                                            fullWidth
-                                        >
-                                            {poli.map((option) => (
+                                            {kategori.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
@@ -483,15 +795,51 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
                                     <Grid columns={12}>
                                         <TextField
                                             select
-                                            label="Pilih Dokter"
-                                            name="dokter" // tambahkan name
-                                            value={form.dokter || ''} // kontrol oleh state
+                                            label="Jenis"
+                                            name="jenis_obat" // tambahkan name
+                                            value={form.jenis_obat || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.dokter}
-                                            helperText={errors.dokter || " "}
+                                            error={!!errors.jenis_obat}
+                                            helperText={errors.jenis_obat || " "}
                                             fullWidth
+                                            sx={{ minWidth: 550 }}
                                         >
-                                            {dokter.map((option) => (
+                                            {jenis_obat.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="Komposisi"
+                                            name="komposisi"
+                                            value={form.komposisi || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.komposisi}
+                                            helperText={errors.komposisi || " "}
+                                            sx={{ minWidth: 540 }}
+                                        />
+                                    </Grid>
+                                </Grid>
+
+                                <Grid container spacing={2}>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            select
+                                            label="Level Sakit"
+                                            name="level_sakit" // tambahkan name
+                                            value={form.level_sakit || ''} // kontrol oleh state
+                                            onChange={handleChange} // ubah state saat berubah
+                                            error={!!errors.level_sakit}
+                                            helperText={errors.level_sakit || " "}
+                                            fullWidth
+                                            sx={{ minWidth: 400 }}
+                                        >
+                                            {level_sakit.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
@@ -501,66 +849,35 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
                                     <Grid columns={12}>
                                         <TextField
                                             select
-                                            label="Datang Sendiri/Rujukan"
-                                            name="jenis_rujukan" // tambahkan name
-                                            value={form.jenis_rujukan || ''} // kontrol oleh state
+                                            label="Resiko Pada Ibu Hamil"
+                                            name="resiko" // tambahkan name
+                                            value={form.resiko || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.jenis_rujukan}
-                                            helperText={errors.jenis_rujukan || " "}
+                                            error={!!errors.resiko}
+                                            helperText={errors.resiko || " "}
                                             fullWidth
+                                            sx={{ minWidth: 400 }}
                                         >
-                                            {jenis_rujukan.map((option) => (
+                                            {resiko.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
                                             ))}
                                         </TextField>
-                                    </Grid>
-                                    <Grid columns={12}>
-                                        <TextField
-                                            label="No. Rujukan"
-                                            name="no_rujukan"
-                                            value={form.jenis_rujukan === 'Datang Sendiri' ? '' : form.no_rujukan || ''}
-                                            onChange={handleChange}
-                                            fullWidth
-                                            margin="normal"
-                                            error={!!errors.no_rujukan}
-                                            helperText={errors.no_rujukan}
-                                            disabled={form.jenis_rujukan === 'Datang Sendiri'}
-                                        />
-                                    </Grid>
-                                    <Grid columns={12}>
-                                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                            <div style={{ marginTop: '7px' }}>
-                                                <DatePicker
-                                                    label="Tanggal Rujukan"
-                                                    value={form.jenis_rujukan === 'Datang Sendiri' ? null : form.tgl_rujukan ? dayjs(form.tgl_rujukan) : null}
-                                                    onChange={(newValue) =>
-                                                        setForm({ ...form, tgl_rujukan: newValue })
-                                                    }
-                                                    disabled={form.jenis_rujukan === 'Datang Sendiri'}
-                                                    slotProps={{
-                                                        textField: {
-                                                        error: !!errors.tgl_rujukan,
-                                                        helperText: errors.tgl_rujukan || " ",
-                                                        },
-                                                    }}
-                                                />
-                                            </div>
-                                        </LocalizationProvider>
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
                                             select
-                                            label="Pilih Pelayanan"
-                                            name="faskes" // tambahkan name
-                                            value={form.faskes || ''} // kontrol oleh state
+                                            label="Obat Terapi"
+                                            name="obat_terapi" // tambahkan name
+                                            value={form.obat_terapi || ''} // kontrol oleh state
                                             onChange={handleChange} // ubah state saat berubah
-                                            error={!!errors.faskes}
-                                            helperText={errors.faskes || " "}
+                                            error={!!errors.obat_terapi}
+                                            helperText={errors.obat_terapi || " "}
                                             fullWidth
+                                            sx={{ minWidth: 400 }}
                                         >
-                                            {faskes.map((option) => (
+                                            {obat_terapi.map((option) => (
                                                 <MenuItem key={option.value} value={option.value}>
                                                     {option.label}
                                                 </MenuItem>
@@ -569,53 +886,129 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
-                                            label="No. Whatsapp"
-                                            name="no_wa"
-                                            value={form.no_wa || ''}
-                                            onChange={handleChange}
+                                            select
+                                            label="Obat Sub Terapi"
+                                            name="obat_subterapi" // tambahkan name
+                                            value={form.obat_subterapi || ''} // kontrol oleh state
+                                            onChange={handleChange} // ubah state saat berubah
+                                            error={!!errors.obat_subterapi}
+                                            helperText={errors.obat_subterapi || " "}
                                             fullWidth
-                                            margin="normal"
-                                            error={!!errors.no_wa}
-                                            helperText={errors.no_wa}
-                                        />
+                                            sx={{ minWidth: 410 }}
+                                        >
+                                            {obat_subterapi.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                </Grid>
+
+                                <Grid container spacing={2}>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            select
+                                            label="Aturan Sebelum Makan"
+                                            name="sebelum_makan" // tambahkan name
+                                            value={form.sebelum_makan || ''} // kontrol oleh state
+                                            onChange={handleChange} // ubah state saat berubah
+                                            error={!!errors.sebelum_makan}
+                                            helperText={errors.sebelum_makan || " "}
+                                            fullWidth
+                                            sx={{ minWidth: 400 }}
+                                        >
+                                            {sebelum_makan.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
-                                            label="Nama Wali"
-                                            name="nama_wali"
-                                            value={form.nama_wali || ''}
-                                            onChange={handleChange}
+                                            select
+                                            label="Aturan Ketika Makan"
+                                            name="ketika_makan" // tambahkan name
+                                            value={form.ketika_makan || ''} // kontrol oleh state
+                                            onChange={handleChange} // ubah state saat berubah
+                                            error={!!errors.ketika_makan}
+                                            helperText={errors.ketika_makan || " "}
                                             fullWidth
-                                            margin="normal"
-                                            error={!!errors.nama_wali}
-                                            helperText={errors.nama_wali}
-                                        />
+                                            sx={{ minWidth: 400 }}
+                                        >
+                                            {ketika_makan.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
-                                            label="No. Telpon Wali"
-                                            name="telp_wali"
-                                            value={form.telp_wali || ''}
-                                            onChange={handleChange}
+                                            select
+                                            label="Aturan Setelah Makan"
+                                            name="setelah_makan" // tambahkan name
+                                            value={form.setelah_makan || ''} // kontrol oleh state
+                                            onChange={handleChange} // ubah state saat berubah
+                                            error={!!errors.setelah_makan}
+                                            helperText={errors.setelah_makan || " "}
                                             fullWidth
-                                            margin="normal"
-                                            error={!!errors.telp_wali}
-                                            helperText={errors.telp_wali}
-                                        />
+                                            sx={{ minWidth: 400 }}
+                                        >
+                                            {setelah_makan.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
                                     </Grid>
                                     <Grid columns={12}>
                                         <TextField
-                                            label="Alasan Berobat"
-                                            name="alasan"
-                                            value={form.alasan || ''}
+                                            label="Efek Hati"
+                                            name="efek_hati"
+                                            value={form.efek_hati || ''}
                                             onChange={handleChange}
                                             fullWidth
                                             margin="normal"
-                                            error={!!errors.alasan}
-                                            helperText={errors.alasan}
-                                            multiline
-                                            rows={4} // Menentukan tinggi area teks, bisa disesuaikan sesuai kebutuhan
-                                            style={{ width: '600px' }}
+                                            error={!!errors.efek_hati}
+                                            helperText={errors.efek_hati || " "}
+                                            sx={{ minWidth: 410 }}
+                                        />
+                                    </Grid>
+                                </Grid>
+
+                                <Grid container spacing={2}>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            select
+                                            label="Keterangan"
+                                            name="keterangan" // tambahkan name
+                                            value={form.keterangan || ''} // kontrol oleh state
+                                            onChange={handleChange} // ubah state saat berubah
+                                            error={!!errors.keterangan}
+                                            helperText={errors.keterangan || " "}
+                                            fullWidth
+                                            sx={{ minWidth: 400 }}
+                                        >
+                                            {keterangan.map((option) => (
+                                                <MenuItem key={option.value} value={option.value}>
+                                                    {option.label}
+                                                </MenuItem>
+                                            ))}
+                                        </TextField>
+                                    </Grid>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="Sumber Barang"
+                                            name="sumber_barang"
+                                            value={form.sumber_barang || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            margin="normal"
+                                            error={!!errors.sumber_barang}
+                                            helperText={errors.sumber_barang || " "}
+                                            sx={{ minWidth: 400 }}
                                         />
                                     </Grid>
                                 </Grid>

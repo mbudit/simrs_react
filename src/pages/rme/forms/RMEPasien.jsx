@@ -33,11 +33,6 @@ import FormCatatanKlinis from './RMECatatanKlinis'
 
 
 const defaultPatient = {
-  name: "Budi Santoso",
-  age: 45,
-  bloodType: "A+",
-  allergies: ["Penicillin", "NSAIDs"],
-  lastVisit: "2023-10-15",
   clinicalNotes: [
     { date: "2023-10-15", diagnosis: "Hypertension", doctor: "Dr. Ani", notes: "Patient advised to reduce salt intake" },
     { date: "2023-08-22", diagnosis: "Diabetes Type 2", doctor: "Dr. Rudi", notes: "Started on Metformin 500mg" }
@@ -117,8 +112,16 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
     rencana_tindak_lanjut: ''
   });
 
+  const handleOpenForm = (rowData) => {
+    setNewNote({
+      ...newNote,
+      tanggal_pemeriksaan: rowData.tanggal_pemeriksaan || '',
+      keluhan_utama: rowData.keluhan_utama || '',
+      // Populate other fields from rowData if needed
+    });
+    setFormOpen(true);
+  };
 
-  const handleOpenForm = () => setFormOpen(true);
   const handleCloseForm = () => setFormOpen(false);
 
   const handleFormChange = (e) => {
@@ -130,7 +133,6 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
     // optionally: call API or update clinicalNotes state
     handleCloseForm();
   };
-
 
   const nama = data.nama_lengkap;
   const umur = data.umur;
@@ -231,7 +233,7 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
             <Button
               variant="contained"
               startIcon={<PictureAsPdf />}
-              onClick={handleOpenForm} // we'll define this next
+              onClick={() => handleOpenForm(data)} // Pass the selectedRow data
             >
               Buat RME Baru
             </Button>

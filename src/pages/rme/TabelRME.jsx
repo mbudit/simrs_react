@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Box, Button, Stack, Modal, Paper } from '@mui/material';
+import { Box, Button, Stack, Modal, Paper, Alert } from '@mui/material';
 import RMEPasien from './forms/RMEPasien';
 import axios from 'axios';
 
@@ -27,6 +27,7 @@ const TabelRME = () => {
   const handleClose = () => {
     setOpen(false);
     setSelectedRow(null);
+    setError(null);
   };
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const TabelRME = () => {
     try {
       const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/patients`);
       setRows(res.data);
+      setError(null); // Clear any previous errors
     } catch (err) {
       console.error('Error fetching patients:', err);
       setError('Gagal memuat data pasien');
@@ -60,7 +62,7 @@ const TabelRME = () => {
               variant="contained"
               size="small"
               color="primary"
-              onClick={() => handleOpen(params.row)} // ✅ Pass full row
+              onClick={() => handleOpen(params.row)}
             >
               RME
             </Button>
@@ -114,7 +116,10 @@ const TabelRME = () => {
           }}
         >
           {selectedRow && (
-            <RMEPasien data={selectedRow} onClose={handleClose} />
+            <RMEPasien
+              data={selectedRow}
+              onClose={handleClose} // Ensure modal closes on form submission
+            />
           )}
         </Box>
       </Modal>

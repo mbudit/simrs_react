@@ -12,8 +12,8 @@ import {
 
 const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
   const [errors, setErrors] = useState({});
-  const [confirmOpen, setConfirmOpen] = useState(false); // State for confirmation dialog
-  const [successOpen, setSuccessOpen] = useState(false); // State for success dialog
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [successOpen, setSuccessOpen] = useState(false); 
 
   const validate = () => {
     const newErrors = {};
@@ -30,19 +30,19 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange }) => {
   };
 
   const handleChange = (e) => {
-    onChange(e); // Directly call the onChange handler without numeric validation
+    onChange(e);
   };
 
   const handleConfirmSubmit = async () => {
-    setConfirmOpen(false); // Close confirmation dialog
+    setConfirmOpen(false); 
     if (validate()) {
       try {
-        console.log("Submitting form data:", note); // Debugging: Log the note object
+        console.log("Submitting form data:", note); 
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/rme/save-form`, note);
         console.log(response.data.message);
-        setSuccessOpen(true); // Open success dialog
+        setSuccessOpen(true); 
         onSubmit();
-        resetForm(); // Reset the form fields
+        resetForm();
       } catch (error) {
         console.error("Error saving form data:", error);
       }

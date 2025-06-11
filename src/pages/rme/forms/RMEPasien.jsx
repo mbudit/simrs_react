@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import {
   Box,
@@ -30,13 +30,10 @@ import {
   AddCircleOutline
 } from '@mui/icons-material';
 import FormCatatanKlinis from './RMECatatanKlinis'
-
+import axios from 'axios';
+import { format } from 'date-fns';
 
 const defaultPatient = {
-  clinicalNotes: [
-    { date: "2023-10-15", diagnosis: "Hypertension", doctor: "Dr. Ani", notes: "Patient advised to reduce salt intake" },
-    { date: "2023-08-22", diagnosis: "Diabetes Type 2", doctor: "Dr. Rudi", notes: "Started on Metformin 500mg" }
-  ],
   vitals: [
     { parameter: "BP", value: "130/85", unit: "mmHg", status: "normal" },
     { parameter: "Temp", value: "36.8", unit: "°C", status: "normal" },
@@ -92,11 +89,26 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
   if (!data) return null;
   const [activeTab, setActiveTab] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
+  const [clinicalNotes, setClinicalNotes] = useState([]);
+
+  const fetchClinicalNotes = async () => {
+    try {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/rme/clinical-notes/${data.no_rme}`);
+      setClinicalNotes(response.data);
+    } catch (error) {
+      console.error("Failed to fetch clinical notes:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchClinicalNotes();
+  }, [data.no_rme]);
 
   const [formOpen, setFormOpen] = useState(false);
   const [newNote, setNewNote] = useState({
     no_rme: data.no_rme,
-    tanggal_pemeriksaan: '',
+    tanggal_pemeriksaan: format(new Date(), 'yyyy-MM-dd'), // Automatically set to the present date
+    dokter: '',
     keluhan_utama: '',
     riwayat_penyakit_sekarang: '',
     riwayat_penyakit_dahulu: '',
@@ -113,7 +125,6 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
     rencana_tindak_lanjut: ''
   });
 
-
   const handleOpenForm = () => setFormOpen(true);
   const handleCloseForm = () => setFormOpen(false);
 
@@ -121,10 +132,29 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
     setNewNote({ ...newNote, [e.target.name]: e.target.value });
   };
 
-  const handleSubmitNote = () => {
-    console.log("Submitting note:", newNote);
-    // optionally: call API or update clinicalNotes state
-    handleCloseForm();
+  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+  const [selectedNoteId, setSelectedNoteId] = useState(null);
+
+  const handleOpenDeleteConfirmation = (noteId) => {
+    setSelectedNoteId(noteId);
+    setDeleteConfirmationOpen(true);
+  };
+
+  const handleCloseDeleteConfirmation = () => {
+    setDeleteConfirmationOpen(false);
+    setSelectedNoteId(null);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!selectedNoteId) return;
+    try {
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/rme/clinical-notes/${selectedNoteId}`);
+      setClinicalNotes((prevNotes) => prevNotes.filter((note) => note.id !== selectedNoteId));
+      console.log(`Deleted note ID: ${selectedNoteId}`);
+    } catch (error) {
+      console.error(`Failed to delete note ID: ${selectedNoteId}`, error);
+    }
+    handleCloseDeleteConfirmation();
   };
 
   const nama = data.nama_lengkap;
@@ -137,7 +167,6 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
   const no_telp = data.no_telp;
 
   const {
-    clinicalNotes,
     vitals,
     prescriptions,
     labResults
@@ -238,19 +267,53 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
                   <TableCell>Diagnosis</TableCell>
                   <TableCell>Dokter</TableCell>
                   <TableCell>Catatan</TableCell>
+                  <TableCell>Aksi</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {clinicalNotes.map((note, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{note.date}</TableCell>
-                    <TableCell>
-                      <Chip label={note.diagnosis} color="primary" size="small" />
+                {clinicalNotes.length > 0 ? (
+                  clinicalNotes.map((note, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{format(new Date(note.tanggal_pemeriksaan), 'yyyy-MM-dd')}</TableCell>
+                      <TableCell>
+                        <Chip label={note.diagnosis_kerja} color="primary" size="small" />
+                      </TableCell>
+                      <TableCell>{note.dokter}</TableCell>
+                      <TableCell>{note.catatan}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="contained"
+                          color="info"
+                          onClick={() => console.log(`Edit note ID: ${note.id}`)}
+                        >
+                          PDF
+                        </Button>
+                        <Button
+                          variant="contained" 
+                          color="success"     
+                          onClick={() => console.log(`Edit note ID: ${note.id}`)}
+                          sx={{ ml: 1 }}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="contained"
+                          color="error"
+                          onClick={() => handleOpenDeleteConfirmation(note.id)}
+                          sx={{ ml: 1 }}
+                        >
+                          Delete
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">
+                      Tidak ada data tersedia
                     </TableCell>
-                    <TableCell>{note.doctor}</TableCell>
-                    <TableCell>{note.notes}</TableCell>
                   </TableRow>
-                ))}
+                )}
               </TableBody>
             </Table>
           </TableContainer>
@@ -258,11 +321,30 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
           <FormCatatanKlinis
             open={formOpen}
             onClose={handleCloseForm}
-            onSubmit={handleSubmitNote}
+            onSubmit={fetchClinicalNotes} // Pass fetchClinicalNotes directly
             note={newNote}
             onChange={handleFormChange}
             patientData={data} // Pass the data parameter here
           />
+
+          {/* Confirmation Delete Dialog */}
+          <Dialog
+            open={deleteConfirmationOpen}
+            onClose={handleCloseDeleteConfirmation}
+          >
+            <DialogTitle>Konfirmasi Penghapusan</DialogTitle>
+            <DialogContent>
+              <Typography>Apakah Anda yakin ingin menghapus catatan ini?</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDeleteConfirmation} color="primary">
+                Batal
+              </Button>
+              <Button onClick={handleConfirmDelete} color="error">
+                Hapus
+              </Button>
+            </DialogActions>
+          </Dialog>
         </div>
 
       )}

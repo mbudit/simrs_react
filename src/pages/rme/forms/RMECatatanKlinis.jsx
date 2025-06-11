@@ -9,6 +9,7 @@ import {
   Button,
   Tooltip
 } from '@mui/material';
+import { format } from 'date-fns';
 
 const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientData }) => {
   const [errors, setErrors] = useState({});
@@ -19,6 +20,7 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
     const newErrors = {};
     if (!patientData.no_rme) newErrors.no_rme = 'No. RME wajib diisi.';
     if (!note.tanggal_pemeriksaan) newErrors.tanggal_pemeriksaan = 'Tanggal pemeriksaan wajib diisi.';
+    if (!note.dokter) newErrors.dokter = 'Nama dokter wajib diisi.';
     if (!note.keluhan_utama) newErrors.keluhan_utama = 'Keluhan utama wajib diisi.';
     if (!note.tekanan_darah) newErrors.tekanan_darah = 'Tekanan darah wajib diisi.';
     if (!note.nadi) newErrors.nadi = 'Nadi wajib diisi.';
@@ -26,12 +28,20 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
     if (!note.pemeriksaan_fisik) newErrors.pemeriksaan_fisik = 'Pemeriksaan fisik wajib diisi.';
     if (!note.diagnosis_kerja) newErrors.diagnosis_kerja = 'Diagnosis kerja wajib diisi.';
     if (!note.rencana_terapi) newErrors.rencana_terapi = 'Rencana terapi wajib diisi.';
+    if (!note.rencana_tindak_lanjut) newErrors.rencana_tindak_lanjut = 'Rencana tindak lanjut wajib diisi.';
+    if (!note.catatan) newErrors.catatan = 'Catatan wajib diisi.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
     onChange(e);
+  };
+
+  const handleSubmit = () => {
+    if (validate()) {
+      setConfirmOpen(true); // Open confirmation dialog
+    }
   };
 
   const handleConfirmSubmit = async () => {
@@ -42,8 +52,9 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
         const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/rme/save-form`, note);
         console.log(response.data.message);
         setSuccessOpen(true);
-        onSubmit();
-        resetForm();
+        onSubmit(); // Refresh clinical notes in RMEPasien
+        resetForm(); // Immediately reset the form for next submission
+        onClose(); // Automatically close the form dialog
       } catch (error) {
         console.error("Error saving form data:", error);
       }
@@ -51,35 +62,27 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
   };
 
   const resetForm = () => {
-    onChange({
-      target: {
-        name: "reset",
-        value: {
-          no_rme: patientData.no_rme || '',
-          tanggal_pemeriksaan: '',
-          keluhan_utama: '',
-          riwayat_penyakit_sekarang: '',
-          riwayat_penyakit_dahulu: '',
-          riwayat_penyakit_keluarga: '',
-          riwayat_alergi: '',
-          tekanan_darah: '',
-          nadi: '',
-          suhu: '',
-          pernapasan: '',
-          pemeriksaan_fisik: '',
-          diagnosis_kerja: '',
-          diagnosis_banding: '',
-          rencana_terapi: '',
-          rencana_tindak_lanjut: ''
-        }
-      }
-    });
-  };
-
-  const handleSubmit = () => {
-    if (validate()) {
-      setConfirmOpen(true); // Open confirmation dialog
-    }
+    const defaultNote = {
+      no_rme: patientData.no_rme || '',
+      tanggal_pemeriksaan: format(new Date(), 'yyyy-MM-dd'), // Reset to the current date
+      dokter: '',
+      keluhan_utama: '',
+      riwayat_penyakit_sekarang: '',
+      riwayat_penyakit_dahulu: '',
+      riwayat_penyakit_keluarga: '',
+      riwayat_alergi: '',
+      tekanan_darah: '',
+      nadi: '',
+      suhu: '',
+      pernapasan: '',
+      pemeriksaan_fisik: '',
+      diagnosis_kerja: '',
+      diagnosis_banding: '',
+      rencana_terapi: '',
+      rencana_tindak_lanjut: '',
+      catatan: ''
+    };
+    onChange({ target: { name: 'reset', value: defaultNote } });
   };
 
   return (
@@ -124,6 +127,19 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 slotProps={{
                   inputLabel: { shrink: true }
                 }}
+              />
+            </Tooltip>
+
+            <Tooltip title="Dokter">
+              <TextField
+                className="col-span-2"
+                name="dokter"
+                label="Nama Dokter Pemeriksa"
+                placeholder="Masukkan nama dokter"
+                value={note.dokter}
+                onChange={onChange}
+                error={!!errors.dokter}
+                helperText={errors.dokter}
               />
             </Tooltip>
 
@@ -307,6 +323,20 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 multiline
                 rows={2}
                 value={note.rencana_tindak_lanjut}
+                onChange={onChange}
+              />
+            </Tooltip>
+
+            {/* === Plan === */}
+            <div className="col-span-10 text-lg font-semibold mt-6">Catatan</div>
+
+            <Tooltip title="Catatan tambahan untuk pasien">
+              <TextField
+                className="col-span-4"
+                name="catatan"
+                label="Catatan"
+                placeholder="Masukkan catatan tambahan"
+                value={note.catatan}
                 onChange={onChange}
               />
             </Tooltip>

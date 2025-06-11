@@ -26,7 +26,7 @@ const style = {
         width: '25ch',
     },
 };
-export default function ModalTambahObat({ open, handleClose, form, setForm, setRefreshTrigger }) {
+export default function ModalEditObat({ open, handleCloseEdit, form = {}, setForm, setRefreshTrigger }) {
     const [errors, setErrors] = useState({});
     const [openDialog, setOpenDialog] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
@@ -519,24 +519,22 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
         const formattedData = {
             ...form,
         };
-
+    
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/tambahObat`, formattedData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
+            const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/updateObat/${form.id}`, formattedData,
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+    
             console.log('Response:', response.data);
-            
-            // Menampilkan snackbar setelah berhasil submit
-            enqueueSnackbar('Data berhasil disubmit!', { variant: 'success', autoHideDuration: 3000 });
-            setRefreshTrigger(prev => !prev); // trigger refresh table
-            handleClose();
+            enqueueSnackbar('Data berhasil diperbarui!', { variant: 'success', autoHideDuration: 3000 });
+            setRefreshTrigger(prev => !prev);
+            handleCloseEdit();
         } catch (error) {
             console.error('Error terjadi:', error);
-            
-            // Menampilkan snackbar jika terjadi error
             enqueueSnackbar('Terjadi kesalahan saat mengirim data', { variant: 'error', autoHideDuration: 3000 });
         }
     };
@@ -549,8 +547,10 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
         <Box>
             <Modal 
                 open={open} 
-                onClose={handleClose}
+                onClose={handleCloseEdit} 
                 closeAfterTransition
+                aria-labelledby="modal-form-title"
+                aria-describedby="modal-form-description"
             >
                 <Fade in={open}>
                     <Box sx={style}>
@@ -569,13 +569,24 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
                                 /* borderBottom: '1px solid #1565c0', */
                             }}
                             >
-                            <h2 className="text-xl font-bold">Tambah Data Obat</h2>
-                            <ModalCloseButton onClick={handleClose} />
+                            <h2 className="text-xl font-bold">Edit Data Obat</h2>
+                            <ModalCloseButton onClick={handleCloseEdit} />
                         </Box>
 
                         <Box sx={{ pt: 4, pl: 2, pb: 2, pr: 2 }}>
                             <form onSubmit={handleSubmit}>
                                 <Grid container spacing={2}>
+                                    <Grid columns={12}>
+                                        <TextField
+                                            label="ID"
+                                            name="id"
+                                            value={form.id || ''}
+                                            onChange={handleChange}
+                                            fullWidth
+                                            error={!!errors.id}
+                                            helperText={errors.id}
+                                        />
+                                    </Grid>
                                     <Grid columns={12} >
                                         <TextField
                                             label="Nama Obat"
@@ -1063,7 +1074,7 @@ export default function ModalTambahObat({ open, handleClose, form, setForm, setR
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                                     <ButtonSubmit onClick={handleSubmit} />
                                     <Box sx={{ ml: 2 }}>
-                                        <ButtonClose onClick={handleClose} />
+                                        <ButtonClose onClick={handleCloseEdit} />
                                     </Box>
                                 </Box>
                             </form>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { BackButton, ButtonDaftar } from '../../components/Buttons';
 import TableIRJ2 from './TablesRajal';
 import TableIRJ3 from './TablesRajal2';
@@ -8,6 +8,10 @@ import dayjs from 'dayjs';
 import { SnackbarProvider } from 'notistack';
 import ModalEditRajal from './forms/FormEditRajal';
 import ModalPasienLama2 from '../pasien_lama/ModalPasienLama';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import Button from '@mui/material/Button';
+import PrintIcon from '@mui/icons-material/Print';
 
 const RawatJalan = () => {
     const [open, setOpen] = useState(false);
@@ -103,15 +107,78 @@ const RawatJalan = () => {
         /* setOpenPasienLama(false); */ // Menutup modal lain jika ada
     };
 
+    const tableRef = useRef();
+
+    const handleExportPDF = () => {
+        const filteredRows = tableRef.current?.getFilteredRows?.() || [];
+    
+        if (filteredRows.length === 0) {
+            alert('Tidak ada data yang ditampilkan untuk diexport.');
+            return;
+        }
+    
+        const doc = new jsPDF({ orientation: 'landscape' });
+        const pageWidth = doc.internal.pageSize.getWidth();
+    
+        const centerText = (text, y, fontSize, isBold = false) => {
+            doc.setFontSize(fontSize);
+            doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+            const textWidth = doc.getTextWidth(text);
+            const x = (pageWidth - textWidth) / 2;
+            doc.text(text, x, y);
+        };
+    
+        // Header PDF
+        centerText("Data Pasien Rawat Jalan", 15, 18, true);
+        centerText("Rumah Sakit A", 24, 14, true);
+        centerText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor", 30, 11);
+    
+        const tableColumn = [
+            "Tanggal Daftar", "No RM", "Poli", "Nama Lengkap", "Jenis Kelamin", "Dokter"
+        ];
+    
+        const tableRows = filteredRows.map(row => [
+            dayjs(row.tgl_daftar).format("DD/MM/YYYY"), // Format tanggal
+            row.no_rm || '-',
+            row.poli || '-',
+            row.nama_lengkap || '-',
+            row.jenis_kelamin || '-',
+            row.dokter || '-'
+        ]);
+    
+        autoTable(doc, {
+            startY: 35,
+            head: [tableColumn],
+            body: tableRows,
+            styles: { fontSize: 9 },
+            headStyles: { fillColor: [30, 40, 56] },
+        });
+    
+        doc.save("data_pasien_rajal.pdf");
+    };
+    
+    
+
     return (
         <div>
             <BackButton />
             <div className="flex items-center justify-between mb-4 mt-5">
                 <h3 className="text-2xl font-semibold">Data Pasien Rawat Jalan</h3>
-                <ButtonDaftar onClick={handleOpen} />
+                
+                <div className="flex items-center gap-2">
+                    <ButtonDaftar onClick={handleOpen} />
+                    <Button
+                        variant="contained"
+                        onClick={handleExportPDF}
+                        startIcon={<PrintIcon />}
+                    >
+                        Export PDF
+                    </Button>
+                </div>
             </div>
+
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                <TableIRJ3 handleSelect={handleSelectPasien} refreshTrigger={refreshTrigger} />
+                <TableIRJ3 handleSelect={handleSelectPasien} refreshTrigger={refreshTrigger} ref={tableRef} />
                 <ModalEditRajal
                     open={openEdit}
                     handleCloseEdit={handleCloseEdit}

@@ -2,11 +2,12 @@ import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import { useSnackbar } from 'notistack';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import dayjs from 'dayjs';
 
 const columnsBase = [
     { field: 'tgl_daftar', headerName: 'Tanggal Daftar', headerClassName: 'super-app-theme--header', width: 150 },
@@ -19,11 +20,13 @@ const columnsBase = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function TableIGD({ handleSelect, refreshTrigger }) {
+const TableIGD = React.forwardRef(({ handleSelect, refreshTrigger }, ref) => {
     const [rows, setRows] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [openDialog, setOpenDialog] = React.useState(false); // State untuk Dialog
     const [deleteId, setDeleteId] = React.useState(null); // Menyimpan id untuk dihapus
+    const [startDate, setStartDate] = React.useState('');
+    const [endDate, setEndDate] = React.useState('');
     const { enqueueSnackbar } = useSnackbar(); // Pakai notistack
 
     React.useEffect(() => {
@@ -43,6 +46,20 @@ export default function TableIGD({ handleSelect, refreshTrigger }) {
                 setLoading(false);
             });
     }, [refreshTrigger]);
+
+    React.useImperativeHandle(ref, () => ({
+                getRows: () => rows,
+                getFilteredRows: () => getFilteredRows()
+            }));
+        
+    const getFilteredRows = () => {
+        return rows.filter((row) => {
+            const rowDate = dayjs(row.tgl_daftar);
+            const isAfterStart = startDate ? rowDate.isAfter(dayjs(startDate).subtract(1, 'day')) : true;
+            const isBeforeEnd = endDate ? rowDate.isBefore(dayjs(endDate).add(1, 'day')) : true;
+            return isAfterStart && isBeforeEnd;
+        });
+    };
 
     const handleOpenDialog = (id) => {
         setDeleteId(id);
@@ -106,12 +123,59 @@ export default function TableIGD({ handleSelect, refreshTrigger }) {
 
     return (
         <>
+            <Box
+                sx={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 2,
+                    mb: 1,
+                    mt: 3,
+                    p: 2,
+                    backgroundColor: 'background.paper',
+                    borderRadius: 2,
+                    boxShadow: 1,
+                }}
+            >
+                <TextField
+                    label="Tanggal Awal"
+                    type="date"
+                    size="small"
+                    value={startDate}
+                    onChange={(e) => setStartDate(e.target.value)}
+                    InputLabelProps={{ shrink: true }}
+                    variant="filled"
+                    fullWidth
+                />
+                <TextField
+                    label="Tanggal Akhir"
+                    type="date"
+                    size="small"
+                    value={endDate}
+                    onChange={(e) => setEndDate(e.target.value)}
+                    InputLabelProps={{ shrink: true }}
+                    variant="filled"
+                    fullWidth
+                />
+                {(startDate || endDate) && (
+                    <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={() => {
+                            setStartDate('');
+                            setEndDate('');
+                        }}
+                    >
+                        Reset
+                    </Button>
+                )}
+            </Box>
+
             <Paper sx={{ 
                     height: '100%', 
                     width: '100%',
             }}>
                 <DataGrid
-                    rows={rows}
+                    rows={getFilteredRows()}
                     columns={columns}
                     getRowId={(row) => row.id}
                     initialState={{ pagination: { paginationModel } }}
@@ -164,4 +228,6 @@ export default function TableIGD({ handleSelect, refreshTrigger }) {
             </Dialog>
         </>
     );
-}
+});
+
+export default TableIGD;

@@ -27,6 +27,7 @@
     "express": "^5.1.0",
     "focus-trap-react": "^11.0.3",
     "framer-motion": "^12.9.7",
+    "jspdf": "^3.0.1",
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.503.0",
     "mysql2": "^3.14.1",

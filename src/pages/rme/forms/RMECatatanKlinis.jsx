@@ -11,31 +11,53 @@ import {
 } from '@mui/material';
 import { format } from 'date-fns';
 
-const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientData }) => {
+const FormCatatanKlinis = ({ open, onClose, onSubmit, patientData }) => {
+  const [formData, setFormData] = useState({
+    no_rme: patientData.no_rme || '',
+    tanggal_pemeriksaan: format(new Date(), 'yyyy-MM-dd'),
+    dokter: '',
+    keluhan_utama: '',
+    riwayat_penyakit_sekarang: '',
+    riwayat_penyakit_dahulu: '',
+    riwayat_penyakit_keluarga: '',
+    riwayat_alergi: '',
+    tekanan_darah: '',
+    nadi: '',
+    suhu: '',
+    pernapasan: '',
+    pemeriksaan_fisik: '',
+    diagnosis_kerja: '',
+    diagnosis_banding: '',
+    rencana_terapi: '',
+    rencana_tindak_lanjut: '',
+    catatan: ''
+  });
+
   const [errors, setErrors] = useState({});
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [successOpen, setSuccessOpen] = useState(false);
 
   const validate = () => {
     const newErrors = {};
-    if (!patientData.no_rme) newErrors.no_rme = 'No. RME wajib diisi.';
-    if (!note.tanggal_pemeriksaan) newErrors.tanggal_pemeriksaan = 'Tanggal pemeriksaan wajib diisi.';
-    if (!note.dokter) newErrors.dokter = 'Nama dokter wajib diisi.';
-    if (!note.keluhan_utama) newErrors.keluhan_utama = 'Keluhan utama wajib diisi.';
-    if (!note.tekanan_darah) newErrors.tekanan_darah = 'Tekanan darah wajib diisi.';
-    if (!note.nadi) newErrors.nadi = 'Nadi wajib diisi.';
-    if (!note.suhu) newErrors.suhu = 'Suhu wajib diisi.';
-    if (!note.pemeriksaan_fisik) newErrors.pemeriksaan_fisik = 'Pemeriksaan fisik wajib diisi.';
-    if (!note.diagnosis_kerja) newErrors.diagnosis_kerja = 'Diagnosis kerja wajib diisi.';
-    if (!note.rencana_terapi) newErrors.rencana_terapi = 'Rencana terapi wajib diisi.';
-    if (!note.rencana_tindak_lanjut) newErrors.rencana_tindak_lanjut = 'Rencana tindak lanjut wajib diisi.';
-    if (!note.catatan) newErrors.catatan = 'Catatan wajib diisi.';
+    if (!formData.no_rme) newErrors.no_rme = 'No. RME wajib diisi.';
+    if (!formData.tanggal_pemeriksaan) newErrors.tanggal_pemeriksaan = 'Tanggal pemeriksaan wajib diisi.';
+    if (!formData.dokter) newErrors.dokter = 'Nama dokter wajib diisi.';
+    if (!formData.keluhan_utama) newErrors.keluhan_utama = 'Keluhan utama wajib diisi.';
+    if (!formData.tekanan_darah) newErrors.tekanan_darah = 'Tekanan darah wajib diisi.';
+    if (!formData.nadi) newErrors.nadi = 'Nadi wajib diisi.';
+    if (!formData.suhu) newErrors.suhu = 'Suhu wajib diisi.';
+    if (!formData.pemeriksaan_fisik) newErrors.pemeriksaan_fisik = 'Pemeriksaan fisik wajib diisi.';
+    if (!formData.diagnosis_kerja) newErrors.diagnosis_kerja = 'Diagnosis kerja wajib diisi.';
+    if (!formData.rencana_terapi) newErrors.rencana_terapi = 'Rencana terapi wajib diisi.';
+    if (!formData.rencana_tindak_lanjut) newErrors.rencana_tindak_lanjut = 'Rencana tindak lanjut wajib diisi.';
+    if (!formData.catatan) newErrors.catatan = 'Catatan wajib diisi.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleChange = (e) => {
-    onChange(e);
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = () => {
@@ -48,8 +70,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
     setConfirmOpen(false);
     if (validate()) {
       try {
-        console.log("Submitting form data:", note);
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/rme/save-form`, note);
+        console.log("Submitting form data:", formData);
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/rme/save-form`, formData);
         console.log(response.data.message);
         setSuccessOpen(true);
         onSubmit(); // Refresh clinical notes in RMEPasien
@@ -62,9 +84,9 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
   };
 
   const resetForm = () => {
-    const defaultNote = {
+    setFormData({
       no_rme: patientData.no_rme || '',
-      tanggal_pemeriksaan: format(new Date(), 'yyyy-MM-dd'), // Reset to the current date
+      tanggal_pemeriksaan: format(new Date(), 'yyyy-MM-dd'),
       dokter: '',
       keluhan_utama: '',
       riwayat_penyakit_sekarang: '',
@@ -81,8 +103,7 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
       rencana_terapi: '',
       rencana_tindak_lanjut: '',
       catatan: ''
-    };
-    onChange({ target: { name: 'reset', value: defaultNote } });
+    });
   };
 
   return (
@@ -104,7 +125,7 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="no_rme"
                 label="No. RME"
                 placeholder="Masukkan No. RME"
-                value={patientData.no_rme}
+                value={formData.no_rme}
                 error={!!errors.no_rme}
                 helperText={errors.no_rme || "Diisi otomatis dari data pasien"}
                 slotProps={{
@@ -120,8 +141,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="tanggal_pemeriksaan"
                 label="Tanggal Pemeriksaan"
                 type="date"
-                value={note.tanggal_pemeriksaan}
-                onChange={onChange}
+                value={formData.tanggal_pemeriksaan}
+                onChange={handleChange}
                 error={!!errors.tanggal_pemeriksaan}
                 helperText={errors.tanggal_pemeriksaan}
                 slotProps={{
@@ -136,8 +157,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="dokter"
                 label="Nama Dokter Pemeriksa"
                 placeholder="Masukkan nama dokter"
-                value={note.dokter}
-                onChange={onChange}
+                value={formData.dokter}
+                onChange={handleChange}
                 error={!!errors.dokter}
                 helperText={errors.dokter}
               />
@@ -149,8 +170,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="keluhan_utama"
                 label="Keluhan Utama"
                 placeholder="Masukkan keluhan utama pasien"
-                value={note.keluhan_utama}
-                onChange={onChange}
+                value={formData.keluhan_utama}
+                onChange={handleChange}
                 error={!!errors.keluhan_utama}
                 helperText={errors.keluhan_utama}
               />
@@ -162,8 +183,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="riwayat_penyakit_sekarang"
                 label="Riwayat Penyakit Sekarang"
                 placeholder="Masukkan riwayat penyakit sekarang"
-                value={note.riwayat_penyakit_sekarang}
-                onChange={onChange}
+                value={formData.riwayat_penyakit_sekarang}
+                onChange={handleChange}
               />
             </Tooltip>
 
@@ -173,8 +194,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="riwayat_penyakit_dahulu"
                 label="Riwayat Penyakit Dahulu"
                 placeholder="Masukkan riwayat penyakit dahulu"
-                value={note.riwayat_penyakit_dahulu}
-                onChange={onChange}
+                value={formData.riwayat_penyakit_dahulu}
+                onChange={handleChange}
               />
             </Tooltip>
 
@@ -184,8 +205,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="riwayat_penyakit_keluarga"
                 label="Riwayat Penyakit Keluarga"
                 placeholder="Masukkan riwayat penyakit keluarga"
-                value={note.riwayat_penyakit_keluarga}
-                onChange={onChange}
+                value={formData.riwayat_penyakit_keluarga}
+                onChange={handleChange}
               />
             </Tooltip>
 
@@ -195,8 +216,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="riwayat_alergi"
                 label="Riwayat Alergi"
                 placeholder="Masukkan riwayat alergi"
-                value={note.riwayat_alergi}
-                onChange={onChange}
+                value={formData.riwayat_alergi}
+                onChange={handleChange}
               />
             </Tooltip>
 
@@ -209,8 +230,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="tekanan_darah"
                 label="Tekanan Darah"
                 placeholder="Contoh: 120/80 mmHg"
-                value={note.tekanan_darah}
-                onChange={handleChange} // Updated to use handleChange
+                value={formData.tekanan_darah}
+                onChange={handleChange}
                 error={!!errors.tekanan_darah}
                 helperText={errors.tekanan_darah || "Satuan: mmHg"}
               />
@@ -222,8 +243,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="nadi"
                 label="Nadi"
                 placeholder="Contoh: 80 bpm"
-                value={note.nadi}
-                onChange={handleChange} // Updated to use handleChange
+                value={formData.nadi}
+                onChange={handleChange}
                 error={!!errors.nadi}
                 helperText={errors.nadi || "Satuan: bpm"}
               />
@@ -235,8 +256,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="suhu"
                 label="Suhu"
                 placeholder="Contoh: 36.5 °C"
-                value={note.suhu}
-                onChange={handleChange} // Updated to use handleChange
+                value={formData.suhu}
+                onChange={handleChange}
                 error={!!errors.suhu}
                 helperText={errors.suhu || "Satuan: °C"}
               />
@@ -248,8 +269,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="pernapasan"
                 label="Pernapasan"
                 placeholder="Contoh: 16 kali/min"
-                value={note.pernapasan}
-                onChange={handleChange} // Updated to use handleChange
+                value={formData.pernapasan}
+                onChange={handleChange}
                 helperText="Satuan: kali/min"
               />
             </Tooltip>
@@ -262,8 +283,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 placeholder="Masukkan hasil pemeriksaan fisik"
                 multiline
                 rows={3}
-                value={note.pemeriksaan_fisik}
-                onChange={onChange}
+                value={formData.pemeriksaan_fisik}
+                onChange={handleChange}
                 error={!!errors.pemeriksaan_fisik}
                 helperText={errors.pemeriksaan_fisik}
               />
@@ -278,8 +299,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="diagnosis_kerja"
                 label="Diagnosis Kerja"
                 placeholder="Masukkan diagnosis kerja"
-                value={note.diagnosis_kerja}
-                onChange={onChange}
+                value={formData.diagnosis_kerja}
+                onChange={handleChange}
                 error={!!errors.diagnosis_kerja}
                 helperText={errors.diagnosis_kerja}
               />
@@ -291,8 +312,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="diagnosis_banding"
                 label="Diagnosis Banding"
                 placeholder="Masukkan diagnosis banding"
-                value={note.diagnosis_banding}
-                onChange={onChange}
+                value={formData.diagnosis_banding}
+                onChange={handleChange}
               />
             </Tooltip>
 
@@ -307,8 +328,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 placeholder="Masukkan rencana terapi"
                 multiline
                 rows={3}
-                value={note.rencana_terapi}
-                onChange={onChange}
+                value={formData.rencana_terapi}
+                onChange={handleChange}
                 error={!!errors.rencana_terapi}
                 helperText={errors.rencana_terapi}
               />
@@ -322,12 +343,12 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 placeholder="Masukkan rencana tindak lanjut"
                 multiline
                 rows={2}
-                value={note.rencana_tindak_lanjut}
-                onChange={onChange}
+                value={formData.rencana_tindak_lanjut}
+                onChange={handleChange}
               />
             </Tooltip>
 
-            {/* === Plan === */}
+            {/* === Catatan === */}
             <div className="col-span-10 text-lg font-semibold mt-6">Catatan</div>
 
             <Tooltip title="Catatan tambahan untuk pasien">
@@ -336,8 +357,8 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
                 name="catatan"
                 label="Catatan"
                 placeholder="Masukkan catatan tambahan"
-                value={note.catatan}
-                onChange={onChange}
+                value={formData.catatan}
+                onChange={handleChange}
               />
             </Tooltip>
 
@@ -346,6 +367,7 @@ const FormCatatanKlinis = ({ open, onClose, onSubmit, note, onChange, patientDat
         <DialogActions className="justify-center mt-4">
           <Button onClick={onClose}>Batal</Button>
           <Button variant="contained" onClick={handleSubmit}>Simpan</Button>
+          <Button variant="outlined" color="secondary" onClick={resetForm}>Reset Form</Button>
         </DialogActions>
       </Dialog>
 

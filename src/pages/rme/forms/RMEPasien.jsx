@@ -30,8 +30,10 @@ import {
   AddCircleOutline
 } from '@mui/icons-material';
 import FormCatatanKlinis from './RMECatatanKlinis'
+import RMECatatanKlinisEdit from './RMECatatanKlinisEdit';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { jsPDF } from 'jspdf';
 
 const defaultPatient = {
   vitals: [
@@ -104,57 +106,83 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
     fetchClinicalNotes();
   }, [data.no_rme]);
 
-  const [formOpen, setFormOpen] = useState(false);
-  const [newNote, setNewNote] = useState({
-    no_rme: data.no_rme,
-    tanggal_pemeriksaan: format(new Date(), 'yyyy-MM-dd'), // Automatically set to the present date
-    dokter: '',
-    keluhan_utama: '',
-    riwayat_penyakit_sekarang: '',
-    riwayat_penyakit_dahulu: '',
-    riwayat_penyakit_keluarga: '',
-    riwayat_alergi: '',
-    tekanan_darah: '',
-    nadi: '',
-    suhu: '',
-    pernapasan: '',
-    pemeriksaan_fisik: '',
-    diagnosis_kerja: '',
-    diagnosis_banding: '',
-    rencana_terapi: '',
-    rencana_tindak_lanjut: ''
+  const [formState, setFormState] = useState({
+    isFormOpen: false,
+    isEditFormOpen: false,
+    selectedNoteId: null,
+    isDeleteConfirmationOpen: false,
   });
 
-  const handleOpenForm = () => setFormOpen(true);
-  const handleCloseForm = () => setFormOpen(false);
+  const handleOpenForm = () => setFormState((prev) => ({ ...prev, isFormOpen: true }));
+  const handleCloseForm = () => setFormState((prev) => ({ ...prev, isFormOpen: false }));
 
-  const handleFormChange = (e) => {
-    setNewNote({ ...newNote, [e.target.name]: e.target.value });
-  };
+  const handleOpenEditForm = (note) => setFormState((prev) => ({
+    ...prev,
+    isEditFormOpen: true,
+    selectedNoteId: note.id,
+  }));
 
-  const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
-  const [selectedNoteId, setSelectedNoteId] = useState(null);
+  const handleCloseEditForm = () => setFormState((prev) => ({
+    ...prev,
+    isEditFormOpen: false,
+    selectedNoteId: null,
+  }));
 
-  const handleOpenDeleteConfirmation = (noteId) => {
-    setSelectedNoteId(noteId);
-    setDeleteConfirmationOpen(true);
-  };
+  const handleOpenDeleteConfirmation = (noteId) => setFormState((prev) => ({
+    ...prev,
+    isDeleteConfirmationOpen: true,
+    selectedNoteId: noteId,
+  }));
 
-  const handleCloseDeleteConfirmation = () => {
-    setDeleteConfirmationOpen(false);
-    setSelectedNoteId(null);
-  };
+  const handleCloseDeleteConfirmation = () => setFormState((prev) => ({
+    ...prev,
+    isDeleteConfirmationOpen: false,
+    selectedNoteId: null,
+  }));
 
   const handleConfirmDelete = async () => {
-    if (!selectedNoteId) return;
+    if (!formState.selectedNoteId) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/api/rme/clinical-notes/${selectedNoteId}`);
-      setClinicalNotes((prevNotes) => prevNotes.filter((note) => note.id !== selectedNoteId));
-      console.log(`Deleted note ID: ${selectedNoteId}`);
+      await axios.delete(`${import.meta.env.VITE_API_URL}/api/rme/clinical-notes/${formState.selectedNoteId}`);
+      setClinicalNotes((prevNotes) => prevNotes.filter((note) => note.id !== formState.selectedNoteId));
+      console.log(`Deleted note ID: ${formState.selectedNoteId}`);
     } catch (error) {
-      console.error(`Failed to delete note ID: ${selectedNoteId}`, error);
+      console.error(`Failed to delete note ID: ${formState.selectedNoteId}`, error);
     }
     handleCloseDeleteConfirmation();
+  };
+
+  const generatePDF = (note) => {
+    const doc = new jsPDF();
+    doc.setFontSize(16);
+    doc.text("Catatan Klinis", 10, 10);
+
+    const fields = [
+      { label: "Nomor RME", value: note.no_rme },
+      { label: "Tanggal Pemeriksaan", value: note.tanggal_pemeriksaan },
+      { label: "Dokter", value: note.dokter },
+      { label: "Keluhan Utama", value: note.keluhan_utama },
+      { label: "Riwayat Penyakit Sekarang", value: note.riwayat_penyakit_sekarang },
+      { label: "Riwayat Penyakit Dahulu", value: note.riwayat_penyakit_dahulu },
+      { label: "Riwayat Penyakit Keluarga", value: note.riwayat_penyakit_keluarga },
+      { label: "Riwayat Alergi", value: note.riwayat_alergi },
+      { label: "Tekanan Darah", value: note.tekanan_darah },
+      { label: "Nadi", value: note.nadi },
+      { label: "Suhu", value: note.suhu },
+      { label: "Pernapasan", value: note.pernapasan },
+      { label: "Pemeriksaan Fisik", value: note.pemeriksaan_fisik },
+      { label: "Diagnosis Kerja", value: note.diagnosis_kerja },
+      { label: "Diagnosis Banding", value: note.diagnosis_banding },
+      { label: "Rencana Terapi", value: note.rencana_terapi },
+      { label: "Rencana Tindak Lanjut", value: note.rencana_tindak_lanjut },
+      { label: "Catatan", value: note.catatan },
+    ];
+
+    fields.forEach((field, index) => {
+      doc.text(`${field.label}: ${field.value || ''}`, 10, 20 + index * 10);
+    });
+
+    doc.save(`Catatan_Klinis_${note.id || 'unknown'}.pdf`);
   };
 
   const nama = data.nama_lengkap;
@@ -180,6 +208,28 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
   const filteredLabResults = labResults.filter(lab =>
     lab.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
     lab.lab.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const renderTableRow = (note) => (
+    <TableRow key={note.id}>
+      <TableCell>{format(new Date(note.tanggal_pemeriksaan), 'yyyy-MM-dd')}</TableCell>
+      <TableCell>
+        <Chip label={note.diagnosis_kerja} color="primary" size="small" />
+      </TableCell>
+      <TableCell>{note.dokter}</TableCell>
+      <TableCell>{note.catatan}</TableCell>
+      <TableCell>
+        <Button variant="contained" color="info" onClick={() => generatePDF(note)}>
+          PDF
+        </Button>
+        <Button variant="contained" color="success" onClick={() => handleOpenEditForm(note)} sx={{ ml: 1 }}>
+          Edit
+        </Button>
+        <Button variant="contained" color="error" onClick={() => handleOpenDeleteConfirmation(note.id)} sx={{ ml: 1 }}>
+          Delete
+        </Button>
+      </TableCell>
+    </TableRow>
   );
 
   return (
@@ -272,41 +322,7 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
               </TableHead>
               <TableBody>
                 {clinicalNotes.length > 0 ? (
-                  clinicalNotes.map((note, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{format(new Date(note.tanggal_pemeriksaan), 'yyyy-MM-dd')}</TableCell>
-                      <TableCell>
-                        <Chip label={note.diagnosis_kerja} color="primary" size="small" />
-                      </TableCell>
-                      <TableCell>{note.dokter}</TableCell>
-                      <TableCell>{note.catatan}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="contained"
-                          color="info"
-                          onClick={() => console.log(`Edit note ID: ${note.id}`)}
-                        >
-                          PDF
-                        </Button>
-                        <Button
-                          variant="contained" 
-                          color="success"     
-                          onClick={() => console.log(`Edit note ID: ${note.id}`)}
-                          sx={{ ml: 1 }}
-                        >
-                          Edit
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={() => handleOpenDeleteConfirmation(note.id)}
-                          sx={{ ml: 1 }}
-                        >
-                          Delete
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))
+                  clinicalNotes.map(renderTableRow)
                 ) : (
                   <TableRow>
                     <TableCell colSpan={5} align="center">
@@ -319,17 +335,22 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
           </TableContainer>
 
           <FormCatatanKlinis
-            open={formOpen}
+            open={formState.isFormOpen}
             onClose={handleCloseForm}
-            onSubmit={fetchClinicalNotes} // Pass fetchClinicalNotes directly
-            note={newNote}
-            onChange={handleFormChange}
-            patientData={data} // Pass the data parameter here
+            onSubmit={fetchClinicalNotes}
+            patientData={data}
+          />
+
+          <RMECatatanKlinisEdit
+            open={formState.isEditFormOpen}
+            onClose={handleCloseEditForm}
+            noteId={formState.selectedNoteId}
+            onSubmit={fetchClinicalNotes}
           />
 
           {/* Confirmation Delete Dialog */}
           <Dialog
-            open={deleteConfirmationOpen}
+            open={formState.isDeleteConfirmationOpen}
             onClose={handleCloseDeleteConfirmation}
           >
             <DialogTitle>Konfirmasi Penghapusan</DialogTitle>

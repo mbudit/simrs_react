@@ -35,7 +35,7 @@ const style = {
     },
 };
 
-export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setForm }) {
+export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setForm, setRefreshTrigger }) {
     const [errors, setErrors] = useState({});
     const [openDialog, setOpenDialog] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
@@ -286,6 +286,7 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
     
             console.log('Response:', response.data);
             enqueueSnackbar('Data berhasil diperbarui!', { variant: 'success', autoHideDuration: 3000 });
+            setRefreshTrigger(prev => !prev);
             handleCloseEdit();
         } catch (error) {
             console.error('Error terjadi:', error);
@@ -675,26 +676,6 @@ export default function ModalEditRajal({ open, handleCloseEdit, form = {}, setFo
                                 </Grid>
 
                                 <Box sx={{ borderBottom: '1px solid #ccc', mb: 2, mt: 2, }} />
-
-                                <h3 className="text-xl mb-2 mt-3 font-bold">Status Pasien</h3>
-                                <Grid columns={12}>
-                                    <TextField
-                                        select
-                                        label="Status Pasien"
-                                        name="status" // tambahkan name
-                                        value={form.status || ''} // kontrol oleh state
-                                        onChange={handleChange} // ubah state saat berubah
-                                        error={!!errors.status}
-                                        helperText={errors.status || " "}
-                                        fullWidth
-                                    >
-                                        {status.map((option) => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
 
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                                     <ButtonSubmit onClick={handleSubmit} />

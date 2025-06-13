@@ -120,7 +120,6 @@ exports.updateRajalPatient = (req, res) => {
     nama_wali,
     telp_wali,
     alasan,
-    status,
   } = req.body;
 
   // Helper function
@@ -151,7 +150,7 @@ exports.updateRajalPatient = (req, res) => {
   nama_wali = checkAndFill(nama_wali);
   telp_wali = checkAndFill(telp_wali);
   alasan = checkAndFill(alasan);
-  status = checkAndFill(status);
+
 
   const sql = `UPDATE rawatjalan SET 
     nama_lengkap = ?, 
@@ -174,8 +173,7 @@ exports.updateRajalPatient = (req, res) => {
     no_wa = ?, 
     nama_wali = ?, 
     telp_wali = ?, 
-    alasan = ?,
-    status = ?
+    alasan = ?
   WHERE id = ?`;
 
   db.query(
@@ -202,7 +200,6 @@ exports.updateRajalPatient = (req, res) => {
       nama_wali,
       telp_wali,
       alasan,
-      status,
       id,
     ],
     (err, result) => {

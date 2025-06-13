@@ -111,53 +111,53 @@ const IGD = () => {
 
     const tableRef = useRef();
         
-            const handleExportPDF = () => {
-                const filteredRows = tableRef.current?.getFilteredRows?.() || [];
-            
-                if (filteredRows.length === 0) {
-                    alert('Tidak ada data yang ditampilkan untuk diexport.');
-                    return;
-                }
-            
-                const doc = new jsPDF({ orientation: 'landscape' });
-                const pageWidth = doc.internal.pageSize.getWidth();
-            
-                const centerText = (text, y, fontSize, isBold = false) => {
-                    doc.setFontSize(fontSize);
-                    doc.setFont('helvetica', isBold ? 'bold' : 'normal');
-                    const textWidth = doc.getTextWidth(text);
-                    const x = (pageWidth - textWidth) / 2;
-                    doc.text(text, x, y);
-                };
-            
-                // Header PDF
-                centerText("Data Pasien IGD", 15, 18, true);
-                centerText("Rumah Sakit A", 24, 14, true);
-                centerText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor", 30, 11);
-            
-                const tableColumn = [
-                    "Tanggal Daftar", "No RM", "Poli", "Nama Lengkap", "Jenis Kelamin", "Dokter"
-                ];
-            
-                const tableRows = filteredRows.map(row => [
-                    dayjs(row.tgl_daftar).format("DD/MM/YYYY"), // Format tanggal
-                    row.no_rm || '-',
-                    row.poli || '-',
-                    row.nama_lengkap || '-',
-                    row.jenis_kelamin || '-',
-                    row.dokter || '-'
-                ]);
-            
-                autoTable(doc, {
-                    startY: 35,
-                    head: [tableColumn],
-                    body: tableRows,
-                    styles: { fontSize: 9 },
-                    headStyles: { fillColor: [30, 40, 56] },
-                });
-            
-                doc.save("data_pasien_igd.pdf");
-            };
+    const handleExportPDF = () => {
+        const filteredRows = tableRef.current?.getFilteredRows?.() || [];
+    
+        if (filteredRows.length === 0) {
+            alert('Tidak ada data yang ditampilkan untuk diexport.');
+            return;
+        }
+    
+        const doc = new jsPDF({ orientation: 'landscape' });
+        const pageWidth = doc.internal.pageSize.getWidth();
+    
+        const centerText = (text, y, fontSize, isBold = false) => {
+            doc.setFontSize(fontSize);
+            doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+            const textWidth = doc.getTextWidth(text);
+            const x = (pageWidth - textWidth) / 2;
+            doc.text(text, x, y);
+        };
+    
+        // Header PDF
+        centerText("Data Pasien IGD", 15, 18, true);
+        centerText("Rumah Sakit A", 24, 14, true);
+        centerText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor", 30, 11);
+    
+        const tableColumn = [
+            "Tanggal Daftar", "No RM", "Poli", "Nama Lengkap", "Jenis Kelamin", "Dokter"
+        ];
+    
+        const tableRows = filteredRows.map(row => [
+            dayjs(row.tgl_daftar).format("DD/MM/YYYY"), // Format tanggal
+            row.no_rm || '-',
+            row.poli || '-',
+            row.nama_lengkap || '-',
+            row.jenis_kelamin || '-',
+            row.dokter || '-'
+        ]);
+    
+        autoTable(doc, {
+            startY: 35,
+            head: [tableColumn],
+            body: tableRows,
+            styles: { fontSize: 9 },
+            headStyles: { fillColor: [30, 40, 56] },
+        });
+    
+        doc.save("data_pasien_igd.pdf");
+    };
     
     return (
         <div>

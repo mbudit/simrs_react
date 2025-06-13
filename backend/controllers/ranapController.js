@@ -98,7 +98,6 @@ exports.updateRanapPatient = (reg, res) => {
     nama_wali,
     telp_wali,
     alasan,
-    status,
   } = req.body;
 
   // Fungsi untuk mengubah nilai kosong menjadi "Tidak Ada" atau null untuk tanggal
@@ -138,10 +137,6 @@ exports.updateRanapPatient = (reg, res) => {
   nama_wali = checkAndFill(nama_wali);
   telp_wali = checkAndFill(telp_wali);
   alasan = checkAndFill(alasan);
-  status = checkAndFill(status);
-  if (status === "Tidak Ada") {
-    status = "Rawat Inap";
-  }
 
   const sql = `UPDATE rawatinap SET 
     nama_lengkap = ?, 
@@ -164,8 +159,7 @@ exports.updateRanapPatient = (reg, res) => {
     no_wa = ?, 
     nama_wali = ?, 
     telp_wali = ?, 
-    alasan = ?,
-    status = ?
+    alasan = ?
   WHERE id = ?`;
 
   db.query(
@@ -192,7 +186,6 @@ exports.updateRanapPatient = (reg, res) => {
       nama_wali,
       telp_wali,
       alasan,
-      status,
       id,
     ],
     (err, result) => {

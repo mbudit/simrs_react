@@ -1,10 +1,14 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { BackButton, ButtonDaftar, ButtonTambahObat } from '../../../components/Buttons';
 import TableObat from './TableObat';
 import ModalTambahObat from './forms/FormTambahObat';
 import { SnackbarProvider } from 'notistack';
 import ModalEditObat from './forms/FormEditObat';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+import Button from '@mui/material/Button';
+import PrintIcon from '@mui/icons-material/Print';
 
 const DataObat = () => {
     const [open, setOpen] = useState(false);
@@ -90,15 +94,68 @@ const DataObat = () => {
         setOpenEdit(true); // Buka ModalRajal2
     };
 
+    const tableRef = useRef();
+            
+    const handleExportPDF = () => {
+        const rows = tableRef.current?.getRows() || [];
+    
+        const doc = new jsPDF({ orientation: 'landscape' });
+        const pageWidth = doc.internal.pageSize.getWidth();
+    
+        // Fungsi bantu untuk center teks
+        const centerText = (text, y, fontSize) => {
+            doc.setFontSize(fontSize);
+            const textWidth = doc.getTextWidth(text);
+            const x = (pageWidth - textWidth) / 2;
+            doc.text(text, x, y);
+        };
+    
+        // Header tengah
+        centerText("Data Obat", 15, 16);
+        centerText("Rumah Sakit A", 23, 12);
+        centerText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor", 30, 10);
+    
+        const tableColumn = [
+            "Kode Obat", "Nama Obat", "Jenis Obat", "Kategori Obat"
+        ];
+    
+        const tableRows = rows.map(row => [
+            row.code,
+            row.nama_obat,
+            row.jenis_obat,
+            row.kategori,
+        ]);
+    
+        autoTable(doc, {
+            startY: 35,
+            head: [tableColumn],
+            body: tableRows,
+            styles: { fontSize: 9 },
+        });
+    
+        doc.save("data_obat.pdf");
+    };
+    
+
     return (
         <div>
             <BackButton />
             <div className="flex items-center justify-between mb-4 mt-5">
-                <h3 className="text-2xl font-semibold">Data Obat</h3>
-                <ButtonTambahObat onClick={handleOpen} />
+                <h3 className="text-2xl font-semibold">Data Pasien IGD</h3>
+                
+                <div className="flex items-center gap-2">
+                    <ButtonDaftar onClick={handleOpen} />
+                    <Button
+                        variant="contained"
+                        onClick={handleExportPDF}
+                        startIcon={<PrintIcon />}
+                    >
+                        Export PDF
+                    </Button>
+                </div>
             </div>
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                <TableObat handleSelect={handleSelectObat} refreshTrigger={refreshTrigger} />
+                <TableObat handleSelect={handleSelectObat} refreshTrigger={refreshTrigger} ref={tableRef} />
                 <ModalTambahObat 
                     open={open}
                     handleClose={handleClose}

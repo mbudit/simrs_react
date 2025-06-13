@@ -18,7 +18,7 @@ const columnsBase = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-export default function TableObat({ handleSelect, refreshTrigger }) {
+const TableObat = React.forwardRef(({ handleSelect, refreshTrigger }, ref) => {
     const [rows, setRows] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [openDialog, setOpenDialog] = React.useState(false); // State untuk Dialog
@@ -42,6 +42,13 @@ export default function TableObat({ handleSelect, refreshTrigger }) {
                 setLoading(false);
             });
     }, [refreshTrigger]);
+
+    React.useImperativeHandle(ref, () => ({
+        getRows: () => rows,
+        
+    }));
+            
+        
 
     const handleOpenDialog = (id) => {
         setDeleteId(id);
@@ -174,4 +181,6 @@ export default function TableObat({ handleSelect, refreshTrigger }) {
             </Dialog>
         </>
     );
-}
+});
+
+export default TableObat;

@@ -185,6 +185,7 @@ const RawatJalan = () => {
                     form={form}
                     setForm={setForm}
                     handleOpenNested={() => setOpenPasienLama(true)}
+                    setRefreshTrigger={setRefreshTrigger}
                 />
             </SnackbarProvider>
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>

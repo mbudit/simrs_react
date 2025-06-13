@@ -12,11 +12,12 @@ import {
   Alert,
   CircularProgress
 } from '@mui/material';
+import axios from 'axios'; // Add axios import
 
 const FormPendaftaran = ({ onClose, onSuccess }) => {
   const [formData, setFormData] = useState({
     noKtp: '',
-    noRme: 'RME-',
+    noRme: '',
     namaLengkap: '',
     tempatLahir: '',
     tanggalLahir: '',
@@ -63,9 +64,28 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
     };
   }, []);
 
+  useEffect(() => {
+    // Fetch the last RME number from the backend
+    const fetchLastRme = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/patients/last-rme`);
+        const lastRmeNumber = parseInt(response.data.lastRme.replace('RME-', ''), 10) || 0;
+        console.log('Fetched last RME number:', lastRmeNumber); // Log the last RME number
+        setFormData((prev) => ({
+          ...prev,
+          noRme: `RME-${lastRmeNumber + 1}` // Increment the last RME number
+        }));
+      } catch (error) {
+        console.error('Failed to fetch the last RME number:', error);
+      }
+    };
+
+    fetchLastRme();
+  }, []);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value
     }));
@@ -245,25 +265,11 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
               fullWidth
               required
               name="noRme"
-              // remove prefix for editing
-              value={(formData.noRme || '').replace(/^RME-/, '')}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  noRme: `RME-${e.target.value.replace(/\D/g, '')}` // keep digits only
-                }))
-              }
+              value={formData.noRme}
+              disabled // Make the field read-only
               error={!!errors.noRme}
               helperText={errors.noRme}
-              slotProps={{
-                input: {
-                  startAdornment: <span className="text-gray-500 mr-2">RME-</span>
-                },
-
-                htmlInput: {
-                  maxLength: 4 // just the number part
-                }
-              }} />
+            />
           </div>
 
 

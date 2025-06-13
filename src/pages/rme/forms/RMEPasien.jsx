@@ -34,6 +34,7 @@ import RMECatatanKlinisEdit from './RMECatatanKlinisEdit';
 import axios from 'axios';
 import { format } from 'date-fns';
 import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 const defaultPatient = {
   vitals: [
@@ -96,6 +97,7 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
   const fetchClinicalNotes = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/rme/clinical-notes/${data.no_rme}`);
+      console.log('Fetched clinical notes:', response.data); // Log the fetched data
       setClinicalNotes(response.data);
     } catch (error) {
       console.error("Failed to fetch clinical notes:", error);
@@ -154,35 +156,58 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
 
   const generatePDF = (note) => {
     const doc = new jsPDF();
-    doc.setFontSize(16);
-    doc.text("Catatan Klinis", 10, 10);
+    console.log('Data passed to generatePDF:', note); // Log the note data
 
-    const fields = [
-      { label: "Nomor RME", value: note.no_rme },
-      { label: "Tanggal Pemeriksaan", value: note.tanggal_pemeriksaan },
-      { label: "Dokter", value: note.dokter },
-      { label: "Keluhan Utama", value: note.keluhan_utama },
-      { label: "Riwayat Penyakit Sekarang", value: note.riwayat_penyakit_sekarang },
-      { label: "Riwayat Penyakit Dahulu", value: note.riwayat_penyakit_dahulu },
-      { label: "Riwayat Penyakit Keluarga", value: note.riwayat_penyakit_keluarga },
-      { label: "Riwayat Alergi", value: note.riwayat_alergi },
-      { label: "Tekanan Darah", value: note.tekanan_darah },
-      { label: "Nadi", value: note.nadi },
-      { label: "Suhu", value: note.suhu },
-      { label: "Pernapasan", value: note.pernapasan },
-      { label: "Pemeriksaan Fisik", value: note.pemeriksaan_fisik },
-      { label: "Diagnosis Kerja", value: note.diagnosis_kerja },
-      { label: "Diagnosis Banding", value: note.diagnosis_banding },
-      { label: "Rencana Terapi", value: note.rencana_terapi },
-      { label: "Rencana Tindak Lanjut", value: note.rencana_tindak_lanjut },
-      { label: "Catatan", value: note.catatan },
+    // Format the tanggal_pemeriksaan field
+    const formattedDate = format(new Date(note.tanggal_pemeriksaan), 'yyyy-MM-dd');
+
+    // Add main title (centered)
+    doc.setFontSize(16);
+    doc.text('Detail Catatan Klinis', doc.internal.pageSize.getWidth() / 2, 20, { align: 'center' });
+
+    // Add subtitle with dokter, no_rme, and formatted tanggal_pemeriksaan (centered)
+    doc.setFontSize(12);
+    doc.text(
+      `Dokter: ${note.dokter} | No. RME: ${note.no_rme} | Tanggal: ${formattedDate}`,
+      doc.internal.pageSize.getWidth() / 2,
+      30,
+      { align: 'center' }
+    );
+
+    // Add table data dynamically based on the selected row
+    const tableData = [
+      ['Field', 'Value'],
+      ['Tanggal Pemeriksaan', formattedDate],
+      ['Diagnosis Kerja', note.diagnosis_kerja],
+      ['Dokter', note.dokter],
+      ['No. RME', note.no_rme],
+      ['Keluhan Utama', note.keluhan_utama || 'N/A'],
+      ['Riwayat Penyakit Sekarang', note.riwayat_penyakit_sekarang || 'N/A'],
+      ['Riwayat Penyakit Dahulu', note.riwayat_penyakit_dahulu || 'N/A'],
+      ['Riwayat Penyakit Keluarga', note.riwayat_penyakit_keluarga || 'N/A'],
+      ['Riwayat Alergi', note.riwayat_alergi || 'N/A'],
+      ['Tekanan Darah', note.tekanan_darah || 'N/A'],
+      ['Nadi', note.nadi || 'N/A'],
+      ['Suhu', note.suhu || 'N/A'],
+      ['Pernapasan', note.pernapasan || 'N/A'],
+      ['Pemeriksaan Fisik', note.pemeriksaan_fisik || 'N/A'],
+      ['Diagnosis Banding', note.diagnosis_banding || 'N/A'],
+      ['Rencana Terapi', note.rencana_terapi || 'N/A'],
+      ['Rencana Tindak Lanjut', note.rencana_tindak_lanjut || 'N/A'],
+      ['Catatan', note.catatan || 'N/A'],
     ];
 
-    fields.forEach((field, index) => {
-      doc.text(`${field.label}: ${field.value || ''}`, 10, 20 + index * 10);
+    autoTable(doc, {
+      startY: 40,
+      head: [tableData[0]],
+      body: tableData.slice(1),
+      margin: { top: 10 },
+      styles: { fontSize: 9 },
+      headStyles: { fillColor: [30, 40, 56] },
     });
 
-    doc.save(`Catatan_Klinis_${note.id || 'unknown'}.pdf`);
+    // Save the PDF with a dynamic filename
+    doc.save(`Catatan_Klinis_${note.id}_${note.no_rme}.pdf`);
   };
 
   const nama = data.nama_lengkap;

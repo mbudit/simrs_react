@@ -47,7 +47,7 @@ exports.saveFormData = (req, res) => {
 exports.getClinicalNotes = (req, res) => {
   const { no_rme } = req.params;
   const sql = `
-    SELECT id, tanggal_pemeriksaan, diagnosis_kerja, dokter, catatan
+    SELECT * 
     FROM rme_catatan_klinis
     WHERE no_rme = ?
   `;

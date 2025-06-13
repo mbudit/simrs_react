@@ -152,3 +152,16 @@ exports.updatePatient = (req, res) => {
     res.json({ message: 'Patient updated successfully' });
   });
 };
+
+// Get the last RME number
+exports.getLastRme = (req, res) => {
+  const sql = 'SELECT no_rme FROM patients ORDER BY id DESC LIMIT 1';
+  db.query(sql, (err, results) => {
+    if (err) {
+      console.error('Error fetching last RME:', err);
+      return res.status(500).json({ error: 'Failed to fetch last RME' });
+    }
+    const lastRme = results.length > 0 ? results[0].no_rme : 'RME-0';
+    res.json({ lastRme });
+  });
+};

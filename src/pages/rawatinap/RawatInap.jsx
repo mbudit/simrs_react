@@ -113,59 +113,72 @@ const RawatInap = () => {
 
     const tableRef = useRef();
     
-        const handleExportPDF = () => {
-            const filteredRows = tableRef.current?.getFilteredRows?.() || [];
-        
-            if (filteredRows.length === 0) {
-                alert('Tidak ada data yang ditampilkan untuk diexport.');
-                return;
-            }
-        
-            const doc = new jsPDF({ orientation: 'landscape' });
-            const pageWidth = doc.internal.pageSize.getWidth();
-        
-            const centerText = (text, y, fontSize, isBold = false) => {
-                doc.setFontSize(fontSize);
-                doc.setFont('helvetica', isBold ? 'bold' : 'normal');
-                const textWidth = doc.getTextWidth(text);
-                const x = (pageWidth - textWidth) / 2;
-                doc.text(text, x, y);
-            };
-        
-            // Header PDF
-            centerText("Data Pasien Rawat Inap", 15, 18, true);
-            centerText("Rumah Sakit A", 24, 14, true);
-            centerText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor", 30, 11);
-        
-            const tableColumn = [
-                "Tanggal Daftar", "No RM", "Poli", "Nama Lengkap", "Jenis Kelamin", "Dokter"
-            ];
-        
-            const tableRows = filteredRows.map(row => [
-                dayjs(row.tgl_daftar).format("DD/MM/YYYY"), // Format tanggal
-                row.no_rm || '-',
-                row.poli || '-',
-                row.nama_lengkap || '-',
-                row.jenis_kelamin || '-',
-                row.dokter || '-'
-            ]);
-        
-            autoTable(doc, {
-                startY: 35,
-                head: [tableColumn],
-                body: tableRows,
-                styles: { fontSize: 9 },
-                headStyles: { fillColor: [30, 40, 56] },
-            });
-        
-            doc.save("data_pasien_ranap.pdf");
+    const handleExportPDF = () => {
+        const filteredRows = tableRef.current?.getFilteredRows?.() || [];
+    
+        if (filteredRows.length === 0) {
+            alert('Tidak ada data yang ditampilkan untuk diexport.');
+            return;
+        }
+    
+        const doc = new jsPDF({ orientation: 'landscape' });
+        const pageWidth = doc.internal.pageSize.getWidth();
+    
+        const centerText = (text, y, fontSize, isBold = false) => {
+            doc.setFontSize(fontSize);
+            doc.setFont('helvetica', isBold ? 'bold' : 'normal');
+            const textWidth = doc.getTextWidth(text);
+            const x = (pageWidth - textWidth) / 2;
+            doc.text(text, x, y);
         };
+    
+        // Header PDF
+        centerText("Data Pasien Rawat Inap", 15, 18, true);
+        centerText("Rumah Sakit A", 24, 14, true);
+        centerText("Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor", 30, 11);
+    
+        const tableColumn = [
+            "Tanggal Daftar", "No RM", "Poli", "Nama Lengkap", "Jenis Kelamin", "Dokter"
+        ];
+    
+        const tableRows = filteredRows.map(row => [
+            dayjs(row.tgl_daftar).format("DD/MM/YYYY"), // Format tanggal
+            row.no_rm || '-',
+            row.poli || '-',
+            row.nama_lengkap || '-',
+            row.jenis_kelamin || '-',
+            row.dokter || '-'
+        ]);
+    
+        autoTable(doc, {
+            startY: 35,
+            head: [tableColumn],
+            body: tableRows,
+            styles: {
+                fontSize: 9,
+                lineWidth: 0.1, // Menambahkan garis border
+                lineColor: [0, 0, 0], // Warna hitam
+            },
+            headStyles: {
+                fillColor: [30, 40, 56],
+                textColor: 255,
+                lineWidth: 0.1, // Border untuk header
+                lineColor: [0, 0, 0],
+            },
+            bodyStyles: {
+                lineWidth: 0.1, // Border untuk isi tabel
+                lineColor: [0, 0, 0],
+            },
+        });
+    
+        doc.save("data_pasien_ranap.pdf");
+    };
     
     return (
         <div>
             <BackButton />
             <div className="flex items-center justify-between mb-4 mt-5">
-                <h3 className="text-2xl font-semibold">Data Pasien Rawat Jalan</h3>
+                <h3 className="text-2xl font-semibold">Data Pasien Rawat Inap</h3>
                 
                 <div className="flex items-center gap-2">
                     <ButtonDaftar onClick={handleOpen} />

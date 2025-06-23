@@ -12,6 +12,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import Button from '@mui/material/Button';
 import PrintIcon from '@mui/icons-material/Print';
+import ModalUpdateRajal from './forms/FormUpdateRajal';
 
 const RawatJalan = () => {
     const [open, setOpen] = useState(false);
@@ -107,6 +108,41 @@ const RawatJalan = () => {
         /* setOpenPasienLama(false); */ // Menutup modal lain jika ada
     };
 
+    const [openEditRajal, setOpenEditRajal] = useState(false);
+    const handleCloseEditRajal = () => {
+        setOpenEditRajal(false);
+        setForm({}); // opsional, kalau ingin reset form juga
+    };
+    
+    const handleSelectPasienRajal = (row) => {
+        setForm({
+            id: row.id,
+            nama_lengkap: row.nama_lengkap || '',
+            jenis_kelamin: row.jenis_kelamin || '',
+            no_ktp: row.no_ktp || '',
+            tgl_lahir: row.tgl_lahir ? dayjs(row.tgl_lahir) : null,
+            status_pernikahan: row.status_pernikahan || '',
+            pekerjaan: row.pekerjaan || '',
+            no_telp: row.no_telp || '',
+            alamat: row.alamat || '',
+            tgl_daftar: row.tgl_daftar ? dayjs(row.tgl_daftar) : null,
+            payments: row.payments || '',
+            no_kartu: row.no_kartu || '',
+            poli: row.poli || '',
+            dokter: row.dokter || '',
+            jenis_rujukan: row.jenis_rujukan || '',
+            no_rujukan: row.no_rujukan || '',
+            tgl_rujukan: row.tgl_rujukan ? dayjs(row.tgl_rujukan) : null,
+            faskes: row.faskes || '',
+            no_wa: row.no_telp || '',
+            nama_wali: row.nama_wali || '',
+            telp_wali: row.telp_wali || '',
+            alasan: row.alasan || '',
+            status: row.status || '',
+        });
+        setOpenEditRajal(true); // Buka ModalRajal2
+    };
+
     const tableRef = useRef();
 
     const handleExportPDF = () => {
@@ -150,8 +186,21 @@ const RawatJalan = () => {
             startY: 35,
             head: [tableColumn],
             body: tableRows,
-            styles: { fontSize: 9 },
-            headStyles: { fillColor: [30, 40, 56] },
+            styles: {
+                fontSize: 9,
+                lineWidth: 0.1, // Menambahkan garis border
+                lineColor: [0, 0, 0], // Warna hitam
+            },
+            headStyles: {
+                fillColor: [30, 40, 56],
+                textColor: 255,
+                lineWidth: 0.1, // Border untuk header
+                lineColor: [0, 0, 0],
+            },
+            bodyStyles: {
+                lineWidth: 0.1, // Border untuk isi tabel
+                lineColor: [0, 0, 0],
+            },
         });
     
         doc.save("data_pasien_rajal.pdf");
@@ -178,7 +227,7 @@ const RawatJalan = () => {
             </div>
 
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                <TableIRJ3 handleSelect={handleSelectPasien} refreshTrigger={refreshTrigger} ref={tableRef} />
+                <TableIRJ3 handleSelect={handleSelectPasien} handleSelectConfirm={handleSelectPasienRajal} refreshTrigger={refreshTrigger} ref={tableRef} />
                 <ModalEditRajal
                     open={openEdit}
                     handleCloseEdit={handleCloseEdit}
@@ -187,11 +236,17 @@ const RawatJalan = () => {
                     handleOpenNested={() => setOpenPasienLama(true)}
                     setRefreshTrigger={setRefreshTrigger}
                 />
-            </SnackbarProvider>
-            <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
                 <ModalRajal2
                     open={open}
                     handleClose={handleClose}
+                    form={form}
+                    setForm={setForm}
+                    handleOpenNested={() => setOpenPasienLama(true)}
+                    setRefreshTrigger={setRefreshTrigger}
+                />
+                <ModalUpdateRajal
+                    open={openEditRajal}
+                    handleCloseEditRajal={handleCloseEditRajal}
                     form={form}
                     setForm={setForm}
                     handleOpenNested={() => setOpenPasienLama(true)}

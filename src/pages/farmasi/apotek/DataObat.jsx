@@ -130,7 +130,21 @@ const DataObat = () => {
             startY: 35,
             head: [tableColumn],
             body: tableRows,
-            styles: { fontSize: 9 },
+            styles: {
+                fontSize: 9,
+                lineWidth: 0.1, // Menambahkan garis border
+                lineColor: [0, 0, 0], // Warna hitam
+            },
+            headStyles: {
+                fillColor: [30, 40, 56],
+                textColor: 255,
+                lineWidth: 0.1, // Border untuk header
+                lineColor: [0, 0, 0],
+            },
+            bodyStyles: {
+                lineWidth: 0.1, // Border untuk isi tabel
+                lineColor: [0, 0, 0],
+            },
         });
     
         doc.save("data_obat.pdf");

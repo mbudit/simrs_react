@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import CheckIcon from '@mui/icons-material/Check';
 import dayjs from 'dayjs';
 
 const columnsBase = [
@@ -20,7 +21,7 @@ const columnsBase = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-const TableIGD = React.forwardRef(({ handleSelect, refreshTrigger }, ref) => {
+const TableIGD = React.forwardRef(({ handleSelect, handleSelectConfirm, refreshTrigger }, ref) => {
     const [rows, setRows] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
     const [openDialog, setOpenDialog] = React.useState(false); // State untuk Dialog
@@ -114,6 +115,15 @@ const TableIGD = React.forwardRef(({ handleSelect, refreshTrigger }, ref) => {
                             startIcon={<EditIcon />} // Tambahkan ikon di sini
                         >
                             Edit
+                        </Button>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            size="small"
+                            onClick={() => handleSelectConfirm(params.row)}
+                            startIcon={<CheckIcon />} // Tambahkan ikon di sini
+                        >
+                            Confirm
                         </Button>
                     </div>
                 </>

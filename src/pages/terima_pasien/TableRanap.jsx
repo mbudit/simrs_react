@@ -21,21 +21,22 @@ const columnsBase = [
 
 const paginationModel = { page: 0, pageSize: 5 };
 
-const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refreshTrigger }, ref) => {
+const TableRanap = React.forwardRef(({ handleSelect, refreshTrigger }, ref) => {
     const [rows, setRows] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
-    const [openDialog, setOpenDialog] = React.useState(false);
-    const [deleteId, setDeleteId] = React.useState(null);
+    const [openDialog, setOpenDialog] = React.useState(false); // State untuk Dialog
+    const [deleteId, setDeleteId] = React.useState(null); // Menyimpan id untuk dihapus
     const [startDate, setStartDate] = React.useState('');
     const [endDate, setEndDate] = React.useState('');
-    const { enqueueSnackbar } = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar(); // Pakai notistack
 
     React.useEffect(() => {
-        axios.get(`${import.meta.env.VITE_API_URL}/api/pasien_rajal`)
+        axios.get(`${import.meta.env.VITE_API_URL}/api/pasien_ranap`)
             .then((res) => {
                 const dataWithId = res.data.map((row, index) => ({
                     id: index,
                     ...row,
+                    tgl_daftar: row.tgl_daftar ? row.tgl_daftar.split('T')[0] : '',
                 }));
                 setRows(dataWithId);
             })
@@ -48,10 +49,10 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
     }, [refreshTrigger]);
 
     React.useImperativeHandle(ref, () => ({
-        getRows: () => rows,
-        getFilteredRows: () => getFilteredRows()
-    }));
-
+            getRows: () => rows,
+            getFilteredRows: () => getFilteredRows()
+        }));
+    
     const getFilteredRows = () => {
         return rows.filter((row) => {
             const rowDate = dayjs(row.tgl_daftar);
@@ -63,7 +64,7 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
 
     const handleOpenDialog = (id) => {
         setDeleteId(id);
-        setOpenDialog(true);
+        setOpenDialog(true); // Buka dialog konfirmasi
     };
 
     const handleCloseDialog = () => {
@@ -72,16 +73,16 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
     };
 
     const handleDelete = () => {
-        axios.delete(`${import.meta.env.VITE_API_URL}/api/pasien_rajal/${deleteId}`)
+        axios.delete(`${import.meta.env.VITE_API_URL}/api/pasien_ranap/${deleteId}`)
             .then(() => {
                 setRows(prev => prev.filter(row => row.id !== deleteId));
                 enqueueSnackbar("Data berhasil dihapus!", { variant: 'success', autoHideDuration: 3000 });
-                handleCloseDialog();
+                handleCloseDialog(); // Tutup dialog setelah penghapusan
             })
             .catch(err => {
                 console.error("Gagal menghapus data:", err);
                 enqueueSnackbar("Gagal menghapus data!", { variant: 'error', autoHideDuration: 3000 });
-                handleCloseDialog();
+                handleCloseDialog(); // Tutup dialog jika gagal
             });
     };
 
@@ -95,35 +96,19 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
             filterable: false,
             headerClassName: 'super-app-theme--header',
             renderCell: (params) => (
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '100%' }}>
-                    <Button
-                        variant="contained"
-                        color="error"
-                        size="small"
-                        onClick={() => handleOpenDialog(params.row.id)}
-                        startIcon={<DeleteIcon />}
-                    >
-                        Hapus
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        onClick={() => handleSelect(params.row)}
-                        startIcon={<EditIcon />}
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="success"
-                        size="small"
-                        onClick={() => handleSelectConfirm(params.row)}
-                        startIcon={<CheckIcon />} // Tambahkan ikon di sini
-                    >
-                        Confirm
-                    </Button>
-                </div>
+                <>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '100%'  }}>
+                        <Button
+                            variant="contained"
+                            color="success"
+                            size="small"
+                            onClick={() => handleSelect(params.row)}
+                            startIcon={<CheckIcon />} // Tambahkan ikon di sini
+                        >
+                            Confirm
+                        </Button>
+                    </div>
+                </>
             )
         }
     ];
@@ -136,7 +121,7 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
                     alignItems: 'center',
                     gap: 2,
                     mb: 1,
-                    mt: 3,
+                    mt: 2,
                     p: 2,
                     backgroundColor: 'background.paper',
                     borderRadius: 2,
@@ -176,9 +161,11 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
                     </Button>
                 )}
             </Box>
-
-
-            <Paper sx={{ height: '100%', width: '100%' }}>
+        
+            <Paper sx={{ 
+                    height: '100%', 
+                    width: '100%',
+            }}>
                 <DataGrid
                     rows={getFilteredRows()}
                     columns={columns}
@@ -186,36 +173,37 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
                     initialState={{ pagination: { paginationModel } }}
                     pageSizeOptions={[5, 10]}
                     loading={loading}
-                    sx={{
-                        border: 0,
-                        '& .super-app-theme--header': {
-                            backgroundColor: '#1e2838',
-                            fontSize: '16px',
-                            fontWeight: 'bold !important',
-                        },
-                        '& .MuiDataGrid-columnHeaders': {
-                            backgroundColor: '#1e2838',
-                            fontWeight: 'bold !important',
-                            fontSize: '16px',
-                            color: '#fff',
-                        },
-                        '& .MuiDataGrid-columnHeaderTitle': {
-                            fontWeight: 'bold !important',
-                        },
-                        '& .MuiDataGrid-sortIcon': {
-                            color: '#ffffff !important',
-                        },
-                        '& .MuiDataGrid-menuIconButton': {
-                            color: '#ffffff',
-                        },
-                        '& .MuiDataGrid-cell': {
-                            borderBottom: '1px solid #e0e0e0',
-                            borderRight: '1px solid #e0e0e0',
-                        },
-                    }}
+                    sx={{ 
+                            border: 0,
+                            '& .super-app-theme--header': {
+                                backgroundColor: '#1e2838',
+                                fontSize: '16px',
+                                fontWeight: 'bold !important',
+                            }, 
+                            '& .MuiDataGrid-columnHeaders': {
+                                backgroundColor: '#1e2838',
+                                fontWeight: 'bold !important', // Mengubah gaya font header
+                                fontSize: '16px', // Ukuran font header lebih besar
+                                color: '#fff', // Warna font header
+                            },
+                            '& .MuiDataGrid-columnHeaderTitle': {
+                                fontWeight: 'bold !important', // ← paling penting: ini selector internal teks header
+                            },
+                            '& .MuiDataGrid-sortIcon': {
+                                color: '#ffffff !important', // ← Ubah warna ikon sorting di sini
+                            },
+                            '& .MuiDataGrid-menuIconButton': {
+                                color: '#ffffff',  // ganti dengan warna yang kamu mau, misal pink cerah
+                            },
+                            '& .MuiDataGrid-cell': {
+                                borderBottom: '1px solid #e0e0e0', // Tambahkan border bawah pada data
+                                borderRight: '1px solid #e0e0e0',
+                            },
+                        }}
                 />
             </Paper>
 
+            {/* Dialog Konfirmasi */}
             <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <DialogTitle>Konfirmasi Penghapusan</DialogTitle>
                 <DialogContent>
@@ -234,4 +222,4 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
     );
 });
 
-export default TableIRJ3;
+export default TableRanap;

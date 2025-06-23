@@ -11,6 +11,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import Button from '@mui/material/Button';
 import PrintIcon from '@mui/icons-material/Print';
+import ModalUpdateIGD from './forms/FormUpdateIGD';
 
 
 const IGD = () => {
@@ -109,6 +110,41 @@ const IGD = () => {
         /* setOpenPasienLama(false); */ // Menutup modal lain jika ada
     };
 
+    const [openEditIGD, setOpenEditIGD] = useState(false);
+    const handleCloseEditIGD = () => {
+        setOpenEditIGD(false);
+        setForm({}); // opsional, kalau ingin reset form juga
+    };
+
+    const handleSelectPasienIGD = (row) => {
+        setForm({
+            id: row.id,
+            nama_lengkap: row.nama_lengkap || '',
+            jenis_kelamin: row.jenis_kelamin || '',
+            no_ktp: row.no_ktp || '',
+            tgl_lahir: row.tgl_lahir ? dayjs(row.tgl_lahir) : null,
+            status_pernikahan: row.status_pernikahan || '',
+            pekerjaan: row.pekerjaan || '',
+            no_telp: row.no_telp || '',
+            alamat: row.alamat || '',
+            tgl_daftar: row.tgl_daftar ? dayjs(row.tgl_daftar) : null,
+            payments: row.payments || '',
+            no_kartu: row.no_kartu || '',
+            poli: row.poli || '',
+            dokter: row.dokter || '',
+            jenis_rujukan: row.jenis_rujukan || '',
+            no_rujukan: row.no_rujukan || '',
+            tgl_rujukan: row.tgl_rujukan ? dayjs(row.tgl_rujukan) : null,
+            faskes: row.faskes || '',
+            no_wa: row.no_telp || '',
+            nama_wali: row.nama_wali || '',
+            telp_wali: row.telp_wali || '',
+            alasan: row.alasan || '',
+            status: row.status || '',
+        });
+        setOpenEditIGD(true); // Buka ModalRajal2
+    };
+
     const tableRef = useRef();
         
     const handleExportPDF = () => {
@@ -152,8 +188,21 @@ const IGD = () => {
             startY: 35,
             head: [tableColumn],
             body: tableRows,
-            styles: { fontSize: 9 },
-            headStyles: { fillColor: [30, 40, 56] },
+            styles: {
+                fontSize: 9,
+                lineWidth: 0.1, // Menambahkan garis border
+                lineColor: [0, 0, 0], // Warna hitam
+            },
+            headStyles: {
+                fillColor: [30, 40, 56],
+                textColor: 255,
+                lineWidth: 0.1, // Border untuk header
+                lineColor: [0, 0, 0],
+            },
+            bodyStyles: {
+                lineWidth: 0.1, // Border untuk isi tabel
+                lineColor: [0, 0, 0],
+            },
         });
     
         doc.save("data_pasien_igd.pdf");
@@ -177,7 +226,7 @@ const IGD = () => {
                 </div>
             </div>
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                <TableIGD handleSelect={handleSelectPasien} refreshTrigger={refreshTrigger} ref={tableRef} />
+                <TableIGD handleSelect={handleSelectPasien} handleSelectConfirm={handleSelectPasienIGD} refreshTrigger={refreshTrigger} ref={tableRef} />
                 <ModalDaftarIGD 
                     open={open}
                     handleClose={handleClose}
@@ -192,6 +241,15 @@ const IGD = () => {
                     form={form}
                     setForm={setForm}
                     handleOpenNested={() => setOpenPasienLama(true)}
+                    setRefreshTrigger={setRefreshTrigger}
+                />
+                <ModalUpdateIGD
+                    open={openEditIGD}
+                    handleCloseEditIGD={handleCloseEditIGD}
+                    form={form}
+                    setForm={setForm}
+                    handleOpenNested={() => setOpenPasienLama(true)}
+                    setRefreshTrigger={setRefreshTrigger}
                 />
             </SnackbarProvider>
             <ModalPasienLama2

@@ -35,7 +35,7 @@ const style = {
     },
 };
 
-export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm, setRefreshTrigger }) {
+export default function ModalUpdateRanap({ open, handleCloseEditRanap, form = {}, setForm, setRefreshTrigger }) {
     const [errors, setErrors] = useState({});
     const [openDialog, setOpenDialog] = useState(false);
     const { enqueueSnackbar } = useSnackbar();
@@ -66,6 +66,7 @@ export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm
             nama_wali: '',
             telp_wali: '',
             alasan: '',
+            status: '',
         });
         setErrors({});
     } else {
@@ -93,6 +94,7 @@ export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm
             nama_wali: prevForm.nama_wali || '',
             telp_wali: prevForm.telp_wali || '',
             alasan: prevForm.alasan || '',
+            status: prevForm.status || '',
         }));
     }
 }, [open]);
@@ -191,6 +193,21 @@ export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm
         },
     ];
 
+    const status = [
+        {
+            value: 'Pulang',
+            label: 'Pulang',
+        },
+        {
+            value: 'Rawat Jalan',
+            label: 'Rawat Jalan',
+        },
+        {
+            value: 'Rawat Inap',
+            label: 'Rawat Inap',
+        },
+    ];
+
     const handleChange = (e) => {
         const { name, value } = e.target;
     
@@ -257,23 +274,48 @@ export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm
         };
     
         try {
-            const response = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_igd/${form.id}`, formattedData,
-                {
+            let responsePost, responsePut;
+    
+            if (form.status === "Rawat Inap") {
+                // Panggil API kode 1 (POST /api/rawatinap)
+                responsePost = await axios.post(`${import.meta.env.VITE_API_URL}/api/rawatinap`, formattedData, {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                }
-            );
+                });
     
-            console.log('Response:', response.data);
-            enqueueSnackbar('Data berhasil diperbarui!', { variant: 'success', autoHideDuration: 3000 });
+                // Panggil API kode 2 (PUT /api/update_rajal/:id)
+                responsePut = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_rajal/${form.id}`, formattedData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+    
+                console.log('Response POST:', responsePost.data);
+                console.log('Response PUT:', responsePut.data);
+            } else if (form.status === "Pulang") {
+                // Jika status "Pulang", hanya panggil API kode 2 (PUT)
+                responsePut = await axios.put(`${import.meta.env.VITE_API_URL}/api/update_rajal/${form.id}`, formattedData, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                console.log('Response PUT:', responsePut.data);
+            } else {
+                enqueueSnackbar('Status pasien tidak valid.', { variant: 'warning' });
+                return;
+            }
+    
+            enqueueSnackbar('Data berhasil diproses!', { variant: 'success', autoHideDuration: 3000 });
             setRefreshTrigger(prev => !prev);
-            handleCloseEdit();
+            handleCloseEditRanap();
+    
         } catch (error) {
             console.error('Error terjadi:', error);
             enqueueSnackbar('Terjadi kesalahan saat mengirim data', { variant: 'error', autoHideDuration: 3000 });
         }
     };
+    
 
     const handleCancelSubmit = () => {
         setOpenDialog(false); // Menutup dialog konfirmasi tanpa submit
@@ -283,7 +325,7 @@ export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm
         <Box>
             <Modal 
                 open={open} 
-                onClose={handleCloseEdit} 
+                onClose={handleCloseEditRanap} 
                 closeAfterTransition
                 aria-labelledby="modal-form-title"
                 aria-describedby="modal-form-description"
@@ -302,8 +344,8 @@ export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm
                                 py: 1.5,
                             }}
                         >
-                            <h2>Edit Pendaftaran IGD</h2>
-                            <ModalCloseButton onClick={handleCloseEdit} />
+                            <h2>Update Pendaftaran Rawat Inap</h2>
+                            <ModalCloseButton onClick={handleCloseEditRanap} />
                         </Box>
 
                         {/* <Box display="flex" justifyContent="flex-end" p={2}>
@@ -656,10 +698,32 @@ export default function ModalEditIGD({ open, handleCloseEdit, form = {}, setForm
                                     </Grid>
                                 </Grid>
 
+                                <Box sx={{ borderBottom: '1px solid #ccc', mb: 2, mt: 2, }} />
+
+                                <h3 className="text-xl mb-2 mt-3 font-bold">Status Pasien</h3>
+                                <Grid columns={12}>
+                                    <TextField
+                                        select
+                                        label="Status Pasien"
+                                        name="status" // tambahkan name
+                                        value={form.status || ''} // kontrol oleh state
+                                        onChange={handleChange} // ubah state saat berubah
+                                        error={!!errors.status}
+                                        helperText={errors.status || " "}
+                                        fullWidth
+                                    >
+                                        {status.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+
                                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 3 }}>
                                     <ButtonSubmit onClick={handleSubmit} />
                                     <Box sx={{ ml: 2 }}>
-                                        <ButtonClose onClick={handleCloseEdit} />
+                                        <ButtonClose onClick={handleCloseEditRanap} />
                                     </Box>
                                 </Box>
                             </form>

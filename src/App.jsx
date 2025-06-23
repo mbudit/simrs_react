@@ -19,6 +19,7 @@ import { ThemeProvider } from "@mui/material";
 import Theme from "./theme";
 import RME from "./pages/rme/RME";
 import TerimaPasien from "./pages/terima_pasien/TerimaPasien";
+import TerimaPasien2 from "./pages/terima_pasien/TerimaPasien2";
 import RawatInap from "./pages/rawatinap/RawatInap";
 
 function App() {
@@ -115,8 +116,10 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
                   <Route path="/antrian" element={<PrivateRoute element={<Antrian />} />} />
                   <Route path="/rawatjalan" element={<PrivateRoute element={<RawatJalan />} />} />
                   {/* <Route path="/rawatinap" element={<PrivateRoute element={<RawatInap />} />} /> */}
-                  <Route path="/terima_pasien" element={<PrivateRoute element={<TerimaPasien />} />} />
-                  <Route path="/rawatinap" element={<PrivateRoute element={<RawatInap />} />} />
+                  {/* <Route path="/terima_pasien" element={<PrivateRoute element={<TerimaPasien />} />} />
+                  <Route path="/rawatinap" element={<PrivateRoute element={<RawatInap />} />} /> */}
+                  <Route path="/rawatinap/terima_pasien" element={<PrivateRoute element={<TerimaPasien2 />} />} />
+                  <Route path="/rawatinap/data_pasien_ranap" element={<PrivateRoute element={<RawatInap />} />} />
                   <Route path="/rme" element={<PrivateRoute element={<RME />} />} />
                   <Route path="/igd" element={<PrivateRoute element={<IGD />} />} />
                   <Route path="/radiologi" element={<PrivateRoute element={<Radiologi />} />} />

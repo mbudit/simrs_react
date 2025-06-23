@@ -138,10 +138,10 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                 <MenuItemWithAutoTooltip label="Antrian" icon={<FaUserFriends />} to="/antrian" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="IGD" icon={<FaAmbulance />} to="/igd" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="Rawat Jalan" icon={<FaStethoscope />} to="/rawatjalan" collapsed={collapsed} />
-                <MenuItemWithAutoTooltip label="Rawat Inap" icon={<FaProcedures />} to="/rawatinap" collapsed={collapsed} />
-                <MenuItemWithAutoTooltip label="Terima Pasien" icon={<FaUserInjured />} to="/terima_pasien" collapsed={collapsed} />
+                {/* <MenuItemWithAutoTooltip label="Rawat Inap" icon={<FaProcedures />} to="/rawatinap" collapsed={collapsed} />
+                <MenuItemWithAutoTooltip label="Terima Pasien" icon={<FaUserInjured />} to="/terima_pasien" collapsed={collapsed} /> */}
 
-                {/* <SubMenuWithTooltip
+                <SubMenuWithTooltip
                     label="Rawat Inap"
                     icon={<FaProcedures />}
                     collapsed={collapsed}
@@ -162,7 +162,7 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     >
                         Data Pasien Ranap
                     </MenuItem>
-                </SubMenuWithTooltip> */}
+                </SubMenuWithTooltip>
 
                 <MenuItemWithAutoTooltip label="Radiologi" icon={<FaXRay />} to="/radiologi" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="Laboratorium" icon={<FaMicroscope />} to="/laboratorium" collapsed={collapsed} />

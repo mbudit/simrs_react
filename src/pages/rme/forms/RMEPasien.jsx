@@ -202,8 +202,10 @@ const RMEPasien = ({ patientData = defaultPatient, data }) => {
       head: [tableData[0]],
       body: tableData.slice(1),
       margin: { top: 10 },
-      styles: { fontSize: 9 },
+      styles: { fontSize: 9, lineWidth: 0.1 }, // Add borders with lineWidth
       headStyles: { fillColor: [30, 40, 56] },
+      tableLineColor: [0, 0, 0], // Black border color
+      tableLineWidth: 0.1, // Border thickness
     });
 
     // Save the PDF with a dynamic filename

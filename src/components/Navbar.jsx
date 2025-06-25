@@ -4,12 +4,17 @@ import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import UserSettingsModal from "./UserSettingsModal";
+import UserSettingsModal2 from "./UserSettingsModal2";
+import { SnackbarProvider } from "notistack";
+
 
 const Navbar = ({ setIsAuthenticated }) => {
   const [isOpen, setIsopen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
+
+  const handleCloseSettingsModal = () => setShowSettingsModal(false);
 
   const navigate = useNavigate();
   const dropdownRef = useRef(null);
@@ -79,6 +84,12 @@ const Navbar = ({ setIsAuthenticated }) => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const [form, setForm] = useState({
+      id: '',
+      email: '',
+      password: '',
+  });
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -189,10 +200,18 @@ const Navbar = ({ setIsAuthenticated }) => {
           )}
         </div>
       )}
-      <UserSettingsModal
+      {/* <UserSettingsModal
         isOpen={showSettingsModal}
         onClose={() => setShowSettingsModal(false)}
-      />
+      /> */}
+      <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+        <UserSettingsModal2
+          isOpen={showSettingsModal}
+          handleClose={handleCloseSettingsModal}
+          form={form}
+          setForm={setForm}
+        />
+      </SnackbarProvider>
     </nav>
   );
 };

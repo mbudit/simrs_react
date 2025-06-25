@@ -211,7 +211,7 @@ const IGD = () => {
     return (
         <div>
             <BackButton />
-            <div className="flex items-center justify-between mb-4 mt-5">
+            <div className="flex items-center justify-between mb-3 mt-5">
                 <h3 className="text-2xl font-semibold">Data Pasien IGD</h3>
                 
                 <div className="flex items-center gap-2">

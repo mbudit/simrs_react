@@ -1,9 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { BackButton, ButtonDaftar } from '../../components/Buttons';
-import TableIRJ2 from './TablesRajal';
 import TableIRJ3 from './TablesRajal2';
 import ModalRajal2 from './forms/DaftarRawatJalan2';
-import ModalPasienLama from './forms/PasienLama';
 import dayjs from 'dayjs';
 import { SnackbarProvider } from 'notistack';
 import ModalEditRajal from './forms/FormEditRajal';
@@ -211,7 +209,7 @@ const RawatJalan = () => {
     return (
         <div>
             <BackButton />
-            <div className="flex items-center justify-between mb-4 mt-5">
+            <div className="flex items-center justify-between mb-3 mt-5">
                 <h3 className="text-2xl font-semibold">Data Pasien Rawat Jalan</h3>
                 
                 <div className="flex items-center gap-2">

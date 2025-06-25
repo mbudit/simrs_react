@@ -45,6 +45,8 @@ const Login = ({ setIsAuthenticated }) => {
           setError(data.error || "Login failed");
         } else {
           localStorage.setItem("token", data.token);
+          localStorage.setItem("email", data.email);
+          localStorage.setItem("id", data.id);
           setError("");
           setOpenSnackbar(true);
           setIsAuthenticated(true);

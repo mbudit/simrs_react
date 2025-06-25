@@ -80,7 +80,7 @@ const Login = ({ setIsAuthenticated }) => {
           left: 0,
           width: "100%",
           height: "100%",
-          backgroundImage: `url(src/assets/loginbg.jpeg)`, // Update to your image path
+          backgroundImage: `url(src/assets/background.jpg)`, // Update to your image path
           backgroundSize: "cover",
           backgroundPosition: "center",
           filter: "blur(8px)",
@@ -121,6 +121,10 @@ const Login = ({ setIsAuthenticated }) => {
               marginBottom: 2,
             }}
           />
+
+          <Typography variant="h5" color="black" sx={{ marginBottom: 2, fontWeight: 'bold' }}>
+            SIMRS SIMTECH
+          </Typography>
 
           {error && (
             <Typography variant="body2" color="error" sx={{ marginBottom: 2 }}>

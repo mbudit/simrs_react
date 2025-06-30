@@ -2,7 +2,8 @@ import { useState } from 'react';
 import { Sidebar, Menu, MenuItem, SubMenu, menuClasses } from 'react-pro-sidebar';
 import { Link } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
-
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
 import {
     FaAmbulance, FaBars, FaHome, FaHospitalUser, FaMicroscope, FaNotesMedical,
     FaPills, FaProcedures, FaStethoscope, FaUserFriends, FaXRay, FaBed, FaUserInjured
@@ -47,7 +48,7 @@ const SubMenuWithTooltip = ({ label, icon, collapsed, open, onToggle, children }
                         },
                         [`.${menuClasses.subMenuContent}`]: {
                             backgroundColor: '#1e2939',
-                            minWidth: '270px',
+                            minWidth: '280px',
                             whiteSpace: 'nowrap',
                             overflow: 'visible',
                             zIndex: 9999,
@@ -133,6 +134,37 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                 <MenuItem icon={<FaBars />} onClick={toggleSidebar} />
 
                 <MenuItemWithAutoTooltip label="Home" icon={<FaHome />} to="/" collapsed={collapsed} />
+
+                <SubMenuWithTooltip
+                    label="Data Master"
+                    icon={<ListAltIcon />}
+                    collapsed={collapsed}
+                    open={openSubMenus.rawatInap}
+                    onToggle={toggleRawatInap}
+                >
+                    <MenuItem
+                        style={{ paddingLeft: '40px' }}
+                        component={<Link to="/data_master/tarif-pelayanan-rajal" />}
+                        icon={<PointOfSaleIcon />}
+                    >
+                        Tarif Pelayanan Rajal
+                    </MenuItem>
+                    <MenuItem
+                        style={{ paddingLeft: '40px' }}
+                        component={<Link to="/data_master/tarif-pelayanan-ranap" />}
+                        icon={<PointOfSaleIcon />}
+                    >
+                        Tarif Pelayanan Ranap
+                    </MenuItem>
+                    <MenuItem
+                        style={{ paddingLeft: '40px' }}
+                        component={<Link to="/data_master/tarif-pelayanan-igd" />}
+                        icon={<PointOfSaleIcon />}
+                    >
+                        Tarif Pelayanan IGD
+                    </MenuItem>
+                </SubMenuWithTooltip>
+
                 <MenuItemWithAutoTooltip label="RME" icon={<FaNotesMedical />} to="/rme" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="Data Pasien" icon={<FaHospitalUser />} to="/daftarpasien" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="Antrian" icon={<FaUserFriends />} to="/antrian" collapsed={collapsed} />

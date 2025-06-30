@@ -26,6 +26,14 @@ export const ButtonDaftar = ({ onClick }) => {
     );
 };
 
+export const ButtonTambahPelayanan = ({ onClick }) => {
+    return (
+        <Button variant="contained" color="success" onClick={onClick}>
+            Tambah Pelayanan
+        </Button>
+    );
+};
+
 export const ButtonTambahObat = ({ onClick }) => {
     return (
         <Button variant="contained" color="success" onClick={onClick}>

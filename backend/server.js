@@ -12,6 +12,7 @@ const igdRoutes = require('./routes/igdRoutes');
 const ranapRoutes = require('./routes/ranapRoutes');
 const rmeRoutes = require('./routes/rmeRoutes');
 const obatRoutes = require("./routes/obatRoutes");
+const datamasterRoutes = require("./routes/datamasterRoutes");
 
 const app = express();
 const FRONTEND_ORIGIN = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
@@ -32,6 +33,7 @@ app.use('/', igdRoutes);
 app.use('/', ranapRoutes);
 app.use('/', rmeRoutes);
 app.use("/", obatRoutes);
+app.use("/", datamasterRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

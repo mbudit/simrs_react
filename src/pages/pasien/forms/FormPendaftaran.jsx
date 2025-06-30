@@ -22,15 +22,14 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
     tempatLahir: '',
     tanggalLahir: '',
     umur: '',
-    jenisKelamin: '',
+    jenisKelamin: '', // will store id only
     agama: '',
     status: '',
     goldar: '',
-    rhesus: '',
     pendidikan: '',
     pekerjaan: '',
     noTelp: '',
-    wargaNegara: 'WNI',
+    wargaNegara: '',
     namaOrangtuaWali: '',
     noTelpWali: '',
     alamat: '',
@@ -52,6 +51,14 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
     message: '',
     severity: 'success'
   });
+  const [genderOptions, setGenderOptions] = useState([]);
+  const [agamaOptions, setAgamaOptions] = useState([]);
+  const [statusNikahOptions, setStatusNikahOptions] = useState([]);
+  const [golonganDarahOptions, setGolonganDarahOptions] = useState([]);
+  const [pendidikanOptions, setPendidikanOptions] = useState([]);
+  const [wargaNegaraOptions, setWargaNegaraOptions] = useState([]);
+  const [asuransiOptions, setAsuransiOptions] = useState([]);
+  const [pekerjaanOptions, setPekerjaanOptions] = useState([]);
 
   const handleCloseSnackbar = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
@@ -80,20 +87,127 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
       }
     };
 
+    // Fetch gender options
+    const fetchGenderOptions = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/gender-options`);
+        setGenderOptions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch gender options:', error);
+      }
+    };
+
+    // Fetch agama options
+    const fetchAgamaOptions = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/agama-options`);
+        setAgamaOptions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch agama options:', error);
+      }
+    };
+
+    // Fetch status nikah options
+    const fetchStatusNikahOptions = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/status-nikah-options`);
+        setStatusNikahOptions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch status nikah options:', error);
+      }
+    };
+
+    // Fetch golongan darah options
+    const fetchGolonganDarahOptions = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/golongan-darah-options`);
+        setGolonganDarahOptions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch golongan darah options:', error);
+      }
+    };
+
+    // Fetch pendidikan options
+    const fetchPendidikanOptions = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/pendidikan-options`);
+        setPendidikanOptions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch pendidikan options:', error);
+      }
+    };
+
+    // Fetch warga negara options
+    const fetchWargaNegaraOptions = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/warga-negara-options`);
+        setWargaNegaraOptions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch warga negara options:', error);
+      }
+    };
+
+    // Fetch asuransi options
+    const fetchAsuransiOptions = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/asuransi-options`);
+        setAsuransiOptions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch asuransi options:', error);
+      }
+    };
+
+    // Fetch pekerjaan options
+    const fetchPekerjaanOptions = async () => {
+      try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/pekerjaan-options`);
+        setPekerjaanOptions(response.data);
+      } catch (error) {
+        console.error('Failed to fetch pekerjaan options:', error);
+      }
+    };
+
     fetchLastRme();
+    fetchGenderOptions();
+    fetchAgamaOptions();
+    fetchStatusNikahOptions();
+    fetchGolonganDarahOptions();
+    fetchPendidikanOptions();
+    fetchWargaNegaraOptions();
+    fetchAsuransiOptions();
+    fetchPekerjaanOptions();
   }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value
-    }));
+
+    // Dropdowns with IDs
+    const dropdowns = {
+      jenisKelamin: genderOptions,
+      agama: agamaOptions,
+      status: statusNikahOptions,
+      goldar: golonganDarahOptions,
+      pendidikan: pendidikanOptions,
+      wargaNegara: wargaNegaraOptions,
+      asuransi: asuransiOptions,
+      pekerjaan: pekerjaanOptions,
+    };
+
+    if (dropdowns[name]) {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value // store only the id
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value
+      }));
+    }
 
     const numericFields = ['umur', 'noKtp', 'rt', 'rw', 'kodePos', 'noTelp', 'noTelpWali', 'noAsuransi'];
-
     const newValue = numericFields.includes(name)
-      ? value.replace(/\D/g, '') // Remove non-digits
+      ? value.replace(/\D/g, '')
       : value;
 
     setFormData((prevData) => ({
@@ -116,7 +230,7 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
     // Required fields validation
     const requiredFields = [
       'noKtp', 'namaLengkap', 'tempatLahir', 'tanggalLahir', 'umur',
-      'jenisKelamin', 'agama', 'status', 'goldar', 'rhesus',
+      'jenisKelamin', 'agama', 'status', 'goldar',
       'pendidikan', 'pekerjaan', 'noTelp', 'wargaNegara',
       'namaOrangtuaWali', 'noTelpWali', 'alamat', 'rt', 'rw',
       'kelurahan', 'kecamatan', 'kabupaten', 'provinsi', 'kodePos',
@@ -137,6 +251,11 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
     // Phone number validation
     if (formData.noTelp && formData.noTelp.length < 10) {
       newErrors.noTelp = 'No. Telp minimal 10 digit';
+    }
+
+    // Add explicit check for gender_id
+    if (!formData.jenisKelamin) {
+      newErrors.jenisKelamin = 'Jenis Kelamin wajib dipilih';
     }
 
     setErrors(newErrors);
@@ -169,9 +288,14 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
         },
         body: JSON.stringify({
           ...formData,
-          // Convert some fields to match backend expectations
-          golongan_darah: formData.goldar,
-          no_asuransi: formData.noAsuransi,
+          gender_id: formData.jenisKelamin,
+          agama_id: formData.agama,
+          status_nikah_id: formData.status,
+          golongan_darah_id: formData.goldar,
+          pendidikan_id: formData.pendidikan,
+          warga_negara_id: formData.wargaNegara,
+          asuransi_id: formData.asuransi,
+          pekerjaan_id: formData.pekerjaan,
           // tanggal_lahir: formattedDate
         })
       });
@@ -199,7 +323,6 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
         agama: '',
         status: '',
         goldar: '',
-        rhesus: '',
         pendidikan: '',
         pekerjaan: '',
         noTelp: '',
@@ -354,8 +477,11 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
                 value={formData.jenisKelamin}
                 onChange={handleChange}
               >
-                <MenuItem value="Laki-laki">Laki-laki</MenuItem>
-                <MenuItem value="Perempuan">Perempuan</MenuItem>
+                {genderOptions.map((option) => (
+                  <MenuItem key={option.gender_id} value={option.gender_id}>
+                    {option.gender_name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>
@@ -369,12 +495,11 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
                 value={formData.agama}
                 onChange={handleChange}
               >
-                <MenuItem value="Islam">Islam</MenuItem>
-                <MenuItem value="Kristen">Kristen</MenuItem>
-                <MenuItem value="Katolik">Katolik</MenuItem>
-                <MenuItem value="Hindu">Hindu</MenuItem>
-                <MenuItem value="Budha">Budha</MenuItem>
-                <MenuItem value="Konghucu">Konghucu</MenuItem>
+                {agamaOptions.map((option) => (
+                  <MenuItem key={option.agama_id} value={option.agama_id}>
+                    {option.agama_name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>
@@ -388,9 +513,11 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
                 value={formData.status}
                 onChange={handleChange}
               >
-                <MenuItem value="Belum Menikah">Belum Menikah</MenuItem>
-                <MenuItem value="Menikah">Menikah</MenuItem>
-                <MenuItem value="Cerai">Cerai</MenuItem>
+                {statusNikahOptions.map((option) => (
+                  <MenuItem key={option.status_nikah_id} value={option.status_nikah_id}>
+                    {option.status_nikah_name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>
@@ -404,25 +531,11 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
                 value={formData.goldar}
                 onChange={handleChange}
               >
-                <MenuItem value="A">A</MenuItem>
-                <MenuItem value="B">B</MenuItem>
-                <MenuItem value="AB">AB</MenuItem>
-                <MenuItem value="O">O</MenuItem>
-              </Select>
-            </FormControl>
-          </div>
-
-          <div className="md:col-span-1">
-            <FormControl fullWidth required error={!!errors.rhesus}>
-              <InputLabel>Rhesus</InputLabel>
-              <Select
-                label="Rhesus"
-                name="rhesus"
-                value={formData.rhesus}
-                onChange={handleChange}
-              >
-                <MenuItem value="+">Positif (+)</MenuItem>
-                <MenuItem value="-">Negatif (-)</MenuItem>
+                {golonganDarahOptions.map((option) => (
+                  <MenuItem key={option.golongan_darah_id} value={option.golongan_darah_id}>
+                    {option.golongan_darah_name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>
@@ -436,28 +549,31 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
                 value={formData.pendidikan}
                 onChange={handleChange}
               >
-                <MenuItem value="SD">SD</MenuItem>
-                <MenuItem value="SMP">SMP</MenuItem>
-                <MenuItem value="SMA/SMK">SMA/SMK</MenuItem>
-                <MenuItem value="D3">D3</MenuItem>
-                <MenuItem value="S1">S1</MenuItem>
-                <MenuItem value="S2">S2</MenuItem>
-                <MenuItem value="S3">S3</MenuItem>
+                {pendidikanOptions.map((option) => (
+                  <MenuItem key={option.pendidikan_id} value={option.pendidikan_id}>
+                    {option.pendidikan_name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>
 
           <div className="md:col-span-1">
-            <TextField
-              label="Pekerjaan"
-              fullWidth
-              required
-              name="pekerjaan"
-              value={formData.pekerjaan}
-              onChange={handleChange}
-              error={!!errors.pekerjaan}
-              helperText={errors.pekerjaan}
-            />
+            <FormControl fullWidth required error={!!errors.pekerjaan}>
+              <InputLabel>Pekerjaan</InputLabel>
+              <Select
+                label="Pekerjaan"
+                name="pekerjaan"
+                value={formData.pekerjaan}
+                onChange={handleChange}
+              >
+                {pekerjaanOptions.map((option) => (
+                  <MenuItem key={option.pekerjaan_id} value={option.pekerjaan_id}>
+                    {option.pekerjaan_name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </div>
 
           <div className="md:col-span-1">
@@ -485,8 +601,11 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
                 value={formData.wargaNegara}
                 onChange={handleChange}
               >
-                <MenuItem value="WNI">WNI</MenuItem>
-                <MenuItem value="WNA">WNA</MenuItem>
+                {wargaNegaraOptions.map((option) => (
+                  <MenuItem key={option.warga_negara_id} value={option.warga_negara_id}>
+                    {option.warga_negara_name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>
@@ -642,11 +761,11 @@ const FormPendaftaran = ({ onClose, onSuccess }) => {
                 value={formData.asuransi}
                 onChange={handleChange}
               >
-                <MenuItem value="BPJS">BPJS</MenuItem>
-                <MenuItem value="Asuransi A">Asuransi A</MenuItem>
-                <MenuItem value="Asuransi B">Asuransi B</MenuItem>
-                <MenuItem value="Asuransi Swasta">Asuransi Swasta</MenuItem>
-                <MenuItem value="Tidak Ada">Tidak Ada</MenuItem>
+                {asuransiOptions.map((option) => (
+                  <MenuItem key={option.asuransi_id} value={option.asuransi_id}>
+                    {option.asuransi_name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </div>

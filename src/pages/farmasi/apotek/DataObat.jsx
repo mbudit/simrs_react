@@ -1,6 +1,6 @@
 import React from 'react';
 import { useState, useRef } from 'react';
-import { BackButton, ButtonDaftar, ButtonTambahObat } from '../../../components/Buttons';
+import { BackButton, ButtonDaftar, ButtonExportPDF, ButtonTambahObat } from '../../../components/Buttons';
 import TableObat from './TableObat';
 import ModalTambahObat from './forms/FormTambahObat';
 import { SnackbarProvider } from 'notistack';
@@ -158,14 +158,8 @@ const DataObat = () => {
                 <h3 className="text-2xl font-semibold">Data Obat</h3>
                 
                 <div className="flex items-center gap-2">
-                    <ButtonDaftar onClick={handleOpen} />
-                    <Button
-                        variant="contained"
-                        onClick={handleExportPDF}
-                        startIcon={<PrintIcon />}
-                    >
-                        Export PDF
-                    </Button>
+                    <ButtonTambahObat onClick={handleOpen} />
+                    <ButtonExportPDF onClick={handleExportPDF} />
                 </div>
             </div>
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>

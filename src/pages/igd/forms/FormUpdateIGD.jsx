@@ -12,8 +12,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Fade from '@mui/material/Fade';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ConfirmDialog from '../../../components/ConfirmDialog';
 
 
 const style = {
@@ -336,7 +338,7 @@ export default function ModalUpdateIGD({ open, handleCloseEditIGD, form = {}, se
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
-                                backgroundColor: '#1e2838',
+                                backgroundColor: '#000000',
                                 color: '#fff',
                                 px: 2,
                                 py: 1.5,
@@ -730,26 +732,14 @@ export default function ModalUpdateIGD({ open, handleCloseEditIGD, form = {}, se
                 </Fade>
             </Modal>
 
-            <Dialog open={openDialog} onClose={handleCancelSubmit}>
-                <DialogTitle>Konfirmasi Pengiriman</DialogTitle>
-                <DialogContent>
-                    <p>Apakah data yang dimasukkan sudah benar?</p>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCancelSubmit} color="error">
-                        Tidak
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            handleConfirmSubmit();
-                            setOpenDialog(false); // Menutup dialog setelah submit
-                        }}
-                        color="primary"
-                    >
-                        Ya
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmDialog
+                open={openDialog}
+                onCancel={handleCancelSubmit}
+                onConfirm={() => {
+                    handleConfirmSubmit();
+                    setOpenDialog(false);
+                }}
+            />
         </Box>
     );
 }

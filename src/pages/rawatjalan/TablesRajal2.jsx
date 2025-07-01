@@ -3,12 +3,15 @@ import { DataGrid } from '@mui/x-data-grid';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import Button from '@mui/material/Button';
-import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Box } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, TextField, Box, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
 import dayjs from 'dayjs';
+import { ButtonEditData, ButtonHapusData, ButtonKonfirmasiData } from '../../components/Buttons';
+import WarningAmberIcon from '@mui/icons-material/WarningAmber';
+import ConfirmDeleteDialog from '../../components/ConfirmDeleteDialog';
 
 const columnsBase = [
     { field: 'tgl_daftar', headerName: 'Tanggal Daftar', headerClassName: 'super-app-theme--header', width: 150 },
@@ -96,33 +99,9 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
             headerClassName: 'super-app-theme--header',
             renderCell: (params) => (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '100%' }}>
-                    <Button
-                        variant="contained"
-                        color="error"
-                        size="small"
-                        onClick={() => handleOpenDialog(params.row.id)}
-                        startIcon={<DeleteIcon />}
-                    >
-                        Hapus
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        size="small"
-                        onClick={() => handleSelect(params.row)}
-                        startIcon={<EditIcon />}
-                    >
-                        Edit
-                    </Button>
-                    <Button
-                        variant="contained"
-                        color="success"
-                        size="small"
-                        onClick={() => handleSelectConfirm(params.row)}
-                        startIcon={<CheckIcon />} // Tambahkan ikon di sini
-                    >
-                        Confirm
-                    </Button>
+                    <ButtonHapusData onClick={() => handleOpenDialog(params.row.id)} />
+                    <ButtonEditData onClick={() => handleSelect(params.row)} />
+                    <ButtonKonfirmasiData onClick={() => handleSelectConfirm(params.row)} />
                 </div>
             )
         }
@@ -188,12 +167,12 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
                     sx={{
                         border: 0,
                         '& .super-app-theme--header': {
-                            backgroundColor: '#1e2838',
+                            backgroundColor: '#000000',
                             fontSize: '16px',
                             fontWeight: 'bold !important',
                         },
                         '& .MuiDataGrid-columnHeaders': {
-                            backgroundColor: '#1e2838',
+                            backgroundColor: '#000000',
                             fontWeight: 'bold !important',
                             fontSize: '16px',
                             color: '#fff',
@@ -215,20 +194,11 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
                 />
             </Paper>
 
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>Konfirmasi Penghapusan</DialogTitle>
-                <DialogContent>
-                    Apakah Anda yakin ingin menghapus data ini?
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} color="primary">
-                        Tidak
-                    </Button>
-                    <Button onClick={handleDelete} color="error">
-                        Ya, Hapus
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmDeleteDialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                onDelete={handleDelete}
+            />
         </>
     );
 });

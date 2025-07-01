@@ -7,6 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
+import ConfirmDialog from '../../../../components/ConfirmDialog';
 
 const style = {
     position: 'absolute',
@@ -188,7 +189,7 @@ export default function ModalTambahPelayananRanap({ open, handleClose, form, set
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
-                                backgroundColor: '#1e2838', // biru MUI default
+                                backgroundColor: '#000000', // biru MUI default
                                 color: '#fff',
                                 px: 2,
                                 py: 1.5,
@@ -330,26 +331,14 @@ export default function ModalTambahPelayananRanap({ open, handleClose, form, set
                 </Fade>
             </Modal>
 
-            <Dialog open={openDialog} onClose={handleCancelSubmit}>
-                <DialogTitle>Konfirmasi Pengiriman</DialogTitle>
-                <DialogContent>
-                    <p>Apakah data yang dimasukkan sudah benar?</p>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCancelSubmit} color="error">
-                        Tidak
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            handleConfirmSubmit();
-                            setOpenDialog(false); // Menutup dialog setelah submit
-                        }}
-                        color="primary"
-                    >
-                        Ya
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmDialog
+                open={openDialog}
+                onCancel={handleCancelSubmit}
+                onConfirm={() => {
+                    handleConfirmSubmit();
+                    setOpenDialog(false);
+                }}
+            />
         </Box>
     );
 };

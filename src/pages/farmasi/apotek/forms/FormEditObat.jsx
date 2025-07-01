@@ -7,6 +7,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs from 'dayjs';
 import { useSnackbar } from 'notistack';
 import axios from 'axios';
+import ConfirmDialog from '../../../../components/ConfirmDialog';
 
 const style = {
     position: 'absolute',
@@ -1083,26 +1084,14 @@ export default function ModalEditObat({ open, handleCloseEdit, form = {}, setFor
                 </Fade>
             </Modal>
 
-            <Dialog open={openDialog} onClose={handleCancelSubmit}>
-                <DialogTitle>Konfirmasi Pengiriman</DialogTitle>
-                <DialogContent>
-                    <p>Apakah data yang dimasukkan sudah benar?</p>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCancelSubmit} color="error">
-                        Tidak
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            handleConfirmSubmit();
-                            setOpenDialog(false); // Menutup dialog setelah submit
-                        }}
-                        color="primary"
-                    >
-                        Ya
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmDialog
+                open={openDialog}
+                onCancel={handleCancelSubmit}
+                onConfirm={() => {
+                    handleConfirmSubmit();
+                    setOpenDialog(false);
+                }}
+            />
         </Box>
     );
 };

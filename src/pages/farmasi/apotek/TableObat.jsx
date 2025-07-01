@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { ButtonEditData, ButtonHapusData } from '../../../components/Buttons';
+import ConfirmDeleteDialog from '../../../components/ConfirmDeleteDialog';
 
 const columnsBase = [
     { field: 'code', headerName: 'Kode Obat', headerClassName: 'super-app-theme--header', width: 150 },
@@ -86,24 +88,8 @@ const TableObat = React.forwardRef(({ handleSelect, refreshTrigger }, ref) => {
             renderCell: (params) => (
                 <>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '100%'  }}>
-                        <Button
-                            variant="contained"
-                            color="error"
-                            size="small"
-                            onClick={() => handleOpenDialog(params.row.id)} // Buka dialog konfirmasi
-                            startIcon={<DeleteIcon />}
-                        >
-                            Hapus
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="small"
-                            onClick={() => handleSelect(params.row)}
-                            startIcon={<EditIcon />} // Tambahkan ikon di sini
-                        >
-                            Edit
-                        </Button>
+                        <ButtonHapusData onClick={() => handleOpenDialog(params.row.id)} />
+                        <ButtonEditData onClick={() => handleSelect(params.row)} />
                     </div>
                 </>
             )
@@ -154,31 +140,11 @@ const TableObat = React.forwardRef(({ handleSelect, refreshTrigger }, ref) => {
             </Paper>
 
             {/* Dialog Konfirmasi */}
-            <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="xs" fullWidth>
-                <DialogTitle>
-                    <Box display="flex" alignItems="center" gap={1}>
-                    <WarningAmberIcon color="warning" />
-                    <Typography variant="h6" fontWeight="bold">
-                        Konfirmasi Penghapusan
-                    </Typography>
-                    </Box>
-                </DialogTitle>
-
-                <DialogContent dividers>
-                    <Typography variant="body1" color="text.secondary">
-                    Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.
-                    </Typography>
-                </DialogContent>
-
-                <DialogActions sx={{ px: 3, pb: 2 }}>
-                    <Button onClick={handleCloseDialog} variant="outlined">
-                        Tidak
-                    </Button>
-                    <Button onClick={handleDelete} variant="contained" color="error">
-                        Ya, Hapus
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmDeleteDialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                onDelete={handleDelete}
+            />
         </>
     );
 });

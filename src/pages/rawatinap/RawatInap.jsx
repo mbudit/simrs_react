@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useRef } from 'react';
 import TableRanap from './TableRanap';
-import { BackButton, ButtonDaftar } from '../../components/Buttons';
+import { BackButton, ButtonDaftar, ButtonExportPDF } from '../../components/Buttons';
 import ModalDaftarRanap from './forms/DaftarPasienRanap';
 import ModalPasienLama2 from '../pasien_lama/ModalPasienLama';
 import dayjs from 'dayjs';
@@ -182,13 +182,7 @@ const RawatInap = () => {
                 
                 <div className="flex items-center gap-2">
                     <ButtonDaftar onClick={handleOpen} />
-                    <Button
-                        variant="contained"
-                        onClick={handleExportPDF}
-                        startIcon={<PrintIcon />}
-                    >
-                        Export PDF
-                    </Button>
+                    <ButtonExportPDF onClick={handleExportPDF} />
                 </div>
             </div>
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>

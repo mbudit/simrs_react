@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState, useRef } from 'react';
 import TableIGD from './TableIGD';
-import { BackButton, ButtonDaftar } from '../../components/Buttons';
+import { BackButton, ButtonDaftar, ButtonExportPDF } from '../../components/Buttons';
 import ModalDaftarIGD from './forms/DaftarIGD';
 import ModalPasienLama2 from '../pasien_lama/ModalPasienLama';
 import dayjs from 'dayjs';
@@ -216,13 +216,7 @@ const IGD = () => {
                 
                 <div className="flex items-center gap-2">
                     <ButtonDaftar onClick={handleOpen} />
-                    <Button
-                        variant="contained"
-                        onClick={handleExportPDF}
-                        startIcon={<PrintIcon />}
-                    >
-                        Export PDF
-                    </Button>
+                    <ButtonExportPDF onClick={handleExportPDF} />
                 </div>
             </div>
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>

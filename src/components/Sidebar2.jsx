@@ -40,14 +40,14 @@ const SubMenuWithTooltip = ({ label, icon, collapsed, open, onToggle, children }
                     onClick={onToggle} // toggle saat klik
                     rootStyles={{
                         [`& > .${menuClasses.button}`]: {
-                            backgroundColor: '#1e2939',
+                            backgroundColor: '#B6B09F',
                             color: '#fff',
                             '&:hover': {
                                 backgroundColor: '#112d4e',
                             },
                         },
                         [`.${menuClasses.subMenuContent}`]: {
-                            backgroundColor: '#1e2939',
+                            backgroundColor: '#B6B09F',
                             minWidth: '280px',
                             whiteSpace: 'nowrap',
                             overflow: 'visible',
@@ -58,7 +58,7 @@ const SubMenuWithTooltip = ({ label, icon, collapsed, open, onToggle, children }
                             display: open ? 'block' : 'none',
                         },
                         [`& .${menuClasses.menuItem}`]: {
-                            backgroundColor: '#1e2939',
+                            backgroundColor: '#B6B09F',
                             color: '#fff',
                             '&:hover': {
                                 backgroundColor: '#112d4e',
@@ -103,7 +103,7 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
             rootStyles={{
                 '.ps-sidebar-container': {
                     width: collapsed ? '80px' : '270px',
-                    backgroundColor: '#1e2939',
+                    backgroundColor: '#B6B09F',
                     color: '#fff',
                     height: '100vh',
                     transition: 'width 0.3s',
@@ -118,7 +118,7 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     button: {
                         color: '#fff',
                         '&:hover': {
-                            backgroundColor: '#112d4e',
+                            backgroundColor: '#000000',
                             color: '#fff',
                         },
                     },

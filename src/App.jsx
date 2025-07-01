@@ -111,7 +111,7 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
 
             <div className={`pt-16 transition-all duration-300 ml-16 ${sidebarCollapsed ? "ml-16" : "ml-[250px]"
               }`}>
-              <main className="h-[calc(100vh-4rem)] overflow-y-auto p-6 bg-blue-200">
+              <main className="h-[calc(100vh-4rem)] overflow-y-auto p-6 bg-[#EAE4D5]">
                 <Routes>
                   <Route path="/" element={<Navigate to="/home" />} />
                   <Route path="/home" element={<PrivateRoute element={<Home />} />} />

@@ -36,7 +36,7 @@ export default function ModalPasienLama2({ open, handleClose, setForm, handleOpe
                             display: 'flex',
                             justifyContent: 'space-between',
                             alignItems: 'center',
-                            backgroundColor: '#1e2838',
+                            backgroundColor: '#000000',
                             color: '#fff',
                             px: 2,
                             py: 1.5,

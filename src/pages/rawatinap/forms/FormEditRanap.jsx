@@ -14,6 +14,7 @@ import axios from 'axios';
 import dayjs from 'dayjs';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 import { useSnackbar } from 'notistack';
+import ConfirmDialog from '../../../components/ConfirmDialog';
 
 
 const style = {
@@ -298,7 +299,7 @@ export default function ModalEditRanap({ open, handleCloseEdit, form = {}, setFo
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
-                                backgroundColor: '#1e2838',
+                                backgroundColor: '#000000',
                                 color: '#fff',
                                 px: 2,
                                 py: 1.5,
@@ -682,26 +683,14 @@ export default function ModalEditRanap({ open, handleCloseEdit, form = {}, setFo
                 </Fade>
             </Modal>
 
-            <Dialog open={openDialog} onClose={handleCancelSubmit}>
-                <DialogTitle>Konfirmasi Pengiriman</DialogTitle>
-                <DialogContent>
-                    <p>Apakah data yang dimasukkan sudah benar?</p>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCancelSubmit} color="error">
-                        Tidak
-                    </Button>
-                    <Button
-                        onClick={() => {
-                            handleConfirmSubmit();
-                            setOpenDialog(false); // Menutup dialog setelah submit
-                        }}
-                        color="primary"
-                    >
-                        Ya
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmDialog
+                open={openDialog}
+                onCancel={handleCancelSubmit}
+                onConfirm={() => {
+                    handleConfirmSubmit();
+                    setOpenDialog(false);
+                }}
+            />
         </Box>
     );
 }

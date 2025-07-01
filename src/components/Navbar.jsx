@@ -94,7 +94,7 @@ const Navbar = ({ setIsAuthenticated }) => {
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   return (
-    <nav className="bg-gray-800 text-white w-full relative">
+    <nav className="bg-[#B6B09F] text-white w-full relative">
       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
         <a href="#">
           <img

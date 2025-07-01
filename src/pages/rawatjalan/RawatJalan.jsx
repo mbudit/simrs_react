@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { BackButton, ButtonDaftar } from '../../components/Buttons';
+import { BackButton, ButtonDaftar, ButtonExportPDF } from '../../components/Buttons';
 import TableIRJ3 from './TablesRajal2';
 import ModalRajal2 from './forms/DaftarRawatJalan2';
 import dayjs from 'dayjs';
@@ -214,13 +214,7 @@ const RawatJalan = () => {
                 
                 <div className="flex items-center gap-2">
                     <ButtonDaftar onClick={handleOpen} />
-                    <Button
-                        variant="contained"
-                        onClick={handleExportPDF}
-                        startIcon={<PrintIcon />}
-                    >
-                        Export PDF
-                    </Button>
+                    <ButtonExportPDF onClick={handleExportPDF} />
                 </div>
             </div>
 

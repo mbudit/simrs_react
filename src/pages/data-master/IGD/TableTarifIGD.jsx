@@ -8,6 +8,8 @@ import Button from '@mui/material/Button';
 import axios from 'axios';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import { ButtonEditData, ButtonHapusData } from '../../../components/Buttons';
+import ConfirmDeleteDialog from '../../../components/ConfirmDeleteDialog';
 
 const columnsBase = [
     { field: 'jenis_layanan', headerName: 'Jenis Layanan', headerClassName: 'super-app-theme--header', flex: 1 },
@@ -83,24 +85,8 @@ export default function TableTarifIGD({ handleSelect, refreshTrigger }) {
             renderCell: (params) => (
                 <>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', height: '100%'  }}>
-                        <Button
-                            variant="contained"
-                            color="error"
-                            size="small"
-                            onClick={() => handleOpenDialog(params.row.id)} // Buka dialog konfirmasi
-                            startIcon={<DeleteIcon />}
-                        >
-                            Hapus
-                        </Button>
-                        <Button
-                            variant="contained"
-                            color="primary"
-                            size="small"
-                            onClick={() => handleSelect(params.row)}
-                            startIcon={<EditIcon />} // Tambahkan ikon di sini
-                        >
-                            Edit
-                        </Button>
+                        <ButtonHapusData onClick={() => handleOpenDialog(params.row.id)} />
+                        <ButtonEditData onClick={() => handleSelect(params.row)} />
                     </div>
                 </>
             )
@@ -123,12 +109,12 @@ export default function TableTarifIGD({ handleSelect, refreshTrigger }) {
                     sx={{ 
                             border: 0,
                             '& .super-app-theme--header': {
-                                backgroundColor: '#1e2838',
+                                backgroundColor: '#000000',
                                 fontSize: '16px',
                                 fontWeight: 'bold !important',
                             }, 
                             '& .MuiDataGrid-columnHeaders': {
-                                backgroundColor: '#1e2838',
+                                backgroundColor: '#000000',
                                 fontWeight: 'bold !important', // Mengubah gaya font header
                                 fontSize: '16px', // Ukuran font header lebih besar
                                 color: '#fff', // Warna font header
@@ -151,20 +137,11 @@ export default function TableTarifIGD({ handleSelect, refreshTrigger }) {
             </Paper>
 
             {/* Dialog Konfirmasi */}
-            <Dialog open={openDialog} onClose={handleCloseDialog}>
-                <DialogTitle>Konfirmasi Penghapusan</DialogTitle>
-                <DialogContent>
-                    Apakah Anda yakin ingin menghapus data ini?
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseDialog} color="primary">
-                        Tidak
-                    </Button>
-                    <Button onClick={handleDelete} color="error">
-                        Ya, Hapus
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmDeleteDialog
+                open={openDialog}
+                onClose={handleCloseDialog}
+                onDelete={handleDelete}
+            />
         </>
     );
 }

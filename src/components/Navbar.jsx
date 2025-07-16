@@ -94,11 +94,11 @@ const Navbar = ({ setIsAuthenticated }) => {
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   return (
-    <nav className="bg-[#B6B09F] text-white w-full relative">
+    <nav className="bg-[#4682A9] text-white w-full relative">
       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
         <a href="#">
           <img
-            src="/src/assets/logo.png" // replace with the correct path to your logo
+            src="/src/assets/image (1).png" // replace with the correct path to your logo
             alt="SIMRS Logo"
             className="h-10 object-contain" // adjust height as needed
           />

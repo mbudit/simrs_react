@@ -169,12 +169,12 @@ const TableRanap = React.forwardRef(({ handleSelect, refreshTrigger }, ref) => {
                     sx={{ 
                             border: 0,
                             '& .super-app-theme--header': {
-                                backgroundColor: '#000000',
+                                backgroundColor: '#4682A9',
                                 fontSize: '16px',
                                 fontWeight: 'bold !important',
                             }, 
                             '& .MuiDataGrid-columnHeaders': {
-                                backgroundColor: '#000000',
+                                backgroundColor: '#4682A9',
                                 fontWeight: 'bold !important', // Mengubah gaya font header
                                 fontSize: '16px', // Ukuran font header lebih besar
                                 color: '#fff', // Warna font header

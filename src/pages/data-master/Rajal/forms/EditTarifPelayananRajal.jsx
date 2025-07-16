@@ -187,7 +187,7 @@ export default function ModalEditPelayananRajal({ open, handleCloseEdit, form, s
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
-                                backgroundColor: '#000000', // biru MUI default
+                                backgroundColor: '#4682A9', // biru MUI default
                                 color: '#fff',
                                 px: 2,
                                 py: 1.5,

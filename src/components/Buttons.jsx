@@ -7,6 +7,7 @@ import PrintIcon from '@mui/icons-material/Print';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CheckIcon from '@mui/icons-material/Check';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 export const BackButton = () => {
     const navigate = useNavigate();
@@ -21,10 +22,11 @@ export const BackButton = () => {
             startIcon={<ArrowBackIcon />}
             onClick={handleBack}
             sx={{
-                backgroundColor: '#000000',
+                backgroundColor: '#4682A9',
                 color: '#fff',
+                fontWeight: 'bold',
                 '&:hover': {
-                    backgroundColor: '#222222',
+                    backgroundColor: '#000000',
                 },
             }}
         >
@@ -39,10 +41,11 @@ export const ButtonDaftar = ({ onClick }) => {
             variant="contained" 
             onClick={onClick}
             sx={{
-                backgroundColor: '#948979',
+                backgroundColor: '#41aee9',
                 color: '#fff',
+                
                 '&:hover': {
-                    backgroundColor: '#7c715f',
+                    backgroundColor: '#0D1F22',
                 },
             }}
         >
@@ -57,7 +60,7 @@ export const ButtonTambahPelayanan = ({ onClick }) => {
             variant="contained" 
             onClick={onClick}
             sx={{
-                backgroundColor: '#948979',
+                backgroundColor: '#2571a3',
                 color: '#fff',
                 '&:hover': {
                     backgroundColor: '#7c715f',
@@ -75,7 +78,7 @@ export const ButtonTambahObat = ({ onClick }) => {
             variant="contained" 
             onClick={onClick}
             sx={{
-                backgroundColor: '#948979',
+                backgroundColor: '#41aee9',
                 color: '#fff',
                 '&:hover': {
                     backgroundColor: '#7c715f',
@@ -129,8 +132,9 @@ export const ButtonPasienLama = ({ onClick }) => {
             sx={{ 
                     mt: 1, 
                     mr: 1,
-                    backgroundColor: '#948979',
+                    backgroundColor: '#2571a3',
                     color: '#fff',
+                    
                     '&:hover': {
                         backgroundColor: '#7c715f',
                     }, 
@@ -148,10 +152,11 @@ export const ButtonExportPDF = ({ onClick }) => {
             onClick={onClick}
             startIcon={<PrintIcon />}
             sx={{
-                backgroundColor: '#AF8260',
+                backgroundColor: '#2571a3',
                 color: '#fff',
+                
                 '&:hover': {
-                    backgroundColor: '#8C654F',
+                    backgroundColor: '#0D1F22',
                 },
             }}
         >
@@ -195,7 +200,7 @@ export const ButtonKonfirmasiData = ({ onClick }) => {
             color="success"
             size="small"
             onClick={onClick}
-            startIcon={<CheckIcon />}
+            startIcon={<CheckCircleIcon />}
         >
             Confirm
         </Button>

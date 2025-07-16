@@ -40,15 +40,15 @@ const SubMenuWithTooltip = ({ label, icon, collapsed, open, onToggle, children }
                     onClick={onToggle} // toggle saat klik
                     rootStyles={{
                         [`& > .${menuClasses.button}`]: {
-                            backgroundColor: '#B6B09F',
+                            backgroundColor: '#4682A9',
                             color: '#fff',
                             '&:hover': {
                                 backgroundColor: '#112d4e',
                             },
                         },
                         [`.${menuClasses.subMenuContent}`]: {
-                            backgroundColor: '#B6B09F',
-                            minWidth: '280px',
+                            backgroundColor: '#4682A9',
+                            minWidth: '270px',
                             whiteSpace: 'nowrap',
                             overflow: 'visible',
                             zIndex: 9999,
@@ -58,7 +58,7 @@ const SubMenuWithTooltip = ({ label, icon, collapsed, open, onToggle, children }
                             display: open ? 'block' : 'none',
                         },
                         [`& .${menuClasses.menuItem}`]: {
-                            backgroundColor: '#B6B09F',
+                            backgroundColor: '#4682A9',
                             color: '#fff',
                             '&:hover': {
                                 backgroundColor: '#112d4e',
@@ -78,6 +78,7 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
     // State untuk open/close submenu
     const [openSubMenus, setOpenSubMenus] = useState({
         rawatInap: false,
+        dataMaster: false,
     });
 
     const toggleSidebar = () => {
@@ -86,6 +87,7 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
         // Reset semua submenu tutup ketika toggle sidebar
         setOpenSubMenus({
             rawatInap: false,
+            dataMaster: false,
         });
     };
 
@@ -97,13 +99,20 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
         }));
     };
 
+    const toggleDataMaster = () => {
+        setOpenSubMenus(prev => ({
+            ...prev,
+            dataMaster: !prev.dataMaster,
+        }));
+    };
+
     return (
         <Sidebar
             collapsed={collapsed}
             rootStyles={{
                 '.ps-sidebar-container': {
                     width: collapsed ? '80px' : '270px',
-                    backgroundColor: '#B6B09F',
+                    backgroundColor: '#4682A9',
                     color: '#fff',
                     height: '100vh',
                     transition: 'width 0.3s',
@@ -139,25 +148,25 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     label="Data Master"
                     icon={<ListAltIcon />}
                     collapsed={collapsed}
-                    open={openSubMenus.rawatInap}
-                    onToggle={toggleRawatInap}
+                    open={openSubMenus.dataMaster}
+                    onToggle={toggleDataMaster}
                 >
                     <MenuItem
-                        style={{ paddingLeft: '40px' }}
+                        style={{ paddingLeft: '30px' }}
                         component={<Link to="/data_master/tarif-pelayanan-rajal" />}
                         icon={<PointOfSaleIcon />}
                     >
                         Tarif Pelayanan Rajal
                     </MenuItem>
                     <MenuItem
-                        style={{ paddingLeft: '40px' }}
+                        style={{ paddingLeft: '30px' }}
                         component={<Link to="/data_master/tarif-pelayanan-ranap" />}
                         icon={<PointOfSaleIcon />}
                     >
                         Tarif Pelayanan Ranap
                     </MenuItem>
                     <MenuItem
-                        style={{ paddingLeft: '40px' }}
+                        style={{ paddingLeft: '30px' }}
                         component={<Link to="/data_master/tarif-pelayanan-igd" />}
                         icon={<PointOfSaleIcon />}
                     >
@@ -181,14 +190,14 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     onToggle={toggleRawatInap}
                 >
                     <MenuItem
-                        style={{ paddingLeft: '40px' }}
+                        style={{ paddingLeft: '30px' }}
                         component={<Link to="/rawatinap/terima_pasien" />}
                         icon={<FaBed />}
                     >
                         Terima Pasien Ranap
                     </MenuItem>
                     <MenuItem
-                        style={{ paddingLeft: '40px' }}
+                        style={{ paddingLeft: '30px' }}
                         component={<Link to="/rawatinap/data_pasien_ranap" />}
                         icon={<FaUserInjured />}
                     >

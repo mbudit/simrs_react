@@ -112,12 +112,12 @@ const TableObat = React.forwardRef(({ handleSelect, refreshTrigger }, ref) => {
                     sx={{ 
                             border: 0,
                             '& .super-app-theme--header': {
-                                backgroundColor: '#1e2838',
+                                backgroundColor: '#2571a3',
                                 fontSize: '16px',
                                 fontWeight: 'bold !important',
                             }, 
                             '& .MuiDataGrid-columnHeaders': {
-                                backgroundColor: '#1e2838',
+                                backgroundColor: '#2571a3',
                                 fontWeight: 'bold !important', // Mengubah gaya font header
                                 fontSize: '16px', // Ukuran font header lebih besar
                                 color: '#fff', // Warna font header

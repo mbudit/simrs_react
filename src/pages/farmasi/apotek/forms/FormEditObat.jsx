@@ -561,7 +561,7 @@ export default function ModalEditObat({ open, handleCloseEdit, form = {}, setFor
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
-                                backgroundColor: '#1e2838', // biru MUI default
+                                backgroundColor: '#2571a3', // biru MUI default
                                 color: '#fff',
                                 px: 2,
                                 py: 1.5,

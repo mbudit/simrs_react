@@ -121,7 +121,7 @@ const TableIGD = React.forwardRef(({ handleSelect, handleSelectConfirm, refreshT
                     p: 2,
                     backgroundColor: 'background.paper',
                     borderRadius: 2,
-                    boxShadow: 1,
+                    boxShadow: 5,
                 }}
             >
                 <TextField
@@ -161,6 +161,8 @@ const TableIGD = React.forwardRef(({ handleSelect, handleSelectConfirm, refreshT
             <Paper sx={{ 
                     height: '100%', 
                     width: '100%',
+                    borderRadius: 3, // <-- tambahkan ini
+                    overflow: 'hidden', // <-- agar sudut DataGrid ikut rounded
             }}>
                 <DataGrid
                     rows={getFilteredRows()}
@@ -172,12 +174,12 @@ const TableIGD = React.forwardRef(({ handleSelect, handleSelectConfirm, refreshT
                     sx={{ 
                             border: 0,
                             '& .super-app-theme--header': {
-                                backgroundColor: '#000000',
+                                backgroundColor: '#4682A9',
                                 fontSize: '16px',
                                 fontWeight: 'bold !important',
                             }, 
                             '& .MuiDataGrid-columnHeaders': {
-                                backgroundColor: '#000000',
+                                backgroundColor: '#4682A9',
                                 fontWeight: 'bold !important', // Mengubah gaya font header
                                 fontSize: '16px', // Ukuran font header lebih besar
                                 color: '#fff', // Warna font header

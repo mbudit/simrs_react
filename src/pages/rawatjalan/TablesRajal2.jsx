@@ -167,12 +167,12 @@ const TableIRJ3 = React.forwardRef(({ handleSelect, handleSelectConfirm, refresh
                     sx={{
                         border: 0,
                         '& .super-app-theme--header': {
-                            backgroundColor: '#000000',
+                            backgroundColor: '#4682A9',
                             fontSize: '16px',
                             fontWeight: 'bold !important',
                         },
                         '& .MuiDataGrid-columnHeaders': {
-                            backgroundColor: '#000000',
+                            backgroundColor: '#4682A9',
                             fontWeight: 'bold !important',
                             fontSize: '16px',
                             color: '#fff',

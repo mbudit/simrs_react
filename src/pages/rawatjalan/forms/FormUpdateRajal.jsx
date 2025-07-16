@@ -340,7 +340,7 @@ export default function ModalUpdateRajal({ open, handleCloseEditRajal, form = {}
                                 display: 'flex',
                                 justifyContent: 'space-between',
                                 alignItems: 'center',
-                                backgroundColor: '#000000',
+                                backgroundColor: '#4682A9',
                                 color: '#fff',
                                 px: 2,
                                 py: 1.5,

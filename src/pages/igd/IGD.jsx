@@ -212,7 +212,9 @@ const IGD = () => {
         <div>
             <BackButton />
             <div className="flex items-center justify-between mb-3 mt-5">
-                <h3 className="text-2xl font-semibold">Data Pasien IGD</h3>
+                <h3 className="text-2xl font-semibold" style={{ color: '#0D1F22' }}>
+                    Data Pasien IGD
+                </h3>
                 
                 <div className="flex items-center gap-2">
                     <ButtonDaftar onClick={handleOpen} />

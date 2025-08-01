@@ -21,9 +21,10 @@ import RME from "./pages/rme/RME";
 import TerimaPasien from "./pages/terima_pasien/TerimaPasien";
 import TerimaPasien2 from "./pages/terima_pasien/TerimaPasien2";
 import RawatInap from "./pages/rawatinap/RawatInap";
-import TarifPelayananRajal from "./pages/data-master/Rajal/TarifPelayananRajal";
-import TarifPelayananRanap from "./pages/data-master/Ranap/TarifPelayananRanap";
-import TarifPelayananIgd from "./pages/data-master/IGD/TarifPelayananIgd";
+import TarifPelayananRajal from "./pages/data-master/rajal/TarifPelayananRajal";
+import TarifPelayananRanap from "./pages/data-master/ranap/TarifPelayananRanap";
+import TarifPelayananIgd from "./pages/data-master/igd/TarifPelayananIgd";
+import ListLokasi from "./pages/data-master/lokasi/ListLokasi";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -118,6 +119,7 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
                   <Route path="/data_master/tarif-pelayanan-rajal" element={<PrivateRoute element={<TarifPelayananRajal />} />} />
                   <Route path="/data_master/tarif-pelayanan-ranap" element={<PrivateRoute element={<TarifPelayananRanap />} />} />
                   <Route path="/data_master/tarif-pelayanan-igd" element={<PrivateRoute element={<TarifPelayananIgd />} />} />
+                  <Route path="/data_master/lokasi" element={<PrivateRoute element={<ListLokasi />} />} />
                   <Route path="/daftarpasien" element={<PrivateRoute element={<DaftarPasien />} />} />
                   <Route path="/antrian" element={<PrivateRoute element={<Antrian />} />} />
                   <Route path="/rawatjalan" element={<PrivateRoute element={<RawatJalan />} />} />

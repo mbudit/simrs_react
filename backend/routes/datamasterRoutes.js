@@ -20,4 +20,10 @@ router.get("/api/getLayananIGD", datamasterController.getLayananIGD);
 router.delete("/api/deleteLayananIGD/:id", datamasterController.deleteLayananIGD);
 router.put("/api/updateLayananIGD/:id", datamasterController.updateLayananIGD);
 
+////// Controller for Lokasi //////
+router.post("/api/createLokasi", datamasterController.createLokasi);
+router.get("/api/getLokasi", datamasterController.getLokasi);
+router.delete("/api/deleteLokasi/:id", datamasterController.deleteLokasi);
+router.put("/api/updateLokasi/:id", datamasterController.updateLokasi);
+
 module.exports = router;

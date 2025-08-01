@@ -172,6 +172,13 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     >
                         Tarif Pelayanan IGD
                     </MenuItem>
+                    <MenuItem
+                        style={{ paddingLeft: '30px' }}
+                        component={<Link to="/data_master/lokasi" />}
+                        icon={<PointOfSaleIcon />}
+                    >
+                        Lokasi
+                    </MenuItem>
                 </SubMenuWithTooltip>
 
                 <MenuItemWithAutoTooltip label="RME" icon={<FaNotesMedical />} to="/rme" collapsed={collapsed} />

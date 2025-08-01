@@ -98,7 +98,7 @@ const Navbar = ({ setIsAuthenticated }) => {
       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
         <a href="#">
           <img
-            src="/src/assets/image (1).png" // replace with the correct path to your logo
+            src="/src/assets/logo2.png" // replace with the correct path to your logo
             alt="SIMRS Logo"
             className="h-10 object-contain" // adjust height as needed
           />

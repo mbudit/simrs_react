@@ -24,6 +24,7 @@ import RawatInap from "./pages/rawatinap/RawatInap";
 import TarifPelayananRajal from "./pages/data-master/Rajal/TarifPelayananRajal";
 import TarifPelayananRanap from "./pages/data-master/Ranap/TarifPelayananRanap";
 import TarifPelayananIgd from "./pages/data-master/IGD/TarifPelayananIgd";
+import DataDokter from "./pages/data-master/Dokter/data_dokter";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -96,28 +97,29 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
           <div className="min-h-screen bg-gray-100">
 
             {/* NAVBAR */}
-            <div className="fixed top-0 left-0 right-0 z-50">
+            <div className="fixed top-0 left-20 right-0 z-50">
               <ThemeProvider theme={Theme}>
-                <Navbar setIsAuthenticated={setIsAuthenticated} />
+                <Navbar setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} />
               </ThemeProvider>
             </div>
 
             {/* SIDEBAR */}
-            <div className="fixed top-16 left-0 h-[calc(100vh-4rem)] z-40">
+            <div className="fixed top-0 left-0 h-[calc(100vh-4rem)] z-40">
               <ThemeProvider theme={Theme}>
                 <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
               </ThemeProvider>
             </div>
 
-            <div className={`pt-16 transition-all duration-300 ml-16 ${sidebarCollapsed ? "ml-16" : "ml-[250px]"
+            <div className={`pt-10 transition-all duration-300 ml-20 ${sidebarCollapsed ? "ml-20" : "ml-[240px]"
               }`}>
-              <main className="h-[calc(100vh-4rem)] overflow-y-auto p-6 bg-[#c0dceb]">
+              <main className="h-[calc(100vh-2.5rem)] overflow-y-auto p-6 bg-[#c0dceb]">
                 <Routes>
                   <Route path="/" element={<Navigate to="/home" />} />
                   <Route path="/home" element={<PrivateRoute element={<Home />} />} />
                   <Route path="/data_master/tarif-pelayanan-rajal" element={<PrivateRoute element={<TarifPelayananRajal />} />} />
                   <Route path="/data_master/tarif-pelayanan-ranap" element={<PrivateRoute element={<TarifPelayananRanap />} />} />
                   <Route path="/data_master/tarif-pelayanan-igd" element={<PrivateRoute element={<TarifPelayananIgd />} />} />
+                  <Route path="/data_master/data-dokter" element={<PrivateRoute element={<DataDokter />} />} />
                   <Route path="/daftarpasien" element={<PrivateRoute element={<DaftarPasien />} />} />
                   <Route path="/antrian" element={<PrivateRoute element={<Antrian />} />} />
                   <Route path="/rawatjalan" element={<PrivateRoute element={<RawatJalan />} />} />

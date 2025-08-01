@@ -48,7 +48,7 @@ const SubMenuWithTooltip = ({ label, icon, collapsed, open, onToggle, children }
                         },
                         [`.${menuClasses.subMenuContent}`]: {
                             backgroundColor: '#4682A9',
-                            minWidth: '270px',
+                            minWidth: '240px',
                             whiteSpace: 'nowrap',
                             overflow: 'visible',
                             zIndex: 9999,
@@ -111,10 +111,10 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
             collapsed={collapsed}
             rootStyles={{
                 '.ps-sidebar-container': {
-                    width: collapsed ? '80px' : '270px',
+                    width: collapsed ? '80px' : '250px',
                     backgroundColor: '#4682A9',
                     color: '#fff',
-                    height: '100vh',
+                    height: '100vh', // <-- Adjust this value as needed
                     transition: 'width 0.3s',
                     overflow: 'visible',
                     position: 'relative',
@@ -122,24 +122,35 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                 },
             }}
         >
+
             <Menu
                 menuItemStyles={{
                     button: {
                         color: '#fff',
                         '&:hover': {
-                            backgroundColor: '#000000',
+                            backgroundColor: '#3e7396ff',
                             color: '#fff',
                         },
                     },
                     icon: {
                         color: '#fff',
-                        fontSize: '24px',
+                        fontSize: '22px', // <-- Increase or decrease icon size here
                     },
                     label: {
-                        fontSize: '18px',
+                        fontSize: '15px', // <-- Increase or decrease text size here
                     },
                 }}
             >
+                <MenuItem>
+                    <a href="#">
+                        <img
+                            src="/src/assets/image (1).png"
+                            alt="SIMRS Logo"
+                            className="h-8 object-contain" // adjust height as needed (was h-10)
+                        />
+                    </a>
+                </MenuItem>
+
                 <MenuItem icon={<FaBars />} onClick={toggleSidebar} />
 
                 <MenuItemWithAutoTooltip label="Home" icon={<FaHome />} to="/" collapsed={collapsed} />
@@ -171,6 +182,13 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                         icon={<PointOfSaleIcon />}
                     >
                         Tarif Pelayanan IGD
+                    </MenuItem>
+                    <MenuItem
+                        style={{ paddingLeft: '30px' }}
+                        component={<Link to="/data_master/data-dokter" />}
+                        icon={<PointOfSaleIcon />}
+                    >
+                        Data Dokter
                     </MenuItem>
                 </SubMenuWithTooltip>
 

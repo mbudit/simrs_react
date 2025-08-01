@@ -8,7 +8,7 @@ import UserSettingsModal2 from "./UserSettingsModal2";
 import { SnackbarProvider } from "notistack";
 
 
-const Navbar = ({ setIsAuthenticated }) => {
+const Navbar = ({ setIsAuthenticated, isAuthenticated }) => {
   const [isOpen, setIsopen] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [userEmail, setUserEmail] = useState(null);
@@ -59,7 +59,7 @@ const Navbar = ({ setIsAuthenticated }) => {
       }
     }
     fetchAuth();
-  }, []);
+  }, [isAuthenticated]); // <-- add isAuthenticated as dependency
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -94,28 +94,22 @@ const Navbar = ({ setIsAuthenticated }) => {
   ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   return (
-    <nav className="bg-[#4682A9] text-white w-full relative">
+    <nav className="bg-[#182935ff] text-white w-full relative" style={{ height: '3.1rem' }}>
       <div className="absolute left-4 top-1/2 transform -translate-y-1/2">
-        <a href="#">
-          <img
-            src="/src/assets/image (1).png" // replace with the correct path to your logo
-            alt="SIMRS Logo"
-            className="h-10 object-contain" // adjust height as needed
-          />
-        </a>
+       {/*  */}
       </div>
 
       <div className="absolute right-6 top-1/2 transform -translate-y-1/2 hidden md:flex gap-4 items-center">
         {!userEmail ? (
           <>
             <button
-              className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-md"
+              className="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded text-sm" // <-- resized
               onClick={handleSignIn}
             >
               Sign In
             </button>
             <button
-              className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-md"
+              className="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded text-sm" // <-- resized
               onClick={handleSignUp}
             >
               Sign Up
@@ -156,10 +150,10 @@ const Navbar = ({ setIsAuthenticated }) => {
         )}
       </div>
 
-      <div className="flex justify-center items-center h-16">
+      <div className="flex justify-center items-center h-12">
         <div className="hidden md:flex gap-4">
-          <a href="#">Home</a>
-          <a href="#">Settings</a>
+          {/* <a href="#">Home</a>
+          <a href="#">Settings</a> */}
         </div>
 
         <div className="md:hidden z-30 ml-auto pr-4" onClick={toggleMenu}>
@@ -169,22 +163,22 @@ const Navbar = ({ setIsAuthenticated }) => {
 
       {isOpen && (
         <div className="bg-gray-800 fixed z-20 top-0 left-0 w-screen min-h-screen flex flex-col items-center justify-center gap-10">
-          <a className="text-2xl font-bold" href="#">
+          {/* <a className="text-2xl font-bold" href="#">
             Home
           </a>
           <a className="text-2xl font-bold" href="#">
             Settings
-          </a>
+          </a> */}
           {!userEmail ? (
             <>
               <button
-                className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-md"
+                className="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded text-sm" // <-- resized
                 onClick={handleSignIn}
               >
                 Sign In
               </button>
               <button
-                className="bg-blue-500 hover:bg-blue-600 px-6 py-2 rounded-md"
+                className="bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded text-sm" // <-- resized
                 onClick={handleSignUp}
               >
                 Sign Up
@@ -192,7 +186,7 @@ const Navbar = ({ setIsAuthenticated }) => {
             </>
           ) : (
             <button
-              className="bg-red-500 hover:bg-red-600 px-6 py-2 rounded-md"
+              className="bg-red-500 hover:bg-red-600 px-3 py-1 rounded text-sm" // <-- resized
               onClick={handleLogout}
             >
               Logout

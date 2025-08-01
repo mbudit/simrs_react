@@ -15,19 +15,13 @@ const obatRoutes = require("./routes/obatRoutes");
 const datamasterRoutes = require("./routes/datamasterRoutes");
 
 const app = express();
-const allowedOrigins = [process.env.FRONTEND_ORIGIN, "http://localhost:5173"];
+const FRONTEND_ORIGIN = [process.env.FRONTEND_ORIGIN, "http://localhost:5173"];
 
 // Middlewares
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
-  next();
-});
+app.use(cors({
+  origin: FRONTEND_ORIGIN,
+  credentials: true
+}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 

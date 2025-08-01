@@ -58,14 +58,14 @@ exports.login = (req, res) => {
         res
             .cookie("token", token, {
                 httpOnly: true,
-                secure: false,
-                sameSite: "Lax",
+                secure: false, // set to true if using HTTPS
+                sameSite: "Lax", // use "None" if frontend and backend are on different domains and using HTTPS
                 maxAge: 60 * 60 * 1000
             })
             .cookie("refreshToken", refreshToken, {
                 httpOnly: true,
-                secure: false,
-                sameSite: "Lax",
+                secure: false, // set to true if using HTTPS
+                sameSite: "Lax", // use "None" if frontend and backend are on different domains and using HTTPS
                 maxAge: 7 * 24 * 60 * 60 * 1000
             })
             .status(200)

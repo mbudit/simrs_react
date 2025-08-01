@@ -190,6 +190,13 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     >
                         Data Dokter
                     </MenuItem>
+                    <MenuItem
+                        style={{ paddingLeft: '30px' }}
+                        component={<Link to="/data_master/lokasi" />}
+                        icon={<PointOfSaleIcon />}
+                    >
+                        Lokasi
+                    </MenuItem>
                 </SubMenuWithTooltip>
 
                 <MenuItemWithAutoTooltip label="RME" icon={<FaNotesMedical />} to="/rme" collapsed={collapsed} />

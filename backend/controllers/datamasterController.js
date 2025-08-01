@@ -503,3 +503,116 @@ exports.updateLayananIGD = (req, res) => {
         }
     );
 };
+
+////// Controller for Lokasi //////
+exports.createLokasi = (req, res) => {
+    const formData = req.body;
+
+    const sql = `INSERT INTO lokasi (
+        kode_lokasi, nama_lokasi, kode_bpjs, latitude, longitude
+    ) VALUES (?, ?, ?, ?, ?)`;
+
+    const values = [
+        formData.kode_lokasi,
+        formData.nama_lokasi,
+        formData.kode_bpjs,
+        formData.latitude,
+        formData.longitude,
+    ];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+        console.error("DB error:", err);
+        return res.status(500).json({ error: "Database error" });
+        }
+        res.status(201).json({
+            message: "Lokasi berhasil didaftarkan",
+            id: result.insertId,
+        });
+    });
+};
+
+exports.getLokasi = (req, res) => {
+    const sql = `
+        SELECT
+            id, kode_lokasi, nama_lokasi, kode_bpjs, latitude, longitude
+        FROM lokasi`;
+
+    db.query(sql, (err, results) => {
+        if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Database error" });
+        }
+        // results sudah tgl_daftar berupa string 'YYYY-MM-DD'
+        res.json(results);
+    });
+};
+
+exports.deleteLokasi = (req, res) => {
+    const id = req.params.id;
+
+    const sql = "DELETE FROM lokasi WHERE id = ?";
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+        console.error("Delete error:", err);
+        return res.status(500).json({ error: "Failed to delete lokasi" });
+        }
+
+        if (result.affectedRows === 0) {
+        return res.status(404).json({ error: "Lokasi not found" });
+        }
+
+        res.json({ message: "Lokasi deleted successfully" });
+    });
+};
+
+exports.updateLokasi = (req, res) => {
+    const { id } = req.params;
+    let {
+        kode_lokasi,
+        nama_lokasi,
+        kode_bpjs,
+        latitude,
+        longitude,
+    } = req.body;
+
+    // Helper function
+    const checkAndFill = (value, isDate = false) => {
+        if (isDate) return value ? value : null;
+        return value ? value : "Tidak Ada";
+    };
+
+    // Process all fields
+    kode_lokasi = checkAndFill(kode_lokasi);
+    nama_lokasi = checkAndFill(nama_lokasi);
+    kode_bpjs = checkAndFill(kode_bpjs);
+    latitude = checkAndFill(latitude);
+    longitude = checkAndFill(longitude);
+
+    const sql = `UPDATE lokasi SET 
+            kode_lokasi = ?, 
+            nama_lokasi = ?, 
+            kode_bpjs = ?, 
+            latitude = ?, 
+            longitude = ? 
+            WHERE id = ?`;
+
+    db.query(
+        sql,
+        [
+            kode_lokasi,
+            nama_lokasi,
+            kode_bpjs,
+            latitude,
+            longitude,
+            id,
+        ],
+        (err, result) => {
+        if (err) {
+            console.error("Error updating lokasi:", err);
+            return res.status(500).send("Failed to update");
+        }
+        res.send("Lokasi updated successfully");
+        }
+    );
+};

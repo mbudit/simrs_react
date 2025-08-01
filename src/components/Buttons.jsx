@@ -72,6 +72,24 @@ export const ButtonTambahPelayanan = ({ onClick }) => {
     );
 };
 
+export const ButtonTambahLokasi = ({ onClick }) => {
+    return (
+        <Button 
+            variant="contained" 
+            onClick={onClick}
+            sx={{
+                backgroundColor: '#2571a3',
+                color: '#fff',
+                '&:hover': {
+                    backgroundColor: '#7c715f',
+                },
+            }}
+        >
+            Tambah Lokasi
+        </Button>
+    );
+};
+
 export const ButtonTambahObat = ({ onClick }) => {
     return (
         <Button 

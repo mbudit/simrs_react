@@ -1,14 +1,15 @@
 import React from 'react';
 import { useState } from 'react';
-import { BackButton, ButtonDaftar, ButtonTambahLokasi, ButtonTambahPelayanan } from '../../../components/Buttons';
+import { BackButton, ButtonDaftar, ButtonTambahLokasi, ButtonTambahParamedis, ButtonTambahPelayanan } from '../../../components/Buttons';
 import { Button } from '@mui/material';
 import PrintIcon from '@mui/icons-material/Print';
 import { SnackbarProvider } from 'notistack';
-import TableLokasi from './TableLokasi';
-import ModalTambahLokasi from './forms/TambahLokasi';
-import ModalEditLokasi from './forms/EditLokasi';
+import ModalTambahParamedis from './forms/TambahParamedis';
+import TableParamedis from './TableParamedis';
+import ModalEditParamedis from './forms/EditParamedis';
 
-const ListLokasi = () => {
+
+const ListParamedis = () => {
     const [open, setOpen] = useState(false);
     
     const handleOpen = () => setOpen(true);
@@ -18,12 +19,11 @@ const ListLokasi = () => {
 
     const [form, setForm] = useState({
         id: '',
-        kode_lokasi: '',
-        nama_lokasi: '',
-        kode_bpjs: '',
-        id_location: '',
-        latitude: '',
-        longitude: '',
+        nama_lengkap: '',
+        nik: '',
+        area: '',
+        lokasi_kerja: '',
+        alamat: '',
     });
 
     const [openEdit, setOpenEdit] = useState(false);
@@ -33,15 +33,14 @@ const ListLokasi = () => {
         setForm({}); // opsional, kalau ingin reset form juga
     };
 
-    const handleSelectLokasi = (row) => {
+    const handleSelectParamedis = (row) => {
         setForm({
             id: row.id,
-            kode_lokasi: row.kode_lokasi || '',
-            nama_lokasi: row.nama_lokasi || '',
-            kode_bpjs: row.kode_bpjs || '',
-            id_location: row.id_location || '',
-            latitude: row.latitude || '',
-            longitude: row.longitude || '',
+            nama_lengkap: row.nama_lengkap || '',
+            nik: row.nik || '',
+            area: row.area || '',
+            lokasi_kerja: row.lokasi_kerja || '',
+            alamat: row.alamat || '',
         });
         setOpenEdit(true); // Buka ModalRajal2
     };
@@ -50,22 +49,22 @@ const ListLokasi = () => {
         <div>
             <BackButton />
             <div className="flex items-center justify-between mb-3 mt-5">
-                <h3 className="text-2xl font-semibold">Data Lokasi</h3>
+                <h3 className="text-2xl font-semibold">Data Paramedis</h3>
                 
                 <div className="flex items-center gap-2">
-                    <ButtonTambahLokasi onClick={handleOpen} />
+                    <ButtonTambahParamedis onClick={handleOpen} />
                 </div>
             </div>
             <SnackbarProvider maxSnack={3} anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                <TableLokasi handleSelect={handleSelectLokasi} refreshTrigger={refreshTrigger} />
-                <ModalTambahLokasi 
+                <TableParamedis handleSelect={handleSelectParamedis} refreshTrigger={refreshTrigger} />
+                <ModalTambahParamedis 
                     open={open}
                     handleClose={handleClose}
                     form={form}
                     setForm={setForm}
                     setRefreshTrigger={setRefreshTrigger}
                 />
-                <ModalEditLokasi 
+                <ModalEditParamedis 
                     open={openEdit}
                     handleCloseEdit={handleCloseEdit}
                     form={form}
@@ -77,4 +76,4 @@ const ListLokasi = () => {
     );
 }
 
-export default ListLokasi;
+export default ListParamedis;

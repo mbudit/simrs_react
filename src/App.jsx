@@ -26,6 +26,7 @@ import TarifPelayananRanap from "./pages/data-master/ranap/TarifPelayananRanap";
 import TarifPelayananIgd from "./pages/data-master/igd/TarifPelayananIgd";
 import DataDokter from "./pages/data-master/Dokter/data_dokter";
 import ListLokasi from "./pages/data-master/lokasi/ListLokasi";
+import ListParamedis from "./pages/data-master/paramedis/ListParamedis";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -122,6 +123,7 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
                   <Route path="/data_master/tarif-pelayanan-igd" element={<PrivateRoute element={<TarifPelayananIgd />} />} />
                   <Route path="/data_master/data-dokter" element={<PrivateRoute element={<DataDokter />} />} />
                   <Route path="/data_master/lokasi" element={<PrivateRoute element={<ListLokasi />} />} />
+                  <Route path="/data_master/paramedis" element={<PrivateRoute element={<ListParamedis />} />} />
                   <Route path="/daftarpasien" element={<PrivateRoute element={<DaftarPasien />} />} />
                   <Route path="/antrian" element={<PrivateRoute element={<Antrian />} />} />
                   <Route path="/rawatjalan" element={<PrivateRoute element={<RawatJalan />} />} />

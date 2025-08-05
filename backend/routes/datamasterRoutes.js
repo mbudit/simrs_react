@@ -29,5 +29,10 @@ router.put("/api/updateLokasi/:id", datamasterController.updateLokasi);
 ////// Controller for Dokter //////
 router.post("/api/dokter", datamasterController.createDokter);
 router.get("/api/dokter", datamasterController.getDokter);
+////// Controller for Paramedis //////
+router.post("/api/createParamedis", datamasterController.createParamedis);
+router.get("/api/getParamedis", datamasterController.getParamedis);
+router.delete("/api/deleteParamedis/:id", datamasterController.deleteParamedis);
+router.put("/api/updateParamedis/:id", datamasterController.updateParamedis);
 
 module.exports = router;

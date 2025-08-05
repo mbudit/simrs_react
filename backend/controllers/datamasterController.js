@@ -617,6 +617,119 @@ exports.updateLokasi = (req, res) => {
     );
 };
 
+////// Controller for Paramedis //////
+exports.createParamedis = (req, res) => {
+    const formData = req.body;
+
+    const sql = `INSERT INTO paramedis (
+        nama_lengkap, nik, area, lokasi_kerja, alamat
+    ) VALUES (?, ?, ?, ?, ?)`;
+
+    const values = [
+        formData.nama_lengkap,
+        formData.nik,
+        formData.area,
+        formData.lokasi_kerja,
+        formData.alamat,
+    ];
+
+    db.query(sql, values, (err, result) => {
+        if (err) {
+        console.error("DB error:", err);
+        return res.status(500).json({ error: "Database error" });
+        }
+        res.status(201).json({
+            message: "Paramedis berhasil didaftarkan",
+            id: result.insertId,
+        });
+    });
+};
+
+exports.getParamedis = (req, res) => {
+    const sql = `
+        SELECT
+            id, nama_lengkap, nik, area, lokasi_kerja, alamat
+        FROM paramedis`;
+
+    db.query(sql, (err, results) => {
+        if (err) {
+        console.error(err);
+        return res.status(500).json({ error: "Database error" });
+        }
+        // results sudah tgl_daftar berupa string 'YYYY-MM-DD'
+        res.json(results);
+    });
+};
+
+exports.deleteParamedis = (req, res) => {
+    const id = req.params.id;
+
+    const sql = "DELETE FROM paramedis WHERE id = ?";
+    db.query(sql, [id], (err, result) => {
+        if (err) {
+        console.error("Delete error:", err);
+        return res.status(500).json({ error: "Failed to delete paramedis" });
+        }
+
+        if (result.affectedRows === 0) {
+        return res.status(404).json({ error: "Paramedis not found" });
+        }
+
+        res.json({ message: "Paramedis deleted successfully" });
+    });
+};
+
+exports.updateParamedis = (req, res) => {
+    const { id } = req.params;
+    let {
+        nama_lengkap,
+        nik,
+        area,
+        lokasi_kerja,
+        alamat,
+    } = req.body;
+
+    // Helper function
+    const checkAndFill = (value, isDate = false) => {
+        if (isDate) return value ? value : null;
+        return value ? value : "Tidak Ada";
+    };
+
+    // Process all fields
+    nama_lengkap = checkAndFill(nama_lengkap);
+    nik = checkAndFill(nik);
+    area = checkAndFill(area);
+    lokasi_kerja = checkAndFill(lokasi_kerja);
+    alamat = checkAndFill(alamat);
+
+    const sql = `UPDATE paramedis SET 
+            nama_lengkap = ?, 
+            nik = ?, 
+            area = ?, 
+            lokasi_kerja = ?, 
+            alamat = ? 
+            WHERE id = ?`;
+
+    db.query(
+        sql,
+        [
+            nama_lengkap,
+            nik,
+            area,
+            lokasi_kerja,
+            alamat,
+            id,
+        ],
+        (err, result) => {
+        if (err) {
+            console.error("Error updating Paramedis:", err);
+            return res.status(500).send("Failed to update");
+        }
+        res.send("Paramedis updated successfully");
+        }
+    );
+};
+
 exports.createDokter = (req, res) => {
     const data = req.body;
     const sql = `

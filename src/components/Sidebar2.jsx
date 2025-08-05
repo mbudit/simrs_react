@@ -4,9 +4,13 @@ import { Link } from 'react-router-dom';
 import { Tooltip } from 'react-tooltip';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import MedicalServicesIcon from '@mui/icons-material/MedicalServices';
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import {
     FaAmbulance, FaBars, FaHome, FaHospitalUser, FaMicroscope, FaNotesMedical,
-    FaPills, FaProcedures, FaStethoscope, FaUserFriends, FaXRay, FaBed, FaUserInjured
+    FaPills, FaProcedures, FaStethoscope, FaUserFriends, FaXRay, FaBed, FaUserInjured,
+    FaWheelchair
 } from 'react-icons/fa';
 
 const MenuItemWithAutoTooltip = ({ label, icon, to, collapsed }) => {
@@ -55,6 +59,57 @@ const SubMenuWithTooltip = ({ label, icon, collapsed, open, onToggle, children }
                             position: 'absolute',
                             left: '100%',
                             top: 0,
+                            display: open ? 'block' : 'none',
+                        },
+                        [`& .${menuClasses.menuItem}`]: {
+                            backgroundColor: '#4682A9',
+                            color: '#fff',
+                            '&:hover': {
+                                backgroundColor: '#112d4e',
+                            },
+                        },
+                    }}
+                >
+                    {children}
+                </SubMenu>
+            </div>
+            {collapsed && <Tooltip id={tooltipId} place="right" />}
+        </>
+    );
+};
+
+const SubMenuWithTooltip2 = ({ label, icon, collapsed, open, onToggle, children }) => {
+    const tooltipId = `tooltip-${label.toLowerCase().replace(/\s+/g, '-')}`;
+
+    return (
+        <>
+            <div
+                data-tooltip-id={tooltipId}
+                data-tooltip-content={label}
+                style={{ display: 'block' }}
+            >
+                <SubMenu
+                    label={label}
+                    icon={icon}
+                    open={open} // kontrol buka/tutup
+                    onClick={onToggle} // toggle saat klik
+                    rootStyles={{
+                        [`& > .${menuClasses.button}`]: {
+                            backgroundColor: '#4682A9',
+                            color: '#fff',
+                            '&:hover': {
+                                backgroundColor: '#112d4e',
+                            },
+                        },
+                        [`.${menuClasses.subMenuContent}`]: {
+                            backgroundColor: '#4682A9',
+                            minWidth: '240px',
+                            whiteSpace: 'nowrap',
+                            overflow: 'visible',
+                            zIndex: 9999,
+                            position: 'absolute',
+                            left: '100%',
+                            top: collapsed && open ? '60px !important' : '0 !important',
                             display: open ? 'block' : 'none',
                         },
                         [`& .${menuClasses.menuItem}`]: {
@@ -141,21 +196,19 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     },
                 }}
             >
-                <MenuItem>
-                    <a href="#">
-                        <img
-                            src="/src/assets/image (1).png"
-                            alt="SIMRS Logo"
-                            className="h-8 object-contain" // adjust height as needed (was h-10)
-                        />
-                    </a>
-                </MenuItem>
+                <MenuItem component={<Link to="/" />}>
+                    <img
+                        src="/src/assets/image (1).png"
+                        alt="SIMRS Logo"
+                        className="h-8 object-contain" // adjust height as needed (was h-10)
+                    />
+                </MenuItem> 
 
                 <MenuItem icon={<FaBars />} onClick={toggleSidebar} />
 
                 <MenuItemWithAutoTooltip label="Home" icon={<FaHome />} to="/" collapsed={collapsed} />
 
-                <SubMenuWithTooltip
+                <SubMenuWithTooltip2
                     label="Data Master"
                     icon={<ListAltIcon />}
                     collapsed={collapsed}
@@ -186,24 +239,31 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     <MenuItem
                         style={{ paddingLeft: '30px' }}
                         component={<Link to="/data_master/data-dokter" />}
-                        icon={<PointOfSaleIcon />}
+                        icon={<FaStethoscope />}
                     >
                         Data Dokter
                     </MenuItem>
                     <MenuItem
                         style={{ paddingLeft: '30px' }}
                         component={<Link to="/data_master/lokasi" />}
-                        icon={<PointOfSaleIcon />}
+                        icon={<LocationOnIcon />}
                     >
                         Lokasi
                     </MenuItem>
-                </SubMenuWithTooltip>
+                    <MenuItem
+                        style={{ paddingLeft: '30px' }}
+                        component={<Link to="/data_master/paramedis" />}
+                        icon={<MedicalServicesIcon />}
+                    >
+                        Paramedis
+                    </MenuItem>
+                </SubMenuWithTooltip2>
 
                 <MenuItemWithAutoTooltip label="RME" icon={<FaNotesMedical />} to="/rme" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="Data Pasien" icon={<FaHospitalUser />} to="/daftarpasien" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="Antrian" icon={<FaUserFriends />} to="/antrian" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="IGD" icon={<FaAmbulance />} to="/igd" collapsed={collapsed} />
-                <MenuItemWithAutoTooltip label="Rawat Jalan" icon={<FaStethoscope />} to="/rawatjalan" collapsed={collapsed} />
+                <MenuItemWithAutoTooltip label="Rawat Jalan" icon={<FaWheelchair />} to="/rawatjalan" collapsed={collapsed} />
                 {/* <MenuItemWithAutoTooltip label="Rawat Inap" icon={<FaProcedures />} to="/rawatinap" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="Terima Pasien" icon={<FaUserInjured />} to="/terima_pasien" collapsed={collapsed} /> */}
 
@@ -217,7 +277,7 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     <MenuItem
                         style={{ paddingLeft: '30px' }}
                         component={<Link to="/rawatinap/terima_pasien" />}
-                        icon={<FaBed />}
+                        icon={<AssignmentTurnedInIcon />}
                     >
                         Terima Pasien Ranap
                     </MenuItem>

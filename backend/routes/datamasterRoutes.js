@@ -26,4 +26,8 @@ router.get("/api/getLokasi", datamasterController.getLokasi);
 router.delete("/api/deleteLokasi/:id", datamasterController.deleteLokasi);
 router.put("/api/updateLokasi/:id", datamasterController.updateLokasi);
 
+////// Controller for Dokter //////
+router.post("/api/dokter", datamasterController.createDokter);
+router.get("/api/dokter", datamasterController.getDokter);
+
 module.exports = router;

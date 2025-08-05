@@ -2,6 +2,38 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const db = require('../config/db');
 
+
+// Check authentication
+exports.checkAuth = (req, res) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.json({ authenticated: false });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        return res.json({ authenticated: true, user: decoded });
+    } catch (err) {
+        return res.json({ authenticated: false });
+    }
+};
+
+// Decode token
+exports.decodeToken = (req, res) => {
+    const { token } = req.body;
+
+    if (!token) {
+        return res.status(400).json({ error: "Token is required" });
+    }
+
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        res.json({ decoded });
+    } catch (err) {
+        res.status(400).json({ error: "Invalid token", details: err.message });
+    }
+};
+
 // Register
 exports.register = async (req, res) => {
     const { email, password } = req.body;
@@ -142,35 +174,4 @@ exports.logout = (req, res) => {
     res.clearCookie("token");
     res.clearCookie("refreshToken");
     res.status(200).json({ message: "Logged out successfully" });
-};
-
-// Check authentication
-exports.checkAuth = (req, res) => {
-    const token = req.cookies.token;
-    if (!token) {
-        return res.json({ authenticated: false });
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        return res.json({ authenticated: true, user: decoded });
-    } catch (err) {
-        return res.json({ authenticated: false });
-    }
-};
-
-// Decode token
-exports.decodeToken = (req, res) => {
-    const { token } = req.body;
-
-    if (!token) {
-        return res.status(400).json({ error: "Token is required" });
-    }
-
-    try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        res.json({ decoded });
-    } catch (err) {
-        res.status(400).json({ error: "Invalid token", details: err.message });
-    }
 };

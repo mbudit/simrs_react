@@ -24,8 +24,9 @@ import RawatInap from "./pages/rawatinap/RawatInap";
 import TarifPelayananRajal from "./pages/data-master/rajal/TarifPelayananRajal";
 import TarifPelayananRanap from "./pages/data-master/ranap/TarifPelayananRanap";
 import TarifPelayananIgd from "./pages/data-master/igd/TarifPelayananIgd";
-import DataDokter from "./pages/data-master/Dokter/data_dokter";
+import DataDokter from "./pages/data-master/Dokter/DataDokter";
 import ListLokasi from "./pages/data-master/lokasi/ListLokasi";
+import FormTambahDokter from "./pages/data-master/Dokter/forms/TambahDokter";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -97,17 +98,17 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
         <>
           <div className="min-h-screen bg-gray-100">
 
-            {/* NAVBAR */}
-            <div className="fixed top-0 left-20 right-0 z-50">
+            {/* SIDEBAR */}
+            <div className="fixed top-0 left-0 h-[calc(100vh-4rem)] z-50">
               <ThemeProvider theme={Theme}>
-                <Navbar setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} />
+                <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
               </ThemeProvider>
             </div>
 
-            {/* SIDEBAR */}
-            <div className="fixed top-0 left-0 h-[calc(100vh-4rem)] z-40">
+            {/* NAVBAR */}
+            <div className="fixed top-0 left-20 right-0 z-40">
               <ThemeProvider theme={Theme}>
-                <Sidebar2 collapsed={sidebarCollapsed} setCollapsed={setSidebarCollapsed} />
+                <Navbar setIsAuthenticated={setIsAuthenticated} isAuthenticated={isAuthenticated} />
               </ThemeProvider>
             </div>
 
@@ -135,6 +136,8 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
                   <Route path="/radiologi" element={<PrivateRoute element={<Radiologi />} />} />
                   <Route path="/laboratorium" element={<PrivateRoute element={<Laboratorium />} />} />
                   <Route path="/dataobat" element={<PrivateRoute element={<DataObat />} />} />
+                  <Route path="/data_master/tambah-dokter" element={<PrivateRoute element={<FormTambahDokter />} />} />
+                  <Route path="/data_master/data-dokter" element={<PrivateRoute element={<DataDokter />} />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>

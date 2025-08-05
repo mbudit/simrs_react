@@ -616,3 +616,72 @@ exports.updateLokasi = (req, res) => {
         }
     );
 };
+
+exports.createDokter = (req, res) => {
+    const data = req.body;
+    const sql = `
+        INSERT INTO dokter (
+            kode, nama, gelar, jenis_kelamin, tempat_lahir, tanggal_lahir, nik, email, no_telp, alamat, practitioner_id,
+            no_str, tgl_berlaku_str, tgl_kadaluarsa_str, no_sip, tgl_berlaku_sip, tgl_kadaluarsa_sip, spesialisasi, pendidikan,
+            status_pegawai, poli, jabatan, shift, nip, tgl_mulai_kerja, jabatan_struktural, status_aktif, unit_kerja, golongan,
+            gaji_pokok, tunjangan
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+    const values = [
+        data.kode,
+        data.nama,
+        data.gelar,
+        data.jenis_kelamin,
+        data.tempat_lahir,
+        data.tanggal_lahir,
+        data.nik,
+        data.email,
+        data.no_telp,
+        data.alamat,
+        data.practitioner_id,
+        data.no_str,
+        data.tgl_berlaku_str,
+        data.tgl_kadaluarsa_str,
+        data.no_sip,
+        data.tgl_berlaku_sip,
+        data.tgl_kadaluarsa_sip,
+        data.spesialisasi,
+        data.pendidikan,
+        data.status_pegawai,
+        data.poli,
+        data.jabatan,
+        data.shift,
+        data.nip,
+        data.tgl_mulai_kerja,
+        data.jabatan_struktural,
+        data.status_aktif,
+        data.unit_kerja,
+        data.golongan,
+        data.gaji_pokok,
+        data.tunjangan
+    ];
+    db.query(sql, values, (err, result) => {
+        if (err) {
+            console.error("Error inserting dokter:", err);
+            return res.status(500).json({ error: "Failed to create dokter" });
+        }
+        res.status(201).json({ message: "Dokter created successfully", id: result.insertId });
+    });
+};
+
+exports.getDokter = (req, res) => {
+    const sql = `SELECT 
+        id, kode, nama, gelar, jenis_kelamin, tempat_lahir, tanggal_lahir, nik, email, no_telp, alamat, practitioner_id,
+        no_str, tgl_berlaku_str, tgl_kadaluarsa_str, no_sip, tgl_berlaku_sip, tgl_kadaluarsa_sip, spesialisasi, pendidikan,
+        status_pegawai, poli, jabatan, shift, nip, tgl_mulai_kerja, jabatan_struktural, status_aktif, unit_kerja, golongan,
+        gaji_pokok, tunjangan, created_at, updated_at
+        FROM dokter
+        ORDER BY id DESC`;
+    db.query(sql, (err, result) => {
+        if (err) {
+            console.error("Error fetching dokter:", err);
+            return res.status(500).json({ error: "Failed to fetch dokter" });
+        }
+        res.json(result);
+    });
+};

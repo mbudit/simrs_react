@@ -147,23 +147,28 @@ export default function ModalTambahLokasi({ open, handleClose, form, setForm, se
         let isValid = true;
         let newErrors = {};
     
-        // Daftar field yang wajib diisi sesuai inputan form obat
+
+        // Daftar field yang wajib diisi
         const requiredFields = [
-            
+            'kode_lokasi',
+            'nama_lokasi',
+            'kode_bpjs',
+            'latitude',
+            'longitude',
         ];
-    
+
         for (const key of requiredFields) {
-            if (!form[key]) {
+            if (!form[key] || form[key].toString().trim() === '') {
                 isValid = false;
                 newErrors[key] = 'Field ini tidak boleh kosong';
             }
         }
-    
+
         if (!isValid) {
             setErrors(newErrors);
             return;
         }
-    
+
         setOpenDialog(true);
     };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   TextField,
   Button,
@@ -6,7 +6,6 @@ import {
   Typography,
   Box,
   Container,
-  Grid,
   MenuItem,
   FormControl,
   InputLabel,
@@ -17,12 +16,17 @@ import {
   DialogContentText,
   DialogActions,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { BackButton } from '../../../../components/Buttons';
 
-const FormTambahDokter = () => {
+const FormEditDokter = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const location = useLocation();
+  // Support both route param and state passing
+  const dokterId = id || (location.state && location.state.id_asli);
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [formData, setFormData] = useState({
     kode: '',
@@ -60,9 +64,33 @@ const FormTambahDokter = () => {
 
   const [errors, setErrors] = useState({});
 
+  useEffect(() => {
+    // Fetch dokter data by id
+    if (dokterId) {
+      axios
+        .get(`${import.meta.env.VITE_API_URL}/api/dokter/${dokterId}`)
+        .then((res) => {
+          // Fill formData with fetched data
+          setFormData({
+            ...formData,
+            ...res.data,
+            tanggal_lahir: res.data.tanggal_lahir ? res.data.tanggal_lahir.split('T')[0] : '',
+            tgl_berlaku_str: res.data.tgl_berlaku_str ? res.data.tgl_berlaku_str.split('T')[0] : '',
+            tgl_kadaluarsa_str: res.data.tgl_kadaluarsa_str ? res.data.tgl_kadaluarsa_str.split('T')[0] : '',
+            tgl_berlaku_sip: res.data.tgl_berlaku_sip ? res.data.tgl_berlaku_sip.split('T')[0] : '',
+            tgl_kadaluarsa_sip: res.data.tgl_kadaluarsa_sip ? res.data.tgl_kadaluarsa_sip.split('T')[0] : '',
+            tgl_mulai_kerja: res.data.tgl_mulai_kerja ? res.data.tgl_mulai_kerja.split('T')[0] : '',
+          });
+        })
+        .catch((err) => {
+          console.error('Gagal mengambil data dokter:', err);
+        });
+    }
+    // eslint-disable-next-line
+  }, [dokterId]);
+
   const validate = () => {
     const newErrors = {};
-    // Identitas Dokter
     if (!formData.kode) newErrors.kode = 'Kode wajib diisi';
     if (!formData.nama) newErrors.nama = 'Nama wajib diisi';
     if (!formData.jenis_kelamin) newErrors.jenis_kelamin = 'Jenis kelamin wajib diisi';
@@ -73,7 +101,6 @@ const FormTambahDokter = () => {
     if (formData.email && !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
       newErrors.email = 'Format email tidak valid';
     }
-    // Profesional & Perizinan
     if (!formData.no_str) newErrors.no_str = 'Nomor STR wajib diisi';
     if (!formData.tgl_berlaku_str) newErrors.tgl_berlaku_str = 'Tanggal berlaku STR wajib diisi';
     if (!formData.tgl_kadaluarsa_str) newErrors.tgl_kadaluarsa_str = 'Tanggal kadaluwarsa STR wajib diisi';
@@ -86,7 +113,6 @@ const FormTambahDokter = () => {
     if (!formData.poli) newErrors.poli = 'Poli wajib diisi';
     if (!formData.jabatan) newErrors.jabatan = 'Jabatan wajib diisi';
     if (!formData.shift) newErrors.shift = 'Shift wajib diisi';
-    // Kepegawaian (jika status pegawai tetap)
     if (formData.status_pegawai === 'Tetap') {
       if (!formData.nip) newErrors.nip = 'NIP wajib diisi';
       if (!formData.tgl_mulai_kerja) newErrors.tgl_mulai_kerja = 'Tanggal mulai kerja wajib diisi';
@@ -113,16 +139,16 @@ const FormTambahDokter = () => {
       setErrors(foundErrors);
       return;
     }
-    setShowConfirm(true); // Show confirmation dialog
+    setShowConfirm(true);
   };
 
   const handleConfirmSave = async () => {
     setShowConfirm(false);
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/dokter`, formData);
+      await axios.put(`${import.meta.env.VITE_API_URL}/api/dokter/${dokterId}`, formData);
       navigate('/data_master/data-dokter');
     } catch (error) {
-      console.error('Error submitting form:', error);
+      console.error('Error updating dokter:', error);
     }
   };
 
@@ -135,10 +161,9 @@ const FormTambahDokter = () => {
       <div className="flex justify-between items-center mb-4">
         <BackButton />
       </div>
-
       <Paper elevation={3} sx={{ p: 4, height: '100%', minHeight: '80vh' }}>
         <Typography variant="h4" component="h2" gutterBottom>
-          Data Dokter
+          Edit Data Dokter
         </Typography>
         <hr className="border-t border-gray-300" />
         <div className='mt-5'>
@@ -539,24 +564,24 @@ const FormTambahDokter = () => {
         </Box>
       </Paper>
       {/* Confirmation Dialog */}
-        <Dialog open={showConfirm} onClose={handleCancelSave}>
-          <DialogTitle>Konfirmasi Simpan Data</DialogTitle>
-          <DialogContent>
-            <DialogContentText>
-              Apakah Anda yakin ingin menyimpan data dokter ini?
-            </DialogContentText>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCancelSave} color="secondary">
-              Batal
-            </Button>
-            <Button onClick={handleConfirmSave} color="primary" variant="contained">
-              Simpan
-            </Button>
-          </DialogActions>
-        </Dialog>
+      <Dialog open={showConfirm} onClose={handleCancelSave}>
+        <DialogTitle>Konfirmasi Simpan Data</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Apakah Anda yakin ingin menyimpan perubahan data dokter ini?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelSave} color="secondary">
+            Batal
+          </Button>
+          <Button onClick={handleConfirmSave} color="primary" variant="contained">
+            Simpan
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
 
-export default FormTambahDokter;
+export default FormEditDokter;

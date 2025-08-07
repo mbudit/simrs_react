@@ -13,7 +13,7 @@ export const BackButton = () => {
     const navigate = useNavigate();
 
     const handleBack = () => {
-        navigate('/'); // ganti dengan path yang kamu inginkan
+        navigate(-1); // ganti dengan path yang kamu inginkan
     };
 
     return (

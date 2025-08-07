@@ -24,10 +24,11 @@ import RawatInap from "./pages/rawatinap/RawatInap";
 import TarifPelayananRajal from "./pages/data-master/rajal/TarifPelayananRajal";
 import TarifPelayananRanap from "./pages/data-master/ranap/TarifPelayananRanap";
 import TarifPelayananIgd from "./pages/data-master/igd/TarifPelayananIgd";
-import DataDokter from "./pages/data-master/Dokter/DataDokter";
 import ListLokasi from "./pages/data-master/lokasi/ListLokasi";
 import ListParamedis from "./pages/data-master/paramedis/ListParamedis";
-import FormTambahDokter from "./pages/data-master/Dokter/forms/TambahDokter";
+import FormTambahDokter from "./pages/data-master/dokter/forms/TambahDokter";
+import DataDokter from "./pages/data-master/Dokter/DataDokter";
+import FormEditDokter from "./pages/data-master/dokter/forms/EditDokter";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -139,6 +140,7 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
                   <Route path="/laboratorium" element={<PrivateRoute element={<Laboratorium />} />} />
                   <Route path="/dataobat" element={<PrivateRoute element={<DataObat />} />} />
                   <Route path="/data_master/tambah-dokter" element={<PrivateRoute element={<FormTambahDokter />} />} />
+                  <Route path="/data_master/edit-dokter/:id" element={<PrivateRoute element={<FormEditDokter />} />} />
                   <Route path="/data_master/data-dokter" element={<PrivateRoute element={<DataDokter />} />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

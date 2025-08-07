@@ -180,12 +180,27 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
 
             <Menu
                 menuItemStyles={{
-                    button: {
-                        color: '#fff',
-                        '&:hover': {
-                            backgroundColor: '#3e7396ff',
+                    button: ({ level, label }) => {
+                        // Disable hover for Logo and FaBars buttons
+                        if (label === 'logo' || label === 'menu-toggle') {
+                            return {
+                                color: '#fff',
+                                '&:hover': {
+                                    backgroundColor: 'transparent',
+                                    color: '#fff',
+                                },
+                                cursor: 'default', // Optional: prevent pointer cursor
+                            };
+                        }
+
+                        // Default hover behavior
+                        return {
                             color: '#fff',
-                        },
+                            '&:hover': {
+                                backgroundColor: '#3e7396ff',
+                                color: '#fff',
+                            },
+                        };
                     },
                     icon: {
                         color: '#fff',
@@ -196,15 +211,16 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     },
                 }}
             >
-                <MenuItem component={<Link to="/" />}>
+                <MenuItem label="logo">
                     <img
                         src="/src/assets/image (1).png"
                         alt="SIMRS Logo"
                         className="h-8 object-contain" // adjust height as needed (was h-10)
+                        component={<Link to="/" />}
                     />
-                </MenuItem> 
+                </MenuItem>
 
-                <MenuItem icon={<FaBars />} onClick={toggleSidebar} />
+                <MenuItem label="menu-toggle" icon={<FaBars />} onClick={toggleSidebar} />
 
                 <MenuItemWithAutoTooltip label="Home" icon={<FaHome />} to="/" collapsed={collapsed} />
 

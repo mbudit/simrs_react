@@ -5,21 +5,6 @@ import TableDokter from './TableDokter';
 import { AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
-// Placeholder for the doctor registration form
-const FormPendaftaranDokter = ({ onClose, onSuccess }) => (
-  <div className="fixed inset-0 backdrop-blur-sm bg-white/30 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded shadow-md w-full max-w-lg">
-      <h3 className="text-xl font-bold mb-4">Form Pendaftaran Dokter (Coming Soon)</h3>
-      <button
-        className="px-4 py-2 bg-gray-300 rounded"
-        onClick={onClose}
-      >
-        Tutup
-      </button>
-    </div>
-  </div>
-);
-
 const DataDokter = () => {
   const [showForm, setShowForm] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);

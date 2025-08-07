@@ -101,9 +101,13 @@ export default function ModalTambahParamedis({ open, handleClose, form, setForm,
         let isValid = true;
         let newErrors = {};
     
-        // Daftar field yang wajib diisi sesuai inputan form obat
+        // Daftar field yang wajib diisi sesuai inputan form paramedis
         const requiredFields = [
-            
+            'nama_lengkap',
+            'nik',
+            'area',
+            'lokasi_kerja',
+            'alamat',
         ];
     
         for (const key of requiredFields) {

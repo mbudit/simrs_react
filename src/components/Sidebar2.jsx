@@ -12,6 +12,7 @@ import {
     FaPills, FaProcedures, FaStethoscope, FaUserFriends, FaXRay, FaBed, FaUserInjured,
     FaWheelchair
 } from 'react-icons/fa';
+import MedicationIcon from '@mui/icons-material/Medication';
 
 const MenuItemWithAutoTooltip = ({ label, icon, to, collapsed }) => {
     const tooltipId = `tooltip-${label.toLowerCase().replace(/\s+/g, '-')}`;
@@ -132,6 +133,7 @@ const SubMenuWithTooltip2 = ({ label, icon, collapsed, open, onToggle, children 
 const Sidebar2 = ({ collapsed, setCollapsed }) => {
     // State untuk open/close submenu
     const [openSubMenus, setOpenSubMenus] = useState({
+        farmasi: false,
         rawatInap: false,
         dataMaster: false,
     });
@@ -151,6 +153,13 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
         setOpenSubMenus(prev => ({
             ...prev,
             rawatInap: !prev.rawatInap,
+        }));
+    };
+
+    const toggleFarmasi = () => {
+        setOpenSubMenus(prev => ({
+            ...prev,
+            farmasi: !prev.farmasi,
         }));
     };
 
@@ -261,17 +270,17 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
                     </MenuItem>
                     <MenuItem
                         style={{ paddingLeft: '30px' }}
-                        component={<Link to="/data_master/lokasi" />}
-                        icon={<LocationOnIcon />}
-                    >
-                        Lokasi
-                    </MenuItem>
-                    <MenuItem
-                        style={{ paddingLeft: '30px' }}
                         component={<Link to="/data_master/paramedis" />}
                         icon={<MedicalServicesIcon />}
                     >
-                        Paramedis
+                        Data Paramedis
+                    </MenuItem>
+                    <MenuItem
+                        style={{ paddingLeft: '30px' }}
+                        component={<Link to="/data_master/lokasi" />}
+                        icon={<LocationOnIcon />}
+                    >
+                        Data Lokasi
                     </MenuItem>
                 </SubMenuWithTooltip2>
 
@@ -308,7 +317,30 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
 
                 <MenuItemWithAutoTooltip label="Radiologi" icon={<FaXRay />} to="/radiologi" collapsed={collapsed} />
                 <MenuItemWithAutoTooltip label="Laboratorium" icon={<FaMicroscope />} to="/laboratorium" collapsed={collapsed} />
-                <MenuItemWithAutoTooltip label="Data Obat" icon={<FaPills />} to="/dataobat" collapsed={collapsed} />
+                {/* <MenuItemWithAutoTooltip label="Data Obat" icon={<FaPills />} to="/dataobat" collapsed={collapsed} /> */}
+
+                <SubMenuWithTooltip
+                    label="Farmasi"
+                    icon={<MedicationIcon />}
+                    collapsed={collapsed}
+                    open={openSubMenus.farmasi}
+                    onToggle={toggleFarmasi}
+                >
+                    <MenuItem
+                        style={{ paddingLeft: '30px' }}
+                        component={<Link to="/dataobat" />}
+                        icon={<FaPills />}
+                    >
+                        Data Obat
+                    </MenuItem>
+                    <MenuItem
+                        style={{ paddingLeft: '30px' }}
+                        component={<Link to="/data_master/tarif-o2" />}
+                        icon={<FaPills />}
+                    >
+                        Tarif O2
+                    </MenuItem>
+                </SubMenuWithTooltip>
             </Menu>
         </Sidebar>
     );

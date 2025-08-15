@@ -29,6 +29,7 @@ import ListParamedis from "./pages/data-master/paramedis/ListParamedis";
 import FormTambahDokter from "./pages/data-master/dokter/forms/TambahDokter";
 import DataDokter from "./pages/data-master/Dokter/DataDokter";
 import FormEditDokter from "./pages/data-master/dokter/forms/EditDokter";
+import DataO2 from "./pages/farmasi/o2/DataO2";
 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
@@ -142,6 +143,7 @@ const AppContent = ({ sidebarCollapsed, setSidebarCollapsed, isAuthenticated, se
                   <Route path="/data_master/tambah-dokter" element={<PrivateRoute element={<FormTambahDokter />} />} />
                   <Route path="/data_master/edit-dokter/:id" element={<PrivateRoute element={<FormEditDokter />} />} />
                   <Route path="/data_master/data-dokter" element={<PrivateRoute element={<DataDokter />} />} />
+                  <Route path="/data_master/tarif-o2" element={<PrivateRoute element={<DataO2 />} />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </main>

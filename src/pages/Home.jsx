@@ -25,55 +25,55 @@ const modules = [
     {
         title: 'Rekam Medis Elektronik (RME)',
         description: 'Akses dan kelola riwayat rekam medis pasien secara digital dan terintegrasi.',
-        image: 'src/assets/rme.webp',
+        image: '/assets/rme.webp',
         path: "/rme"
     },
     {
         title: 'Data Pasien',
         description: 'Lihat, tambah, dan kelola data lengkap pasien secara efisien.',
-        image: 'src/assets/datapasien.jpg',
+        image: '/assets/datapasien.jpg',
         path: "/daftarpasien"
     },
     {
         title: 'Antrian',
         description: 'Kelola antrian pasien secara online maupun offline dengan sistem terpusat.',
-        image: 'src/assets/antrian.jpg',
+        image: '/assets/antrian.jpg',
         path: "/antrian"
     },
     {
         title: 'Laboratorium',
         description: 'Lihat hasil laboratorium pasien dan kelola permintaan pemeriksaan.',
-        image: 'src/assets/lab.jpg',
+        image: '/assets/lab.jpg',
         path: "/laboratorium"
     },
     {
         title: 'Radiologi',
         description: 'Akses hasil pemeriksaan radiologi dan kirim permintaan radiologi baru.',
-        image: 'src/assets/radiologi.jpg',
+        image: '/assets/radiologi.jpg',
         path: "/radiologi"
     },
     {
         title: 'Data Obat',
         description: 'Kelola stok obat, distribusi, dan informasi penggunaan obat di fasilitas.',
-        image: 'src/assets/dataobat.jpg',
+        image: '/assets/dataobat.jpg',
         path: "/dataobat"
     },
     {
         title: 'Instalasi Gawat Darurat (IGD)',
         description: 'Tangani pasien gawat darurat dengan alur pencatatan dan penanganan cepat.',
-        image: 'src/assets/igd.jpg',
+        image: '/assets/igd.jpg',
         path: "/igd"
     },
     {
         title: 'Instalasi Rawat Jalan',
         description: 'Atur jadwal dan kunjungan pasien rawat jalan dengan data yang lengkap.',
-        image: 'src/assets/rawatjalan.jpg',
+        image: '/assets/rawatjalan.jpg',
         path: "/rawatjalan"
     },
     {
         title: 'Instalasi Rawat Inap',
         description: 'Kelola pasien rawat inap, kamar, serta status harian dan laporan medis.',
-        image: 'src/assets/rawatinap.png',
+        image: '/assets/rawatinap.png',
         path: "/rawatinap"
     },
 ];

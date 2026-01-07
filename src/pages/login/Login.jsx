@@ -82,7 +82,7 @@ const Login = ({ setIsAuthenticated }) => {
           left: 0,
           width: "100%",
           height: "100%",
-          backgroundImage: `url(src/assets/background.jpg)`, // Update to your image path
+          backgroundImage: `url(/assets/background.jpg)`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           filter: "blur(8px)",
@@ -116,7 +116,7 @@ const Login = ({ setIsAuthenticated }) => {
         >
           <Box
             component="img"
-            src="/src/assets/logo.png" // Update path if needed
+            src="/assets/logo.png"
             alt="Logo"
             sx={{
               height: 80,

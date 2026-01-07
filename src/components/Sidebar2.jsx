@@ -222,7 +222,7 @@ const Sidebar2 = ({ collapsed, setCollapsed }) => {
             >
                 <MenuItem label="logo">
                     <img
-                        src="/src/assets/image (1).png"
+                        src="/assets/image (1).png"
                         alt="SIMRS Logo"
                         className="h-8 object-contain" // adjust height as needed (was h-10)
                         component={<Link to="/" />}

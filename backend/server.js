@@ -17,7 +17,11 @@ const obatRoutes = require("./routes/obatRoutes");
 const datamasterRoutes = require("./routes/datamasterRoutes");
 
 const app = express();
-const allowedOrigins = [process.env.FRONTEND_ORIGIN.split(","), "http://localhost:5173"];
+const allowedOrigins = [
+  ...(process.env.FRONTEND_ORIGIN ? process.env.FRONTEND_ORIGIN.split(",") : []),
+  "http://localhost:5173",
+  "http://localhost:5000"
+];
 
 // Middlewares
 app.use(cors({
@@ -53,12 +57,12 @@ app.use("/", datamasterRoutes);
 //   })
 // );
 
-// Frontend static files
-const frontendPath = path.join(__dirname, "client", "dist"); // or "build"
+// Frontend static files (serve built React app)
+const frontendPath = path.join(__dirname, "..", "dist");
 app.use(express.static(frontendPath));
 
-// Serve frontend for all unmatched GET routes
-app.get((req, res) => {
+// Serve frontend for all unmatched GET routes (Express 5.x syntax)
+app.get("{*path}", (req, res) => {
   res.sendFile(path.join(frontendPath, "index.html"));
 });
 

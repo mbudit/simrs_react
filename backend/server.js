@@ -17,7 +17,7 @@ const obatRoutes = require("./routes/obatRoutes");
 const datamasterRoutes = require("./routes/datamasterRoutes");
 
 const app = express();
-const FRONTEND_ORIGIN = [process.env.FRONTEND_ORIGIN, "http://localhost:5173"];
+const allowedOrigins = [process.env.FRONTEND_ORIGIN.split(","), "http://localhost:5173"];
 
 // Middlewares
 app.use(cors({
